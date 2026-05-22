@@ -1,0 +1,15 @@
+<svg width="200" height="150" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="salmonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6b6b" />
+      <stop offset="50%" style="stop-color:#ff8e8e" />
+      <stop offset="100%" style="stop-color:#ffb4b4" />
+    </linearGradient>
+  </defs>
+  <rect width="200" height="150" fill="#f8f9fa" />
+  <ellipse cx="100" cy="75" rx="80" ry="40" fill="url(#salmonGradient)" stroke="#d63031" stroke-width="2"/>
+  <ellipse cx="100" cy="75" rx="60" ry="30" fill="#ff7675" opacity="0.7"/>
+  <path d="M40 65 Q60 55 80 65 Q100 55 120 65 Q140 55 160 65" stroke="#d63031" stroke-width="1" fill="none"/>
+  <path d="M40 85 Q60 95 80 85 Q100 95 120 85 Q140 95 160 85" stroke="#d63031" stroke-width="1" fill="none"/>
+  <text x="100" y="130" text-anchor="middle" font-family="Arial" font-size="14" fill="#2d3436">Fresh Salmon</text>
+</svg>
