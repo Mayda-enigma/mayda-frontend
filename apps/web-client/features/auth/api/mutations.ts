@@ -26,6 +26,7 @@ export const useLogin = () => {
 };
 
 export const useRegister = () => {
+  const qc = useQueryClient();
   return useMutation({
     mutationFn: (input: RegisterInput) =>
       authService.register(input as RegisterPayloadDto),
