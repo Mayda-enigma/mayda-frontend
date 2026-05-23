@@ -1,49 +1,37 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Button } from "@/shared/ui/button"
-import { Card, CardContent } from "@/shared/ui/card"
-import { Badge } from "@/shared/ui/badge"
-import { Textarea } from "@/shared/ui/textarea"
-import { useCart } from "@/components/cart-context"
-import { X, Plus, Minus, Heart, Leaf, Wheat, AlertTriangle } from "lucide-react"
-
-interface MenuItem {
-  id: string
-  name: string
-  description: string
-  price: number
-  category: string
-  image: string
-  dietary: string[]
-  ingredients: string[]
-  allergens: string[]
-  popular?: boolean
-}
+import { useState } from 'react';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent } from '@/shared/ui/card';
+import { Badge } from '@/shared/ui/badge';
+import { Textarea } from '@/shared/ui/textarea';
+import { useCart } from '@/components/cart-context';
+import { X, Plus, Minus, Heart, Leaf, Wheat, AlertTriangle } from 'lucide-react';
+import type { MenuItem } from '../types';
 
 interface DishDetailModalProps {
-  dish: MenuItem | null
-  isOpen: boolean
-  onClose: () => void
+  dish: MenuItem | null;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-const dietaryIcons = {
-  vegetarian: { icon: Leaf, color: "text-restaurant-green" },
-  vegan: { icon: Heart, color: "text-restaurant-green" },
-  "gluten-free": { icon: Wheat, color: "text-amber-600" },
-  halal: { icon: Heart, color: "text-blue-600" },
-}
+const dietaryIcons: Record<string, { icon: typeof Leaf; color: string }> = {
+  vegetarian: { icon: Leaf, color: 'text-restaurant-green' },
+  vegan: { icon: Heart, color: 'text-restaurant-green' },
+  'gluten-free': { icon: Wheat, color: 'text-amber-600' },
+  halal: { icon: Heart, color: 'text-blue-600' },
+};
 
 export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps) {
-  const { dispatch } = useCart()
-  const [quantity, setQuantity] = useState(1)
-  const [specialInstructions, setSpecialInstructions] = useState("")
+  const { dispatch } = useCart();
+  const [quantity, setQuantity] = useState(1);
+  const [specialInstructions, setSpecialInstructions] = useState('');
 
-  if (!isOpen || !dish) return null
+  if (!isOpen || !dish) return null;
 
   const addToCart = () => {
     dispatch({
-      type: "ADD_ITEM",
+      type: 'ADD_ITEM',
       payload: {
         id: dish.id,
         name: dish.name,
@@ -52,24 +40,22 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
         quantity,
         specialInstructions: specialInstructions.trim() || undefined,
       },
-    })
-    dispatch({ type: "OPEN_CART" })
-    onClose()
-    setQuantity(1)
-    setSpecialInstructions("")
-  }
+    });
+    dispatch({ type: 'OPEN_CART' });
+    onClose();
+    setQuantity(1);
+    setSpecialInstructions('');
+  };
 
   return (
     <>
       <div className="fixed inset-0 bg-black/50 z-50 animate-in fade-in-0 duration-300" onClick={onClose} />
 
       <div className="fixed inset-4 md:inset-8 lg:inset-16 bg-background rounded-xl z-50 overflow-hidden flex flex-col max-w-2xl mx-auto animate-in zoom-in-95 slide-in-from-bottom-4 duration-300">
-        {/* Content - Now includes image in scrollable area */}
         <div className="flex-1 overflow-y-auto">
-          {/* Image Header */}
           <div className="relative overflow-hidden">
             <img
-              src={dish.image || "/placeholder.svg"}
+              src={dish.image || '/placeholder.svg'}
               alt={dish.name}
               className="w-full h-48 md:h-64 object-cover transition-transform duration-700 hover:scale-105"
             />
@@ -90,9 +76,9 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
 
             <div className="absolute bottom-4 right-4 flex gap-2">
               {dish.dietary.map((diet, index) => {
-                const dietInfo = dietaryIcons[diet as keyof typeof dietaryIcons]
-                if (!dietInfo) return null
-                const Icon = dietInfo.icon
+                const dietInfo = dietaryIcons[diet];
+                if (!dietInfo) return null;
+                const Icon = dietInfo.icon;
                 return (
                   <div
                     key={diet}
@@ -101,12 +87,11 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
                   >
                     <Icon className={`w-4 h-4 ${dietInfo.color}`} />
                   </div>
-                )
+                );
               })}
             </div>
           </div>
 
-          {/* Content Details */}
           <div className="p-6">
             <div className="flex justify-between items-start mb-4">
               <div>
@@ -128,7 +113,7 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
                   className="capitalize hover:scale-105 transition-transform duration-200 animate-in fade-in-0 slide-in-from-bottom-2 duration-300"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  {diet.replace("-", " ")}
+                  {diet.replace('-', ' ')}
                 </Badge>
               ))}
             </div>
@@ -136,7 +121,7 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
             <Card className="mb-4 hover:shadow-md transition-shadow duration-200 animate-in slide-in-from-bottom-4 duration-500 delay-200">
               <CardContent className="p-4">
                 <h3 className="font-semibold mb-2">Ingredients</h3>
-                <p className="text-sm text-muted-foreground">{dish.ingredients.join(", ")}</p>
+                <p className="text-sm text-muted-foreground">{dish.ingredients.join(', ')}</p>
               </CardContent>
             </Card>
 
@@ -147,7 +132,7 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
                     <AlertTriangle className="w-4 h-4 text-amber-600 animate-pulse" />
                     <h3 className="font-semibold text-amber-800">Allergen Information</h3>
                   </div>
-                  <p className="text-sm text-amber-700">Contains: {dish.allergens.join(", ")}</p>
+                  <p className="text-sm text-amber-700">Contains: {dish.allergens.join(', ')}</p>
                 </CardContent>
               </Card>
             )}
@@ -208,5 +193,5 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
         </div>
       </div>
     </>
-  )
+  );
 }
