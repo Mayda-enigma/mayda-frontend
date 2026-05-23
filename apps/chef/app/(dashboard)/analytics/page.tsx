@@ -14,11 +14,11 @@ import {
 } from "@/features/analytics"
 
 export default function AnalyticsPage() {
-  const [timeRange, setTimeRange] = useState<RangePreset>("today")
+  const [timeRange, setTimeRange] = useState<RangePreset>("day")
   const { t } = useI18n()
 
   const ranges = [
-    { key: "today", label: t.today },
+    { key: "day", label: t.today },
     { key: "week", label: t.week },
     { key: "month", label: t.month },
   ] as const

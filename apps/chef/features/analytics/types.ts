@@ -41,7 +41,7 @@ export interface RevenuePointDto {
 
 /* ─── Domain models ─── */
 
-export type RangePreset = 'today' | 'week' | 'month'
+export type RangePreset = 'day' | 'week' | 'month'
 
 export interface KitchenKpis {
   totalOrders: number
