@@ -1,112 +1,33 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Image from "next/image"
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
 import { Button } from "@/shared/ui/button"
 import { Badge } from "@/shared/ui/badge"
 import { Progress } from "@/shared/ui/progress"
 import { Input } from "@/shared/ui/input"
-import { Package, AlertTriangle, ShoppingCart, TrendingDown, TrendingUp, Search } from "lucide-react"
-import { useKitchenNotifications } from "@/hooks/use-kitchen-notifications"
+import { Package, AlertTriangle, ShoppingCart, Search, Loader2 } from "lucide-react"
 import { getIngredientIcon, hasIngredientImage } from "@/lib/ingredient-icons"
-
-interface StockItem {
-  id: string
-  name: string
-  category: "protein" | "vegetable" | "dairy" | "grain" | "spice" | "other"
-  currentStock: number
-  threshold: number
-  unit: string
-  costPerUnit: number
-  supplier: string
-  lastRestocked: Date
-  expiryDate?: Date
-  trend: "up" | "down" | "stable"
-  usageRate: number // units per day
-}
-
-const mockStockData: StockItem[] = [
-  {
-    id: "1",
-    name: "Salmon Fillets",
-    category: "protein",
-    currentStock: 3,
-    threshold: 10,
-    unit: "pieces",
-    costPerUnit: 12.5,
-    supplier: "Ocean Fresh",
-    lastRestocked: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-    expiryDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-    trend: "down",
-    usageRate: 8,
-  },
-  {
-    id: "2",
-    name: "Tomatoes",
-    category: "vegetable",
-    currentStock: 15,
-    threshold: 25,
-    unit: "lbs",
-    costPerUnit: 3.2,
-    supplier: "Farm Direct",
-    lastRestocked: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-    expiryDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
-    trend: "down",
-    usageRate: 12,
-  },
-  {
-    id: "3",
-    name: "Mozzarella Cheese",
-    category: "dairy",
-    currentStock: 8,
-    threshold: 12,
-    unit: "lbs",
-    costPerUnit: 8.75,
-    supplier: "Dairy Co",
-    lastRestocked: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-    expiryDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-    trend: "stable",
-    usageRate: 5,
-  },
-  {
-    id: "4",
-    name: "Olive Oil",
-    category: "other",
-    currentStock: 25,
-    threshold: 15,
-    unit: "bottles",
-    costPerUnit: 15.0,
-    supplier: "Mediterranean Imports",
-    lastRestocked: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-    trend: "up",
-    usageRate: 2,
-  },
-]
+import { useStock, useStockStats, useLowStockAlerts } from "@/features/inventory"
+import { StockAlertCard } from "@/features/inventory"
+import { useCurrentUser } from "@/features/auth"
+import type { StockItem } from "@/features/inventory"
 
 export function StockManagement() {
-  const [stockItems, setStockItems] = useState<StockItem[]>(mockStockData)
+  const { data: user } = useCurrentUser()
+  const restaurantId = user?.restaurantId ?? 0
+
+  const { data: stockItems = [], isLoading: isLoadingStock } = useStock(restaurantId)
+  const { data: stats, isLoading: isLoadingStats } = useStockStats(restaurantId)
+  const { data: alerts = [], isLoading: isLoadingAlerts } = useLowStockAlerts(restaurantId)
+
   const [searchTerm, setSearchTerm] = useState("")
   const [filterCategory, setFilterCategory] = useState<string>("all")
   const [filterStatus, setFilterStatus] = useState<string>("all")
-  const { notifyStockLow } = useKitchenNotifications()
-
-  useEffect(() => {
-    const checkStockLevels = () => {
-      stockItems.forEach((item) => {
-        const stockPercentage = (item.currentStock / item.threshold) * 100
-        if (stockPercentage <= 50 && Math.random() > 0.8) {
-          notifyStockLow(item.name, item.currentStock, item.threshold)
-        }
-      })
-    }
-
-    const interval = setInterval(checkStockLevels, 30000) // Check every 30 seconds
-    return () => clearInterval(interval)
-  }, [stockItems, notifyStockLow])
 
   const getStockStatus = (item: StockItem) => {
-    const percentage = (item.currentStock / item.threshold) * 100
+    const percentage = (item.currentStock / item.minimumStock) * 100
     if (percentage <= 25) return "critical"
     if (percentage <= 50) return "low"
     if (percentage <= 75) return "medium"
@@ -150,23 +71,17 @@ export function StockManagement() {
     return matchesSearch && matchesCategory && matchesStatus
   })
 
-  const reorderItem = (itemId: string) => {
-    setStockItems((items) =>
-      items.map((item) =>
-        item.id === itemId ? { ...item, currentStock: item.threshold * 2, lastRestocked: new Date() } : item,
-      ),
+  const isLoading = isLoadingStock || isLoadingStats
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <div className="text-center">
+          <Loader2 className="w-12 h-12 mx-auto text-orange-500 mb-4 animate-spin" />
+          <p className="text-muted-foreground">Loading inventory...</p>
+        </div>
+      </div>
     )
-  }
-
-  const getDaysUntilEmpty = (item: StockItem) => {
-    if (item.usageRate === 0) return "N/A"
-    return Math.ceil(item.currentStock / item.usageRate)
-  }
-
-  const isExpiringSoon = (item: StockItem) => {
-    if (!item.expiryDate) return false
-    const daysUntilExpiry = Math.ceil((item.expiryDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
-    return daysUntilExpiry <= 3
   }
 
   return (
@@ -179,6 +94,21 @@ export function StockManagement() {
           Bulk Reorder
         </Button>
       </div>
+
+      {/* Low Stock Alerts */}
+      {alerts.length > 0 && (
+        <div className="space-y-3">
+          <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+            <AlertTriangle className="w-5 h-5 text-orange-500" />
+            Low Stock Alerts ({alerts.length})
+          </h3>
+          <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+            {alerts.map((alert) => (
+              <StockAlertCard key={alert.id} alert={alert} />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Filters */}
       <Card className="bg-card border-border">
@@ -225,33 +155,83 @@ export function StockManagement() {
 
       {/* Stock Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {["critical", "low", "medium", "good"].map((status) => {
-          const count = filteredItems.filter((item) => getStockStatus(item) === status).length
-          return (
-            <Card key={status} className="bg-card border-border">
+        {stats ? (
+          <>
+            <Card className="bg-card border-border">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className={`w-3 h-3 rounded-full ${getStatusColor(status).split(" ")[1]}`} />
+                  <div className="w-3 h-3 rounded-full bg-green-900/30" />
                   <div>
-                    <div className="text-2xl font-bold text-foreground">{count}</div>
-                    <div className="text-sm text-muted-foreground capitalize">{status} Stock</div>
+                    <div className="text-2xl font-bold text-foreground">{stats.totalItems}</div>
+                    <div className="text-sm text-muted-foreground">Total Items</div>
                   </div>
                 </div>
               </CardContent>
             </Card>
-          )
-        })}
+            <Card className="bg-card border-border">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 rounded-full bg-blue-900/30" />
+                  <div>
+                    <div className="text-2xl font-bold text-foreground">{stats.activeItems}</div>
+                    <div className="text-sm text-muted-foreground">Active Items</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="bg-card border-border">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 rounded-full bg-red-900/30" />
+                  <div>
+                    <div className="text-2xl font-bold text-foreground">{stats.lowStockItems}</div>
+                    <div className="text-sm text-muted-foreground">Low Stock</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="bg-card border-border">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 rounded-full bg-yellow-900/30" />
+                  <div>
+                    <div className="text-2xl font-bold text-foreground">{stats.expiringSoonItems}</div>
+                    <div className="text-sm text-muted-foreground">Expiring Soon</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </>
+        ) : (
+          ["critical", "low", "medium", "good"].map((status) => {
+            const count = filteredItems.filter((item) => getStockStatus(item) === status).length
+            return (
+              <Card key={status} className="bg-card border-border">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-3 h-3 rounded-full ${getStatusColor(status).split(" ")[1]}`} />
+                    <div>
+                      <div className="text-2xl font-bold text-foreground">{count}</div>
+                      <div className="text-sm text-muted-foreground capitalize">{status} Stock</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )
+          })
+        )}
       </div>
 
       {/* Stock Items Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {filteredItems.map((item) => {
           const status = getStockStatus(item)
-          const stockPercentage = (item.currentStock / item.threshold) * 100
-          const daysUntilEmpty = getDaysUntilEmpty(item)
-          const expiringSoon = isExpiringSoon(item)
+          const stockPercentage = Math.min((item.currentStock / item.minimumStock) * 100, 100)
           const ingredientIcon = getIngredientIcon(item.name, item.category)
           const IngredientIcon = ingredientIcon.icon
+          const expiringSoon = item.expiryDate
+            ? Math.ceil((item.expiryDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24)) <= 3
+            : false
 
           return (
             <Card
@@ -297,7 +277,7 @@ export function StockManagement() {
                   <div className="flex justify-between text-sm mb-2">
                     <span className="text-muted-foreground">Stock Level</span>
                     <span className="text-foreground">
-                      {item.currentStock} / {item.threshold} {item.unit}
+                      {item.currentStock} / {item.minimumStock} {item.unit}
                     </span>
                   </div>
                   <Progress value={stockPercentage} className="h-2" />
@@ -306,49 +286,38 @@ export function StockManagement() {
                 {/* Key Metrics */}
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <div className="text-muted-foreground">Days Left</div>
-                    <div className="text-foreground font-medium">{daysUntilEmpty}</div>
+                    <div className="text-muted-foreground">Unit Price</div>
+                    <div className="text-foreground font-medium">${item.unitPrice.toFixed(2)}</div>
                   </div>
                   <div>
-                    <div className="text-muted-foreground">Usage/Day</div>
-                    <div className="text-foreground font-medium">
-                      {item.usageRate} {item.unit}
+                    <div className="text-muted-foreground">Total Value</div>
+                    <div className="text-foreground font-medium">${item.totalValue.toFixed(2)}</div>
+                  </div>
+                  {item.location && (
+                    <div>
+                      <div className="text-muted-foreground">Location</div>
+                      <div className="text-foreground font-medium">{item.location}</div>
                     </div>
-                  </div>
-                  <div>
-                    <div className="text-muted-foreground">Cost/Unit</div>
-                    <div className="text-foreground font-medium">${item.costPerUnit}</div>
-                  </div>
-                  <div>
-                    <div className="text-muted-foreground">Trend</div>
-                    <div className="flex items-center gap-1">
-                      {item.trend === "up" ? (
-                        <TrendingUp className="w-4 h-4 text-green-400" />
-                      ) : item.trend === "down" ? (
-                        <TrendingDown className="w-4 h-4 text-red-400" />
-                      ) : (
-                        <div className="w-4 h-4 bg-gray-400 rounded-full" />
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Supplier & Dates */}
-                <div className="text-xs text-muted-foreground space-y-1">
-                  <div>Supplier: {item.supplier}</div>
-                  <div>Last Restocked: {item.lastRestocked.toLocaleDateString()}</div>
-                  {item.expiryDate && (
-                    <div className={expiringSoon ? "text-red-400" : ""}>
-                      Expires: {item.expiryDate.toLocaleDateString()}
+                  )}
+                  {item.supplier && (
+                    <div>
+                      <div className="text-muted-foreground">Supplier</div>
+                      <div className="text-foreground font-medium">{item.supplier}</div>
                     </div>
                   )}
                 </div>
+
+                {/* Expiry */}
+                {item.expiryDate && (
+                  <div className={`text-xs ${expiringSoon ? "text-red-400" : "text-muted-foreground"}`}>
+                    Expires: {item.expiryDate.toLocaleDateString()}
+                  </div>
+                )}
 
                 {/* Actions */}
                 <div className="flex gap-2">
                   <Button
                     size="sm"
-                    onClick={() => reorderItem(item.id)}
                     className="flex-1 bg-orange-500 hover:bg-orange-600"
                   >
                     <ShoppingCart className="w-4 h-4 mr-2" />
@@ -368,7 +337,7 @@ export function StockManagement() {
       </div>
 
       {/* Empty State */}
-      {filteredItems.length === 0 && (
+      {filteredItems.length === 0 && !isLoading && (
         <div className="text-center py-12">
           <Package className="w-16 h-16 mx-auto text-gray-600 mb-4" />
           <h3 className="text-xl font-semibold text-gray-400 mb-2">No Items Found</h3>
