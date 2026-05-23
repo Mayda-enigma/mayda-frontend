@@ -1,14 +1,14 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Button } from "@/shared/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
+import { Badge } from "@/shared/ui/badge"
+import { Input } from "@/shared/ui/input"
+import { Textarea } from "@/shared/ui/textarea"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/ui/dialog"
 import { Clock, Users, ChefHat, CheckCircle, AlertTriangle, Plus, MessageSquare, Leaf } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/shared/utils"
 import { useLanguage } from "@/components/language-provider"
 
 interface OrderItem {

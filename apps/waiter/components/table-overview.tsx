@@ -1,12 +1,12 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Button } from "@/shared/ui/button"
+import { Card, CardContent } from "@/shared/ui/card"
+import { Badge } from "@/shared/ui/badge"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/shared/ui/dropdown-menu"
 import { Clock, Users, ChefHat, AlertTriangle, Filter, Grid3X3, List, Eye, Leaf, Utensils } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/shared/utils"
 import Link from "next/link"
 
 type TableStatus = "free" | "occupied" | "waiting" | "served"

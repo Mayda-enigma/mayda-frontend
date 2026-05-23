@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
+import { Button } from "@/shared/ui/button"
+import { Badge } from "@/shared/ui/badge"
 import { Bell, BellOff, Trash2 } from "lucide-react"
 import { useNotifications } from "./notification-system"
 

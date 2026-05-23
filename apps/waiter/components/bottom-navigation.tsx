@@ -1,7 +1,7 @@
 "use client"
 
 import { Home, QrCode, ClipboardList } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/shared/utils"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useLanguage } from "@/components/language-provider"

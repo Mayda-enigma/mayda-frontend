@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import Image from "next/image"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/shared/ui/button"
 import { ChefHat, Package, BarChart3 } from "lucide-react"
 import { ThemeToggle } from "./theme-toggle"
 import { LanguageSelector } from "./language-selector"

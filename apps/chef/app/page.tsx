@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/shared/ui/button"
 import { Clock, ChefHat, Users } from "lucide-react"
 import { OrderCard } from "@/components/order-card"
 import { StockAlert } from "@/components/stock-alert"

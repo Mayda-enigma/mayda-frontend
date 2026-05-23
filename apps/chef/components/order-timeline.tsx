@@ -1,6 +1,6 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
 import { Clock, Play, CheckCircle, Utensils } from "lucide-react"
 
 interface Order {
