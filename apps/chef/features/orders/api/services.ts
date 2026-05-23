@@ -1,16 +1,16 @@
 import { apiClient } from '@/shared/api/client';
-import type { Order, OrderDetail } from '../types';
+import type { OrderListDto, OrderDetailDto } from '../types';
 
 export const orderService = {
-  list: (): Promise<Order[]> =>
-    apiClient<Order[]>('/orders/kitchen'),
+  list: (restaurantId: number): Promise<OrderListDto[]> =>
+    apiClient<OrderListDto[]>(`/orders/restaurant/${restaurantId}`),
 
-  detail: (id: string): Promise<OrderDetail> =>
-    apiClient<OrderDetail>(`/orders/${id}`),
+  detail: (orderId: number): Promise<OrderDetailDto> =>
+    apiClient<OrderDetailDto>(`/orders/${orderId}`),
 
-  updateStatus: (id: string, status: string): Promise<void> =>
-    apiClient<void>(`/orders/${id}/status`, {
+  updateStatus: (orderId: number, status: string, notes?: string): Promise<OrderDetailDto> =>
+    apiClient<OrderDetailDto>(`/orders/${orderId}/status`, {
       method: 'PATCH',
-      body: JSON.stringify({ status }),
+      body: JSON.stringify({ status, ...(notes ? { notes } : {}) }),
     }),
 };

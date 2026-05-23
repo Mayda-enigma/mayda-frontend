@@ -3,19 +3,19 @@ import { ordersKeys } from './queryKeys';
 import { orderService } from './services';
 import { toOrders, toOrderDetail } from './mappers';
 
-export const useOrders = () =>
+export const useOrders = (restaurantId: number) =>
   useQuery({
-    queryKey: ordersKeys.lists(),
-    queryFn: orderService.list,
+    queryKey: ordersKeys.list(String(restaurantId)),
+    queryFn: () => orderService.list(restaurantId),
     select: toOrders,
-    refetchInterval: 30_000,
-    staleTime: 10_000,
+    refetchInterval: 15_000,
+    staleTime: 5_000,
   });
 
-export const useOrderDetail = (id: string) =>
+export const useOrderDetail = (orderId: number) =>
   useQuery({
-    queryKey: ordersKeys.detail(id),
-    queryFn: () => orderService.detail(id),
+    queryKey: ordersKeys.detail(String(orderId)),
+    queryFn: () => orderService.detail(orderId),
     select: toOrderDetail,
-    enabled: !!id,
+    enabled: !!orderId,
   });

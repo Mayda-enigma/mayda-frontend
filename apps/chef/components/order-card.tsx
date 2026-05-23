@@ -16,9 +16,10 @@ interface Dish {
 
 interface Order {
   id: string
+  backendId: number
   tableNumber: number
   timeReceived: Date
-  status: "pending" | "in-progress" | "ready"
+  status: string
   complexity: "low" | "medium" | "high"
   dishes: Dish[]
   specialRequests: string

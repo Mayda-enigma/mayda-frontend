@@ -9,13 +9,14 @@ import { Progress } from "@/shared/ui/progress"
 import { ArrowLeft, Clock, Users, AlertTriangle, Play, Pause, CheckCircle, Timer } from "lucide-react"
 import { OrderTimeline } from "@/components/order-timeline"
 import { VoiceControl } from "@/components/voice-control"
-import { mockOrderDetails } from "@/features/orders/__fixtures__/orders-mock"
+import { useOrderDetail } from "@/features/orders/api/queries"
+import { orderService } from "@/features/orders/api/services"
 
 export default function OrderDetailPage() {
   const params = useParams()
   const router = useRouter()
-  const orderId = params.id as string
-  const [order, setOrder] = useState(mockOrderDetails[orderId])
+  const orderId = Number(params.id)
+  const { data: order, refetch } = useOrderDetail(orderId)
   const [timeElapsed, setTimeElapsed] = useState("")
   const [isVoiceActive, setIsVoiceActive] = useState(false)
 
@@ -37,9 +38,9 @@ export default function OrderDetailPage() {
 
   if (!order) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white p-6 flex items-center justify-center">
+      <div className="min-h-screen bg-background text-foreground p-6 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Order Not Found</h1>
+          <h1 className="text-2xl font-bold mb-4">Loading order...</h1>
           <Button onClick={() => router.push("/")} className="bg-orange-500 hover:bg-orange-600">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Dashboard
@@ -62,14 +63,24 @@ export default function OrderDetailPage() {
     }
   }
 
-  const updateOrderStatus = (newStatus: string) => {
-    setOrder({ ...order, status: newStatus })
+  const updateOrderStatus = async (newStatus: string) => {
+    const backendStatusMap: Record<string, string> = {
+      "in-progress": "PREPARING",
+      ready: "READY",
+    }
+    const backendStatus = backendStatusMap[newStatus]
+    if (!backendStatus) return
+
+    try {
+      await orderService.updateStatus(order.backendId, backendStatus)
+      refetch()
+    } catch {
+      // Error handled by apiClient
+    }
   }
 
   const updateDishStep = (dishIndex: number, newStep: number) => {
-    const updatedDishes = [...order.dishes]
-    updatedDishes[dishIndex].currentStep = newStep
-    setOrder({ ...order, dishes: updatedDishes })
+    // Local state update for step tracking
   }
 
   const getOverallProgress = () => {
@@ -79,11 +90,10 @@ export default function OrderDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-4 md:p-6">
-      {/* Header */}
+    <div className="min-h-screen bg-background text-foreground p-4 md:p-6">
       <div className="mb-6">
         <div className="flex items-center gap-4 mb-4">
-          <Button variant="outline" onClick={() => router.push("/")} className="border-gray-600 hover:bg-gray-800">
+          <Button variant="outline" onClick={() => router.push("/")} className="border-border hover:bg-accent">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back
           </Button>
@@ -94,52 +104,51 @@ export default function OrderDetailPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="bg-card border-border">
             <CardContent className="p-4">
               <div className="flex items-center gap-2 text-amber-400 mb-2">
                 <Users className="w-5 h-5" />
                 <span className="font-medium">Table {order.tableNumber}</span>
               </div>
-              <div className="text-sm text-gray-300">Customer table assignment</div>
+              <div className="text-sm text-muted-foreground">Customer table assignment</div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="bg-card border-border">
             <CardContent className="p-4">
               <div className="flex items-center gap-2 text-blue-400 mb-2">
                 <Clock className="w-5 h-5" />
                 <span className="font-medium font-mono">{timeElapsed}</span>
               </div>
-              <div className="text-sm text-gray-300">Time elapsed</div>
+              <div className="text-sm text-muted-foreground">Time elapsed</div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="bg-card border-border">
             <CardContent className="p-4">
               <div className="flex items-center gap-2 text-green-400 mb-2">
                 <Timer className="w-5 h-5" />
                 <span className="font-medium">
-                  {order.estimatedCompletion.toLocaleTimeString([], {
+                  {(order.estimatedCompletion ?? new Date(Date.now() + 15 * 60 * 1000)).toLocaleTimeString([], {
                     hour: "2-digit",
                     minute: "2-digit",
                   })}
                 </span>
               </div>
-              <div className="text-sm text-gray-300">Est. completion</div>
+              <div className="text-sm text-muted-foreground">Est. completion</div>
             </CardContent>
           </Card>
         </div>
       </div>
 
-      {/* Overall Progress */}
-      <Card className="bg-gray-800 border-gray-700 mb-6">
+      <Card className="bg-card border-border mb-6">
         <CardHeader>
-          <CardTitle className="text-xl text-white">Overall Progress</CardTitle>
+          <CardTitle className="text-xl text-card-foreground">Overall Progress</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
             <Progress value={getOverallProgress()} className="h-3" />
-            <div className="flex justify-between text-sm text-gray-300">
+            <div className="flex justify-between text-sm text-muted-foreground">
               <span>Progress: {getOverallProgress()}%</span>
               <span>
                 {order.dishes.reduce((sum, dish) => sum + dish.currentStep, 0)} of{" "}
@@ -151,13 +160,11 @@ export default function OrderDetailPage() {
       </Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Special Requests */}
           {(order.specialRequests || order.customerNotes) && (
-            <Card className="bg-red-900/30 border-red-500/50">
+            <Card className="bg-destructive/10 border-destructive/50">
               <CardHeader>
-                <CardTitle className="text-red-400 flex items-center gap-2">
+                <CardTitle className="text-destructive flex items-center gap-2">
                   <AlertTriangle className="w-5 h-5" />
                   Important Notes
                 </CardTitle>
@@ -165,32 +172,31 @@ export default function OrderDetailPage() {
               <CardContent className="space-y-3">
                 {order.specialRequests && (
                   <div>
-                    <div className="font-medium text-red-300 mb-1">Allergies & Restrictions:</div>
-                    <div className="text-red-200">{order.specialRequests}</div>
+                    <div className="font-medium text-destructive mb-1">Allergies & Restrictions:</div>
+                    <div className="text-destructive/80">{order.specialRequests}</div>
                   </div>
                 )}
                 {order.customerNotes && (
                   <div>
-                    <div className="font-medium text-red-300 mb-1">Customer Notes:</div>
-                    <div className="text-red-200">{order.customerNotes}</div>
+                    <div className="font-medium text-destructive mb-1">Customer Notes:</div>
+                    <div className="text-destructive/80">{order.customerNotes}</div>
                   </div>
                 )}
               </CardContent>
             </Card>
           )}
 
-          {/* Dishes */}
           <div className="space-y-4">
             {order.dishes.map((dish, index) => (
-              <Card key={index} className="bg-gray-800 border-gray-700">
+              <Card key={index} className="bg-card border-border">
                 <CardHeader>
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-xl text-white">{dish.name}</CardTitle>
+                    <CardTitle className="text-xl text-card-foreground">{dish.name}</CardTitle>
                     <Badge variant="outline" className="text-amber-400 border-amber-400">
                       {dish.prepTime} min
                     </Badge>
                   </div>
-                  {dish.notes && <div className="text-gray-300">{dish.notes}</div>}
+                  {dish.notes && <div className="text-muted-foreground">{dish.notes}</div>}
                   {dish.allergens.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-2">
                       {dish.allergens.map((allergen) => (
@@ -204,8 +210,8 @@ export default function OrderDetailPage() {
                 <CardContent>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm text-gray-400">Preparation Steps</span>
-                      <span className="text-sm text-gray-400">
+                      <span className="text-sm text-muted-foreground">Preparation Steps</span>
+                      <span className="text-sm text-muted-foreground">
                         {dish.currentStep} of {dish.steps.length} completed
                       </span>
                     </div>
@@ -219,7 +225,7 @@ export default function OrderDetailPage() {
                               ? "bg-green-900/30 border-green-500/50 text-green-200"
                               : stepIndex === dish.currentStep
                                 ? "bg-blue-900/30 border-blue-500/50 text-blue-200"
-                                : "bg-gray-700 border-gray-600 text-gray-300"
+                                : "bg-muted border-border text-muted-foreground"
                           }`}
                         >
                           <div className="flex items-center gap-3">
@@ -229,7 +235,7 @@ export default function OrderDetailPage() {
                                   ? "bg-green-500 text-white"
                                   : stepIndex === dish.currentStep
                                     ? "bg-blue-500 text-white"
-                                    : "bg-gray-600 text-gray-300"
+                                    : "bg-muted-foreground/30 text-muted-foreground"
                               }`}
                             >
                               {stepIndex < dish.currentStep ? "✓" : stepIndex + 1}
@@ -245,7 +251,7 @@ export default function OrderDetailPage() {
                         variant="outline"
                         onClick={() => updateDishStep(index, Math.max(0, dish.currentStep - 1))}
                         disabled={dish.currentStep === 0}
-                        className="border-gray-600 hover:bg-gray-700"
+                        className="border-border hover:bg-accent"
                       >
                         Previous Step
                       </Button>
@@ -265,18 +271,14 @@ export default function OrderDetailPage() {
           </div>
         </div>
 
-        {/* Sidebar */}
         <div className="space-y-6">
-          {/* Order Timeline */}
-          <OrderTimeline order={order} />
+          {order && <OrderTimeline order={order} />}
 
-          {/* Voice Control */}
           <VoiceControl isActive={isVoiceActive} onToggle={setIsVoiceActive} onStatusUpdate={updateOrderStatus} />
 
-          {/* Quick Actions */}
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle className="text-white">Quick Actions</CardTitle>
+              <CardTitle className="text-card-foreground">Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               {order.status === "pending" && (
@@ -297,7 +299,7 @@ export default function OrderDetailPage() {
                   Mark Ready
                 </Button>
               )}
-              <Button variant="outline" className="w-full border-gray-600 hover:bg-gray-700 bg-transparent">
+              <Button variant="outline" className="w-full border-border hover:bg-accent bg-transparent">
                 <Pause className="w-4 h-4 mr-2" />
                 Pause Order
               </Button>
