@@ -1,12 +1,13 @@
 "use client"
 
-import { useState } from "react"
 import { Button } from "@/shared/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
 import { Badge } from "@/shared/ui/badge"
 import { Slider } from "@/shared/ui/slider"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { BurgerMenu } from "@/components/burger-menu"
+import { useFilterStore } from "@/features/filters"
+import type { SpiceLevel } from "@/features/filters"
 import { ArrowLeft, Leaf, Wheat, Heart, Star, Clock, DollarSign } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -22,7 +23,7 @@ const dietaryOptions = [
 
 const cuisineTypes = ["Mediterranean", "Italian", "Moroccan", "French", "Asian", "American", "Healthy", "Comfort Food"]
 
-const spiceLevels = [
+const spiceLevels: { id: SpiceLevel; name: string; color: string }[] = [
   { id: "mild", name: "Mild", color: "bg-green-100 text-green-800" },
   { id: "medium", name: "Medium", color: "bg-yellow-100 text-yellow-800" },
   { id: "hot", name: "Hot", color: "bg-orange-100 text-orange-800" },
@@ -31,48 +32,26 @@ const spiceLevels = [
 
 export default function FiltersPage() {
   const router = useRouter()
-  const [selectedDietary, setSelectedDietary] = useState<string[]>([])
-  const [selectedCuisines, setSelectedCuisines] = useState<string[]>([])
-  const [selectedSpice, setSelectedSpice] = useState<string[]>([])
-  const [priceRange, setPriceRange] = useState([0, 50])
-  const [prepTime, setPrepTime] = useState([0, 60])
-  const [showPopularOnly, setShowPopularOnly] = useState(false)
-  const [sortBy, setSortBy] = useState("recommended")
+  const {
+    dietary,
+    cuisines,
+    spice,
+    priceRange,
+    prepTime,
+    popularOnly,
+    sortBy,
+    toggleDietary,
+    toggleCuisine,
+    toggleSpice,
+    setPriceRange,
+    setPrepTime,
+    setPopularOnly,
+    setSortBy,
+    clearAll,
+    activeCount,
+  } = useFilterStore()
 
-  const toggleDietaryFilter = (dietary: string) => {
-    setSelectedDietary((prev) => (prev.includes(dietary) ? prev.filter((d) => d !== dietary) : [...prev, dietary]))
-  }
-
-  const toggleCuisineFilter = (cuisine: string) => {
-    setSelectedCuisines((prev) => (prev.includes(cuisine) ? prev.filter((c) => c !== cuisine) : [...prev, cuisine]))
-  }
-
-  const toggleSpiceFilter = (spice: string) => {
-    setSelectedSpice((prev) => (prev.includes(spice) ? prev.filter((s) => s !== spice) : [...prev, spice]))
-  }
-
-  const clearAllFilters = () => {
-    setSelectedDietary([])
-    setSelectedCuisines([])
-    setSelectedSpice([])
-    setPriceRange([0, 50])
-    setPrepTime([0, 60])
-    setShowPopularOnly(false)
-    setSortBy("recommended")
-  }
-
-  const applyFilters = () => {
-    // In a real app, this would pass filters back to the menu page
-    // For now, we'll just navigate back
-    router.push("/menu")
-  }
-
-  const activeFiltersCount =
-    selectedDietary.length +
-    selectedCuisines.length +
-    selectedSpice.length +
-    (showPopularOnly ? 1 : 0) +
-    (sortBy !== "recommended" ? 1 : 0)
+  const count = activeCount()
 
   return (
     <div className="min-h-screen bg-background">
@@ -88,7 +67,7 @@ export default function FiltersPage() {
             <div>
               <h1 className="text-lg sm:text-xl font-bold">Filters</h1>
               <p className="text-xs sm:text-sm text-muted-foreground">
-                {activeFiltersCount > 0 ? `${activeFiltersCount} active filters` : "No filters applied"}
+                {count > 0 ? `${count} active filters` : "No filters applied"}
               </p>
             </div>
           </div>
@@ -96,7 +75,7 @@ export default function FiltersPage() {
             <div className="hidden md:block">
               <ThemeToggle />
             </div>
-            <Button variant="ghost" onClick={clearAllFilters} className="text-xs sm:text-sm px-2 sm:px-3">
+            <Button variant="ghost" onClick={clearAll} className="text-xs sm:text-sm px-2 sm:px-3">
               Clear All
             </Button>
           </div>
@@ -114,14 +93,16 @@ export default function FiltersPage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {[
-                { id: "recommended", name: "Recommended" },
-                { id: "price-low", name: "Price: Low to High" },
-                { id: "price-high", name: "Price: High to Low" },
-                { id: "popular", name: "Most Popular" },
-                { id: "prep-time", name: "Prep Time" },
-                { id: "rating", name: "Highest Rated" },
-              ].map((option) => (
+              {(
+                [
+                  { id: "recommended", name: "Recommended" },
+                  { id: "price-low", name: "Price: Low to High" },
+                  { id: "price-high", name: "Price: High to Low" },
+                  { id: "popular", name: "Most Popular" },
+                  { id: "prep-time", name: "Prep Time" },
+                  { id: "rating", name: "Highest Rated" },
+                ] as const
+              ).map((option) => (
                 <Button
                   key={option.id}
                   variant={sortBy === option.id ? "default" : "outline"}
@@ -146,7 +127,7 @@ export default function FiltersPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3 sm:space-y-4">
-              <Slider value={priceRange} onValueChange={setPriceRange} max={50} min={0} step={1} className="w-full" />
+              <Slider value={priceRange} onValueChange={(v) => setPriceRange(v as [number, number])} max={50} min={0} step={1} className="w-full" />
               <div className="flex justify-between text-xs sm:text-sm text-muted-foreground">
                 <span>${priceRange[0]}</span>
                 <span>${priceRange[1]}+</span>
@@ -165,7 +146,7 @@ export default function FiltersPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3 sm:space-y-4">
-              <Slider value={prepTime} onValueChange={setPrepTime} max={60} min={0} step={5} className="w-full" />
+              <Slider value={prepTime} onValueChange={(v) => setPrepTime(v as [number, number])} max={60} min={0} step={5} className="w-full" />
               <div className="flex justify-between text-xs sm:text-sm text-muted-foreground">
                 <span>{prepTime[0]} min</span>
                 <span>{prepTime[1]}+ min</span>
@@ -183,13 +164,13 @@ export default function FiltersPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {dietaryOptions.map((option) => {
                 const Icon = option.icon
-                const isSelected = selectedDietary.includes(option.id)
+                const isSelected = dietary.includes(option.id)
                 return (
                   <Button
                     key={option.id}
                     variant={isSelected ? "default" : "outline"}
                     size="sm"
-                    onClick={() => toggleDietaryFilter(option.id)}
+                    onClick={() => toggleDietary(option.id)}
                     className={`justify-start text-xs sm:text-sm ${isSelected ? "bg-green-600 text-white" : ""}`}
                   >
                     <Icon className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
@@ -211,11 +192,11 @@ export default function FiltersPage() {
               {cuisineTypes.map((cuisine) => (
                 <Badge
                   key={cuisine}
-                  variant={selectedCuisines.includes(cuisine) ? "default" : "outline"}
+                  variant={cuisines.includes(cuisine) ? "default" : "outline"}
                   className={`cursor-pointer text-xs sm:text-sm hover:scale-105 transition-transform duration-200 ${
-                    selectedCuisines.includes(cuisine) ? "restaurant-gradient text-white" : ""
+                    cuisines.includes(cuisine) ? "restaurant-gradient text-white" : ""
                   }`}
-                  onClick={() => toggleCuisineFilter(cuisine)}
+                  onClick={() => toggleCuisine(cuisine)}
                 >
                   {cuisine}
                 </Badge>
@@ -234,10 +215,10 @@ export default function FiltersPage() {
               {spiceLevels.map((level) => (
                 <Button
                   key={level.id}
-                  variant={selectedSpice.includes(level.id) ? "default" : "outline"}
+                  variant={spice.includes(level.id) ? "default" : "outline"}
                   size="sm"
-                  onClick={() => toggleSpiceFilter(level.id)}
-                  className={`text-xs sm:text-sm ${selectedSpice.includes(level.id) ? "restaurant-gradient text-white" : ""}`}
+                  onClick={() => toggleSpice(level.id)}
+                  className={`text-xs sm:text-sm ${spice.includes(level.id) ? "restaurant-gradient text-white" : ""}`}
                 >
                   {level.name}
                 </Button>
@@ -253,9 +234,9 @@ export default function FiltersPage() {
           </CardHeader>
           <CardContent>
             <Button
-              variant={showPopularOnly ? "default" : "outline"}
-              onClick={() => setShowPopularOnly(!showPopularOnly)}
-              className={`w-full text-xs sm:text-sm ${showPopularOnly ? "restaurant-gradient text-white" : ""}`}
+              variant={popularOnly ? "default" : "outline"}
+              onClick={() => setPopularOnly(!popularOnly)}
+              className={`w-full text-xs sm:text-sm ${popularOnly ? "restaurant-gradient text-white" : ""}`}
             >
               <Star className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
               Show Popular Items Only
@@ -266,10 +247,10 @@ export default function FiltersPage() {
         {/* Apply Filters Button */}
         <div className="sticky bottom-4">
           <Button
-            onClick={applyFilters}
+            onClick={() => router.push("/menu")}
             className="w-full h-12 sm:h-14 text-sm sm:text-base md:text-lg restaurant-gradient text-white"
           >
-            Apply Filters {activeFiltersCount > 0 && `(${activeFiltersCount})`}
+            Apply Filters {count > 0 && `(${count})`}
           </Button>
         </div>
       </div>
