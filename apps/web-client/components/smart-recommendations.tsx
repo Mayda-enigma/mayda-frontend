@@ -5,7 +5,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { Button } from "@/shared/ui/button"
 import { Card, CardContent } from "@/shared/ui/card"
-import { useCart } from "@/components/cart-context"
+import { useCart } from "@/features/cart"
 import { Sparkles, Clock, Calendar, TrendingUp, Plus, X } from "lucide-react"
 
 interface MenuItem {

@@ -1,6 +1,6 @@
 "use client"
 
-import { useCart } from "@/components/cart-context"
+import { useCart } from "@/features/cart"
 import { Home, UtensilsCrossed, Clock, ShoppingBag } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"

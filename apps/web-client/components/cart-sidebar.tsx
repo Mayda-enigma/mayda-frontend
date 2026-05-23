@@ -3,7 +3,7 @@
 import { Button } from "@/shared/ui/button"
 import { Card, CardContent } from "@/shared/ui/card"
 import { Badge } from "@/shared/ui/badge"
-import { useCart } from "@/components/cart-context"
+import { useCart } from "@/features/cart"
 import { X, Plus, Minus, ShoppingBag, CreditCard } from "lucide-react"
 import { useState } from "react"
 import Link from "next/link"

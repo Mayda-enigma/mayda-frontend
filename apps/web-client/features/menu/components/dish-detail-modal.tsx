@@ -5,7 +5,7 @@ import { Button } from '@/shared/ui/button';
 import { Card, CardContent } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
 import { Textarea } from '@/shared/ui/textarea';
-import { useCart } from '@/components/cart-context';
+import { useCart } from '@/features/cart';
 import { X, Plus, Minus, Heart, Leaf, Wheat, AlertTriangle } from 'lucide-react';
 import type { MenuItem } from '../types';
 

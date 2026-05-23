@@ -5,7 +5,7 @@ import { Button } from '@/shared/ui/button';
 import { Card, CardContent } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
 import { Input } from '@/shared/ui/input';
-import { useCart } from '@/components/cart-context';
+import { useCart } from '@/features/cart';
 import { useMenu } from '../api/queries';
 import { DishDetailModal } from './dish-detail-modal';
 import { SmartRecommendations } from '@/components/smart-recommendations';
