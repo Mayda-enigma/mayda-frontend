@@ -6,41 +6,35 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { BurgerMenu } from "@/components/burger-menu"
-import { useCart } from "@/components/cart-context"
+import { useCart } from "@/features/cart"
 import { ArrowLeft, Plus, Minus, Trash2, CreditCard, Clock, MapPin } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
 export default function CartPage() {
-  const { state, dispatch } = useCart()
+  const cart = useCart()
   const router = useRouter()
   const [orderNotes, setOrderNotes] = useState("")
   const [isProcessing, setIsProcessing] = useState(false)
 
-  const subtotal = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const serviceFee = subtotal * 0.1
   const total = subtotal + serviceFee
 
   const updateQuantity = (id: string, newQuantity: number) => {
-    if (newQuantity <= 0) {
-      dispatch({ type: "REMOVE_ITEM", payload: id })
-    } else {
-      dispatch({ type: "UPDATE_QUANTITY", payload: { id, quantity: newQuantity } })
-    }
+    cart.updateQuantity(id, newQuantity)
   }
 
   const handleCheckout = async () => {
     setIsProcessing(true)
-
-    // Simulate order processing
     setTimeout(() => {
-      dispatch({ type: "CLEAR_CART" })
+      cart.clear()
       router.push("/orders")
       setIsProcessing(false)
     }, 2000)
   }
 
-  if (state.items.length === 0) {
+  if (cart.items.length === 0) {
     return (
       <div className="min-h-screen bg-background">
         <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
@@ -101,16 +95,15 @@ export default function CartPage() {
       </header>
 
       <div className="p-2 sm:p-3 md:p-4 space-y-3 sm:space-y-4 md:space-y-6 max-w-4xl mx-auto">
-        {/* Order Items */}
         <Card>
           <CardHeader className="pb-3 sm:pb-4 md:pb-6">
             <CardTitle className="flex items-center gap-2 text-sm sm:text-base md:text-lg">
               <CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />
-              Your Order ({state.items.length} items)
+              Your Order ({cart.items.length} items)
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 sm:space-y-3 md:space-y-4">
-            {state.items.map((item) => (
+            {cart.items.map((item) => (
               <div
                 key={item.id}
                 className="flex items-center gap-2 sm:gap-3 md:gap-4 p-2 sm:p-3 md:p-4 border rounded-lg"
@@ -153,7 +146,7 @@ export default function CartPage() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => dispatch({ type: "REMOVE_ITEM", payload: item.id })}
+                    onClick={() => cart.remove(item.id)}
                     className="text-destructive hover:text-destructive p-1 mt-1"
                   >
                     <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -164,7 +157,6 @@ export default function CartPage() {
           </CardContent>
         </Card>
 
-        {/* Order Notes */}
         <Card>
           <CardHeader className="pb-3 sm:pb-4 md:pb-6">
             <CardTitle className="text-sm sm:text-base md:text-lg">Special Instructions</CardTitle>
@@ -179,7 +171,6 @@ export default function CartPage() {
           </CardContent>
         </Card>
 
-        {/* Order Summary */}
         <Card>
           <CardHeader className="pb-3 sm:pb-4 md:pb-6">
             <CardTitle className="text-sm sm:text-base md:text-lg">Order Summary</CardTitle>
@@ -202,7 +193,6 @@ export default function CartPage() {
           </CardContent>
         </Card>
 
-        {/* Delivery Info */}
         <Card>
           <CardContent className="pt-3 sm:pt-4 md:pt-6">
             <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground">
@@ -216,7 +206,6 @@ export default function CartPage() {
           </CardContent>
         </Card>
 
-        {/* Checkout Button */}
         <Button
           onClick={handleCheckout}
           disabled={isProcessing}
@@ -226,8 +215,7 @@ export default function CartPage() {
         </Button>
       </div>
 
-      {/* Bottom Navigation Spacer */}
-      <div className="h-16 sm:h-20"></div>
+      <div className="h-16 sm:h-20" />
     </div>
   )
 }

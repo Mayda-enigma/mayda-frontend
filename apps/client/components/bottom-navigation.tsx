@@ -1,13 +1,13 @@
 "use client"
 
-import { useCart } from "@/components/cart-context"
+import { useCart } from "@/features/cart"
 import { Home, UtensilsCrossed, Clock, ShoppingBag } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 
 export function BottomNavigation() {
-  const { state } = useCart()
+  const cart = useCart()
   const pathname = usePathname()
 
   const navItems = [
@@ -34,7 +34,7 @@ export function BottomNavigation() {
       icon: ShoppingBag,
       label: "Cart",
       active: pathname === "/cart",
-      badge: state.items.length > 0 ? state.items.length : undefined,
+      badge: cart.items.length > 0 ? cart.items.length : undefined,
     },
   ]
 
