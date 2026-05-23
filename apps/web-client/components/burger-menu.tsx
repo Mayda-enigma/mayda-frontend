@@ -6,7 +6,7 @@ import { Button } from "@/shared/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/shared/ui/sheet"
 import { Menu, Home, UtensilsCrossed, ShoppingBag, Clock, X } from "lucide-react"
 import Link from "next/link"
-import { useCart } from "@/components/cart-context"
+import { useCart } from "@/features/cart"
 import { Badge } from "@/shared/ui/badge"
 import { ThemeToggle } from "@/components/theme-toggle"
 

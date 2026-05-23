@@ -5,8 +5,7 @@ import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import { QueryProvider } from "@/shared/lib/query-provider"
-import { CartProvider } from "@/components/cart-context"
-import { CartSidebar } from "@/components/cart-sidebar"
+import { CartSidebar } from "@/features/cart/components/cart-sidebar"
 import { BottomNavigation } from "@/components/bottom-navigation"
 import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
@@ -33,12 +32,10 @@ export default function RootLayout({
       <body className={`font-sans ${poppins.variable} ${GeistMono.variable} antialiased`}>
         <QueryProvider>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange={false}>
-          <CartProvider>
-            <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
-            <CartSidebar />
-            <BottomNavigation />
-            <Analytics />
-          </CartProvider>
+          <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+          <CartSidebar />
+          <BottomNavigation />
+          <Analytics />
         </ThemeProvider>
         </QueryProvider>
       </body>
