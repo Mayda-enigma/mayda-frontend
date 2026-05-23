@@ -12,8 +12,10 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts"
+import { useHourlyHeatmap } from "../api/queries"
+import type { RangePreset } from "../types"
 
-const hourlyData = [
+const MOCK_DATA = [
   { hour: "6AM", orders: 2, revenue: 45 },
   { hour: "7AM", orders: 8, revenue: 180 },
   { hour: "8AM", orders: 15, revenue: 340 },
@@ -34,7 +36,11 @@ const hourlyData = [
   { hour: "11PM", orders: 12, revenue: 288 },
 ]
 
-export function HourlyHeatmap() {
+export function HourlyHeatmap({ range }: { range: RangePreset }) {
+  const { data: hourly } = useHourlyHeatmap(range)
+
+  const d = hourly ?? MOCK_DATA
+
   return (
     <Card className="hover:shadow-lg transition-shadow duration-300">
       <CardHeader>
@@ -43,7 +49,7 @@ export function HourlyHeatmap() {
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={350}>
-          <BarChart data={hourlyData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+          <BarChart data={d} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
             <XAxis
               dataKey="hour"

@@ -12,18 +12,27 @@ import {
   ResponsiveContainer,
 } from "recharts"
 import { ArrowUpRight } from "lucide-react"
+import { useRevenue } from "../api/queries"
+import type { RangePreset } from "../types"
 
-const salesData = [
-  { name: "Mon", revenue: 4200, orders: 45, profit: 1260 },
-  { name: "Tue", revenue: 3800, orders: 38, profit: 1140 },
-  { name: "Wed", revenue: 5200, orders: 52, profit: 1560 },
-  { name: "Thu", revenue: 4800, orders: 48, profit: 1440 },
-  { name: "Fri", revenue: 6800, orders: 68, profit: 2040 },
-  { name: "Sat", revenue: 8200, orders: 82, profit: 2460 },
-  { name: "Sun", revenue: 7400, orders: 74, profit: 2220 },
-]
+const MOCK_DATA = {
+  salesData: [
+    { name: "Mon", revenue: 4200, orders: 45, profit: 1260 },
+    { name: "Tue", revenue: 3800, orders: 38, profit: 1140 },
+    { name: "Wed", revenue: 5200, orders: 52, profit: 1560 },
+    { name: "Thu", revenue: 4800, orders: 48, profit: 1440 },
+    { name: "Fri", revenue: 6800, orders: 68, profit: 2040 },
+    { name: "Sat", revenue: 8200, orders: 82, profit: 2460 },
+    { name: "Sun", revenue: 7400, orders: 74, profit: 2220 },
+  ],
+  forecast: { revenue: 52400, change: 15.3 },
+}
 
-export function RevenueChart() {
+export function RevenueChart({ range }: { range: RangePreset }) {
+  const { data: revenue } = useRevenue(range)
+
+  const d = revenue ?? MOCK_DATA
+
   return (
     <>
       <Card>
@@ -32,10 +41,10 @@ export function RevenueChart() {
             <div>
               <p className="text-xs font-medium text-muted-foreground">Revenue Forecast</p>
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-bold">$52,400</span>
+                <span className="text-2xl font-bold">${d.forecast.revenue.toLocaleString()}</span>
                 <span className="flex items-center gap-0.5 text-xs text-success font-medium">
                   <ArrowUpRight className="size-3" />
-                  +15.3% projected
+                  +{d.forecast.change}% projected
                 </span>
               </div>
             </div>
@@ -51,13 +60,13 @@ export function RevenueChart() {
             </div>
           </div>
           <div className="flex items-end gap-1.5 h-24">
-            {salesData.concat([
+            {d.salesData.concat([
               { name: "Forecast Mon", revenue: 7800, orders: 0, profit: 0 },
               { name: "Forecast Tue", revenue: 8500, orders: 0, profit: 0 },
               { name: "Forecast Wed", revenue: 9200, orders: 0, profit: 0 },
-            ]).map((d, i) => {
-              const isForecast = i >= salesData.length
-              const height = ((d.revenue / 10000) * 100).toFixed(0)
+            ]).map((item, i) => {
+              const isForecast = i >= d.salesData.length
+              const height = ((item.revenue / 10000) * 100).toFixed(0)
               return (
                 <div key={i} className="flex flex-1 flex-col items-center gap-1">
                   <div
@@ -67,7 +76,7 @@ export function RevenueChart() {
                     style={{ height: `${Math.max(Number(height), 4)}%` }}
                   />
                   <span className="text-[10px] text-muted-foreground text-center leading-tight">
-                    {d.name.split("\n")[0]}
+                    {d.salesData[i]?.name ?? item.name.split(" ")[0]}
                   </span>
                 </div>
               )
@@ -83,7 +92,7 @@ export function RevenueChart() {
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={350}>
-            <LineChart data={salesData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+            <LineChart data={d.salesData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
               <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tickMargin={10} />
               <YAxis
