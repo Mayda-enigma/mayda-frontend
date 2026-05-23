@@ -994,47 +994,63 @@ export function MenuManagement() {
 
       {/* Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="border-l-4 border-l-primary">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Items</CardTitle>
-            <ChefHat className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalItems}</div>
-            <p className="text-xs text-muted-foreground">{activeItems} active dishes</p>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-primary/15 text-primary">
+                <ChefHat className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Total Items</p>
+                <div className="text-2xl font-bold">{totalItems}</div>
+                <p className="text-xs text-muted-foreground">{activeItems} active dishes</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-success">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Avg Rating</CardTitle>
-            <Star className="h-4 w-4 text-success" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-success">{avgRating.toFixed(1)}</div>
-            <p className="text-xs text-muted-foreground">Customer satisfaction</p>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-success/15 text-success">
+                <Star className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Avg Rating</p>
+                <div className="text-2xl font-bold text-success">{avgRating.toFixed(1)}</div>
+                <p className="text-xs text-muted-foreground">Customer satisfaction</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-secondary">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Menu Revenue</CardTitle>
-            <DollarSign className="h-4 w-4 text-secondary" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${totalRevenue.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">Total from menu items</p>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-accent-blue/15 text-accent-blue">
+                <DollarSign className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Menu Revenue</p>
+                <div className="text-2xl font-bold">${totalRevenue.toLocaleString()}</div>
+                <p className="text-xs text-muted-foreground">Total from menu items</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-accent">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Promos</CardTitle>
-            <Tag className="h-4 w-4 text-accent" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{promotions.filter((p) => p.status === "active").length}</div>
-            <p className="text-xs text-muted-foreground">Running campaigns</p>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-warning/15 text-warning">
+                <Tag className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Active Promos</p>
+                <div className="text-2xl font-bold text-warning">{promotions.filter((p) => p.status === "active").length}</div>
+                <p className="text-xs text-muted-foreground">Running campaigns</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>

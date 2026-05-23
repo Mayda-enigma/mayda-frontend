@@ -2,15 +2,13 @@
 
 import * as React from "react"
 import Image from "next/image"
+import { usePathname, useRouter } from "next/navigation"
 import {
-  BarChart3,
   Bell,
-  ChevronDown,
+  ChevronRight,
   ChevronsUpDown,
-  type LucideIcon,
   LogOut,
   Moon,
-  Settings,
   Sun,
 } from "lucide-react"
 
@@ -24,47 +22,80 @@ import {
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu"
 import { useTheme } from "@/shared/ui/theme-provider"
-
-export interface NavItem {
-  id: string
-  name: string
-  icon: typeof BarChart3
-}
+import type { NavSection } from "./navigation-config"
 
 interface SidebarProps {
-  navigation: NavItem[]
-  activeTab: string
-  onTabChange: (tab: string) => void
+  navigation: NavSection[]
   className?: string
   onNavigate?: () => void
 }
 
-const settingsSubItems = [
-  { id: "general", label: "General" },
-  { id: "security", label: "Security" },
-  { id: "notifications", label: "Notifications" },
-  { id: "billing", label: "Billing" },
-]
-
-export function Sidebar({
-  navigation,
-  activeTab,
-  onTabChange,
-  className,
-  onNavigate,
-}: SidebarProps) {
+export function Sidebar({ navigation, className, onNavigate }: SidebarProps) {
+  const pathname = usePathname()
+  const router = useRouter()
   const { theme, setTheme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = React.useState(false)
+  const [expandedSections, setExpandedSections] = React.useState<Set<string>>(
+    new Set(),
+  )
 
   React.useEffect(() => {
     setMounted(true)
   }, [])
 
+  React.useEffect(() => {
+    const toExpand = new Set(expandedSections)
+    let changed = false
+    for (const section of navigation) {
+      if (section.items) {
+        const anyChildActive = section.items.some(
+          (item) => pathname === item.href || pathname.startsWith(item.href + "/"),
+        )
+        if (anyChildActive) {
+          toExpand.add(section.id)
+          changed = true
+        }
+      }
+    }
+    if (changed) setExpandedSections(toExpand)
+  }, [pathname, navigation])
+
   const isDark = mounted && (resolvedTheme ?? theme) === "dark"
-  const isOnSettings = activeTab.startsWith("settings")
 
   const toggleTheme = () => {
     setTheme(isDark ? "light" : "dark")
+  }
+
+  const handleSectionClick = (section: NavSection) => {
+    if (section.items && section.items.length > 0) {
+      setExpandedSections((prev) => {
+        const next = new Set(prev)
+        if (next.has(section.id)) {
+          next.delete(section.id)
+        } else {
+          next.add(section.id)
+        }
+        return next
+      })
+    } else if (section.href) {
+      router.push(section.href)
+      onNavigate?.()
+    }
+  }
+
+  const isExactActive = (href: string) => {
+    if (href === "/") return pathname === "/"
+    return pathname === href
+  }
+
+  const isChildActive = (href: string) => {
+    return pathname === href || pathname.startsWith(href + "/")
+  }
+
+  const isSectionActive = (section: NavSection) => {
+    if (section.href && isExactActive(section.href)) return true
+    if (section.items?.some((item) => isExactActive(item.href))) return true
+    return false
   }
 
   return (
@@ -146,19 +177,21 @@ export function Sidebar({
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* 3. Primary nav */}
+      {/* 3. Navigation */}
       <nav className="flex-1 overflow-y-auto">
-        <ul className="space-y-1">
-          {navigation.map(({ id, name, icon: Icon }) => {
-            const active = activeTab === id
+        <ul className="space-y-0.5">
+          {navigation.map((section) => {
+            const active = isSectionActive(section)
+            const expanded = expandedSections.has(section.id)
+            const hasItems = section.items && section.items.length > 0
+
             return (
-              <li key={id}>
+              <li key={section.id}>
                 <button
-                  onClick={() => {
-                    onTabChange(id)
-                    onNavigate?.()
-                  }}
+                  type="button"
+                  onClick={() => handleSectionClick(section)}
                   aria-current={active ? "page" : undefined}
+                  aria-expanded={hasItems ? expanded : undefined}
                   className={cn(
                     "group flex h-9 w-full items-center gap-3 rounded-md px-3 text-sm font-medium transition-colors",
                     "outline-none focus-visible:ring-2 focus-visible:ring-ring",
@@ -167,7 +200,7 @@ export function Sidebar({
                       : "text-foreground/75 hover:bg-accent hover:text-foreground",
                   )}
                 >
-                  <Icon
+                  <section.icon
                     className={cn(
                       "size-4 shrink-0",
                       active
@@ -176,95 +209,59 @@ export function Sidebar({
                     )}
                     aria-hidden
                   />
-                  <span className="truncate">{name}</span>
+                  <span className="flex-1 truncate text-left">{section.label}</span>
+                  {hasItems && (
+                    <ChevronRight
+                      className={cn(
+                        "size-3.5 shrink-0 text-muted-foreground transition-transform duration-fast ease-out",
+                        expanded && "rotate-90",
+                      )}
+                      aria-hidden
+                    />
+                  )}
                 </button>
+
+                {hasItems && expanded && (
+                  <ul className="mt-0.5 ml-5 space-y-0.5 border-l border-border pl-4" aria-label={`${section.label} sub-navigation`}>
+                    {section.items!.map((item) => {
+                      const itemActive = isChildActive(item.href)
+                      return (
+                        <li key={item.href} className="relative">
+                          {itemActive && (
+                            <span
+                              className="absolute -left-[1.125rem] top-1/2 size-1.5 -translate-y-1/2 rounded-full bg-foreground"
+                              aria-hidden
+                            />
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              router.push(item.href)
+                              onNavigate?.()
+                            }}
+                            aria-current={itemActive ? "page" : undefined}
+                            className={cn(
+                              "flex h-7 w-full items-center rounded-md px-2 text-sm transition-colors",
+                              "outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                              itemActive
+                                ? "font-semibold text-foreground"
+                                : "text-muted-foreground hover:text-foreground",
+                            )}
+                          >
+                            {item.label}
+                          </button>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                )}
               </li>
             )
           })}
         </ul>
-
-        {/* 4. Account settings group */}
-        <div className="mt-1">
-          <div
-            className={cn(
-              "transition-colors",
-              isOnSettings && "rounded-lg border bg-card shadow-depth-card p-1",
-            )}
-          >
-            <button
-              onClick={() => {
-                onTabChange(isOnSettings ? activeTab : "settings/general")
-                onNavigate?.()
-              }}
-              aria-current={isOnSettings ? "page" : undefined}
-              className={cn(
-                "group flex h-9 w-full items-center gap-3 rounded-md px-3 text-sm font-medium transition-colors",
-                "outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                isOnSettings
-                  ? "text-foreground"
-                  : "text-foreground/75 hover:bg-accent hover:text-foreground",
-              )}
-            >
-              <Settings
-                className={cn(
-                  "size-4 shrink-0",
-                  isOnSettings
-                    ? "text-foreground"
-                    : "text-foreground/55 group-hover:text-foreground",
-                )}
-                aria-hidden
-              />
-              <span className="flex-1 truncate text-left">Account settings</span>
-              <ChevronDown
-                className={cn(
-                  "size-3.5 shrink-0 text-muted-foreground transition-transform",
-                  isOnSettings ? "rotate-0" : "-rotate-90",
-                )}
-                aria-hidden
-              />
-            </button>
-
-            {isOnSettings ? (
-              <ul
-                className="mt-1 ml-5 space-y-0.5 border-l border-border pl-4"
-                aria-label="Account settings sections"
-              >
-                {settingsSubItems.map((item) => {
-                  const active = activeTab === `settings/${item.id}`
-                  return (
-                    <li key={item.id} className="relative">
-                      {active ? (
-                        <span
-                          className="absolute -left-[1.125rem] top-1/2 size-1.5 -translate-y-1/2 rounded-full bg-foreground"
-                          aria-hidden
-                        />
-                      ) : null}
-                      <button
-                        onClick={() => {
-                          onTabChange(`settings/${item.id}`)
-                          onNavigate?.()
-                        }}
-                        aria-current={active ? "page" : undefined}
-                        className={cn(
-                          "flex h-7 w-full items-center rounded-md px-2 text-sm transition-colors",
-                          "outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                          active
-                            ? "font-semibold text-foreground"
-                            : "text-muted-foreground hover:text-foreground",
-                        )}
-                      >
-                        {item.label}
-                      </button>
-                    </li>
-                  )
-                })}
-              </ul>
-            ) : null}
-          </div>
-        </div>
       </nav>
 
-      {/* 5. Footer profile */}
+      {/* 4. Footer profile */}
       <DropdownMenu>
         <DropdownMenuTrigger
           className={cn(

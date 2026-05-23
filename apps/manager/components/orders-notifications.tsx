@@ -298,47 +298,63 @@ export function OrdersNotifications() {
 
       {/* Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="border-l-4 border-l-accent-blue">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Orders</CardTitle>
-            <ShoppingCart className="h-4 w-4 text-accent-blue" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-accent-blue">{activeOrders}</div>
-            <p className="text-xs text-muted-foreground">Currently processing</p>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-accent-blue/15 text-accent-blue">
+                <ShoppingCart className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Active Orders</p>
+                <div className="text-2xl font-bold text-accent-blue">{activeOrders}</div>
+                <p className="text-xs text-muted-foreground">Currently processing</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-success">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Today's Revenue</CardTitle>
-            <DollarSign className="h-4 w-4 text-success" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-success">${totalRevenue.toFixed(2)}</div>
-            <p className="text-xs text-muted-foreground">From completed orders</p>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-success/15 text-success">
+                <DollarSign className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Today's Revenue</p>
+                <div className="text-2xl font-bold text-success">${totalRevenue.toFixed(2)}</div>
+                <p className="text-xs text-muted-foreground">From completed orders</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-primary">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Avg Order Value</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${avgOrderValue.toFixed(2)}</div>
-            <p className="text-xs text-muted-foreground">Per order average</p>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-primary/15 text-primary">
+                <DollarSign className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Avg Order Value</p>
+                <div className="text-2xl font-bold">${avgOrderValue.toFixed(2)}</div>
+                <p className="text-xs text-muted-foreground">Per order average</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-warning">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Notifications</CardTitle>
-            <Bell className="h-4 w-4 text-warning" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-warning">{unreadNotifications}</div>
-            <p className="text-xs text-muted-foreground">Unread alerts</p>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-warning/15 text-warning">
+                <Bell className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Notifications</p>
+                <div className="text-2xl font-bold text-warning">{unreadNotifications}</div>
+                <p className="text-xs text-muted-foreground">Unread alerts</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>

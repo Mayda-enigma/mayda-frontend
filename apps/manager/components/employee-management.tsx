@@ -347,51 +347,65 @@ export function EmployeeManagement() {
           </DialogContent>
         </Dialog>
       </div>
-      {/* Overview Cards - Enhanced with hover animations */}
+      {/* Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="border-l-4 border-l-primary hover:shadow-lg transition-all duration-300 hover:scale-105">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Staff</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalEmployees}</div>
-            <p className="text-xs text-muted-foreground">{activeEmployees} active employees</p>
-          </CardContent>
-        </Card>
-
-        <Card className="border-l-4 border-l-success hover:shadow-lg transition-all duration-300 hover:scale-105">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Avg Performance</CardTitle>
-            <Star className="h-4 w-4 text-success" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-success">{avgRating.toFixed(1)}</div>
-            <p className="text-xs text-muted-foreground">Out of 5.0 rating</p>
-          </CardContent>
-        </Card>
-
-        <Card className="border-l-4 border-l-secondary hover:shadow-lg transition-all duration-300 hover:scale-105">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Attendance Rate</CardTitle>
-            <CheckCircle className="h-4 w-4 text-secondary" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{avgAttendance.toFixed(0)}%</div>
-            <p className="text-xs text-muted-foreground">Average attendance</p>
-          </CardContent>
-        </Card>
-
-        <Card className="border-l-4 border-l-accent hover:shadow-lg transition-all duration-300 hover:scale-105">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Payroll</CardTitle>
-            <DollarSign className="h-4 w-4 text-accent" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              ${employees.reduce((sum, e) => sum + e.salary, 0).toLocaleString()}
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-primary/15 text-primary">
+                <Users className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Total Staff</p>
+                <div className="text-2xl font-bold">{totalEmployees}</div>
+                <p className="text-xs text-muted-foreground">{activeEmployees} active employees</p>
+              </div>
             </div>
-            <p className="text-xs text-muted-foreground">Annual total</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-success/15 text-success">
+                <Star className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Avg Performance</p>
+                <div className="text-2xl font-bold text-success">{avgRating.toFixed(1)}</div>
+                <p className="text-xs text-muted-foreground">Out of 5.0 rating</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-accent-blue/15 text-accent-blue">
+                <CheckCircle className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Attendance Rate</p>
+                <div className="text-2xl font-bold">{avgAttendance.toFixed(0)}%</div>
+                <p className="text-xs text-muted-foreground">Average attendance</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-secondary/15 text-secondary">
+                <DollarSign className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Payroll</p>
+                <div className="text-2xl font-bold">${employees.reduce((sum, e) => sum + e.salary, 0).toLocaleString()}</div>
+                <p className="text-xs text-muted-foreground">Annual total</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
