@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      web-client: ${{ steps.filter.outputs.web-client }}
+      chef: ${{ steps.filter.outputs.chef }}
+      waiter: ${{ steps.filter.outputs.waiter }}
+      manager: ${{ steps.filter.outputs.manager }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            web-client:
+              - 'apps/web-client/**'
+            chef:
+              - 'apps/chef/**'
+            waiter:
+              - 'apps/waiter/**'
+            manager:
+              - 'apps/manager/**'
+
+  build:
+    needs: changes
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: [web-client, chef, waiter, manager]
+    if: ${{ needs.changes.outputs[matrix.app] == 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: latest
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: apps/${{ matrix.app }}/pnpm-lock.yaml
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: apps/${{ matrix.app }}
+      - name: Lint
+        run: pnpm run lint
+        working-directory: apps/${{ matrix.app }}
+      - name: Build
+        run: pnpm run build
+        working-directory: apps/${{ matrix.app }}
