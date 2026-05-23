@@ -12,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/ui/table"
-import { cn } from "@/lib/utils"
+import { cn } from "@/shared/utils"
 import type { StockItem } from "../types"
 
 const statusStyles = {
