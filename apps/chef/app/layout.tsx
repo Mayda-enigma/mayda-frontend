@@ -7,6 +7,7 @@ import { Suspense } from "react"
 import { NotificationProvider } from "@/components/notification-system"
 import { I18nProvider } from "@/components/i18n-provider"
 import { Navigation } from "@/components/navigation"
+import { QueryProvider } from "@/shared/lib/query-provider"
 import "./globals.css"
 
 const poppins = Poppins({
@@ -29,6 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`font-sans ${poppins.variable} antialiased`}>
+        <QueryProvider>
         <Suspense fallback={null}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange={false}>
             <I18nProvider>
@@ -40,6 +42,7 @@ export default function RootLayout({
           </ThemeProvider>
         </Suspense>
         <Analytics />
+        </QueryProvider>
       </body>
     </html>
   )

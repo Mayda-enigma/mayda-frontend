@@ -4,6 +4,7 @@ import { Poppins } from "next/font/google"
 import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
+import { QueryProvider } from "@/shared/lib/query-provider"
 import { CartProvider } from "@/components/cart-context"
 import { CartSidebar } from "@/components/cart-sidebar"
 import { BottomNavigation } from "@/components/bottom-navigation"
@@ -30,6 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`font-sans ${poppins.variable} ${GeistMono.variable} antialiased`}>
+        <QueryProvider>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange={false}>
           <CartProvider>
             <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
@@ -38,6 +40,7 @@ export default function RootLayout({
             <Analytics />
           </CartProvider>
         </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   )

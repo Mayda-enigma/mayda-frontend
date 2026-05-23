@@ -4,6 +4,7 @@ import { Poppins } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Suspense } from "react"
+import { QueryProvider } from "@/shared/lib/query-provider"
 import "./globals.css"
 
 const poppins = Poppins({
@@ -26,12 +27,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`font-sans ${poppins.variable} antialiased`}>
+        <QueryProvider>
         <Suspense fallback={null}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange={false}>
             {children}
           </ThemeProvider>
         </Suspense>
         <Analytics />
+        </QueryProvider>
       </body>
     </html>
   )
