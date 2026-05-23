@@ -29,6 +29,7 @@ export function VoiceControl({ isActive, onToggle, onStatusUpdate }: VoiceContro
     }, 5000)
 
     return () => clearInterval(interval)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isActive])
 
   const handleVoiceCommand = (command: string) => {
@@ -74,15 +75,15 @@ export function VoiceControl({ isActive, onToggle, onStatusUpdate }: VoiceContro
           <div className="space-y-2">
             <div className="text-sm text-gray-400">Available Commands:</div>
             <div className="text-xs text-gray-500 space-y-1">
-              <div>• "Start order" - Begin preparation</div>
-              <div>• "Mark ready" - Complete order</div>
-              <div>• "Next step" - Advance current dish</div>
-              <div>• "Pause order" - Pause preparation</div>
+              <div>&bull; &quot;Start order&quot; - Begin preparation</div>
+              <div>&bull; &quot;Mark ready&quot; - Complete order</div>
+              <div>&bull; &quot;Next step&quot; - Advance current dish</div>
+              <div>&bull; &quot;Pause order&quot; - Pause preparation</div>
             </div>
             {lastCommand && (
               <div className="mt-3 p-2 bg-blue-900/30 border border-blue-500/50 rounded text-sm">
                 <div className="text-blue-400 font-medium">Last Command:</div>
-                <div className="text-blue-200">"{lastCommand}"</div>
+                <div className="text-blue-200">&quot;{lastCommand}&quot;</div>
               </div>
             )}
           </div>
