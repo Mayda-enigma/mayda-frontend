@@ -1,6 +1,6 @@
 "use client"
 
-import { ReservationFilteredTable } from "@/components/reservation-filtered-table"
+import { ReservationFilteredTable } from "@/features/reservations"
 
 export default function CancelledReservationsPage() {
   return (
