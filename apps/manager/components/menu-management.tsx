@@ -463,20 +463,20 @@ export function MenuManagement() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "active":
-        return "bg-green-500 text-white"
+        return "bg-success text-white"
       case "inactive":
-        return "bg-gray-500 text-white"
+        return "bg-muted text-white"
       case "seasonal":
-        return "bg-orange-500 text-white"
+        return "bg-warning text-white"
       default:
         return "bg-muted text-muted-foreground"
     }
   }
 
   const getPopularityColor = (popularity: number) => {
-    if (popularity >= 80) return "text-green-500"
-    if (popularity >= 60) return "text-yellow-500"
-    return "text-red-500"
+    if (popularity >= 80) return "text-success"
+    if (popularity >= 60) return "text-warning"
+    return "text-destructive"
   }
 
   const getProfitMargin = (price: number, cost: number) => {
@@ -1005,13 +1005,13 @@ export function MenuManagement() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-success">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Avg Rating</CardTitle>
-            <Star className="h-4 w-4 text-green-500" />
+            <Star className="h-4 w-4 text-success" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-500">{avgRating.toFixed(1)}</div>
+            <div className="text-2xl font-bold text-success">{avgRating.toFixed(1)}</div>
             <p className="text-xs text-muted-foreground">Customer satisfaction</p>
           </CardContent>
         </Card>
@@ -1049,7 +1049,7 @@ export function MenuManagement() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-start gap-3 p-3 bg-background/50 rounded-lg">
-            <TrendingUp className="h-5 w-5 text-green-500 mt-0.5" />
+            <TrendingUp className="h-5 w-5 text-success mt-0.5" />
             <div>
               <p className="font-medium">Pizza Margherita showing 25% demand increase</p>
               <p className="text-sm text-muted-foreground">
@@ -1149,7 +1149,7 @@ export function MenuManagement() {
                   <div className="flex items-center justify-between">
                     <Badge variant="outline">{item.category}</Badge>
                     <div className="flex items-center gap-1">
-                      <Star className="h-3 w-3 text-yellow-500" />
+                      <Star className="h-3 w-3 text-warning" />
                       <span className="text-sm">{item.rating}</span>
                     </div>
                   </div>
@@ -1161,7 +1161,7 @@ export function MenuManagement() {
                     </div>
                     <div>
                       <p className="text-muted-foreground">Profit Margin</p>
-                      <p className="font-semibold text-lg text-green-500">{getProfitMargin(item.price, item.cost)}%</p>
+                      <p className="font-semibold text-lg text-success">{getProfitMargin(item.price, item.cost)}%</p>
                     </div>
                   </div>
 
@@ -1245,7 +1245,7 @@ export function MenuManagement() {
                       <TableCell>${item.revenue.toLocaleString()}</TableCell>
                       <TableCell>
                         <div className="flex items-center gap-1">
-                          <Star className="h-3 w-3 text-yellow-500" />
+                          <Star className="h-3 w-3 text-warning" />
                           {item.rating}
                         </div>
                       </TableCell>
@@ -1256,13 +1256,13 @@ export function MenuManagement() {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <span className="text-green-500 font-medium">{getProfitMargin(item.price, item.cost)}%</span>
+                        <span className="text-success font-medium">{getProfitMargin(item.price, item.cost)}%</span>
                       </TableCell>
                       <TableCell>
                         {item.popularity > 80 ? (
-                          <TrendingUp className="h-4 w-4 text-green-500" />
+                          <TrendingUp className="h-4 w-4 text-success" />
                         ) : (
-                          <TrendingDown className="h-4 w-4 text-red-500" />
+                          <TrendingDown className="h-4 w-4 text-destructive" />
                         )}
                       </TableCell>
                     </TableRow>

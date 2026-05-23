@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  // `eslint` was removed in Next 16. Lint runs via the standalone ESLint CLI now.
   typescript: {
     ignoreBuildErrors: true,
   },

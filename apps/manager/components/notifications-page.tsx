@@ -94,7 +94,7 @@ export function NotificationsPage() {
       case "info":
         return <Info className="h-5 w-5 text-primary" />
       case "success":
-        return <CheckCircle className="h-5 w-5 text-green-500" />
+        return <CheckCircle className="h-5 w-5 text-success" />
       default:
         return <Bell className="h-5 w-5 text-muted-foreground" />
     }
@@ -202,14 +202,14 @@ export function NotificationsPage() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Today</p>
                 <p className="text-2xl font-bold">6</p>
               </div>
-              <Clock className="h-8 w-8 text-green-500" />
+              <Clock className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>

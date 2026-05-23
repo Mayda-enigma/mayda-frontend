@@ -7,7 +7,7 @@ function Card({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="card"
       className={cn(
-        'bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm',
+        'bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-depth-card transition-all duration-[var(--duration-fast)] ease-[var(--ease-out)]',
         className,
       )}
       {...props}
@@ -28,12 +28,26 @@ function CardHeader({ className, ...props }: React.ComponentProps<'div'>) {
   )
 }
 
-function CardTitle({ className, ...props }: React.ComponentProps<'div'>) {
+type CardTitleElement =
+  | "div"
+  | "h1"
+  | "h2"
+  | "h3"
+  | "h4"
+  | "h5"
+  | "h6"
+  | "p"
+
+function CardTitle({
+  className,
+  as: As = "div",
+  ...props
+}: React.ComponentProps<"div"> & { as?: CardTitleElement }) {
   return (
-    <div
+    <As
       data-slot="card-title"
-      className={cn('leading-none font-semibold', className)}
-      {...props}
+      className={cn("leading-none font-semibold", className)}
+      {...(props as React.HTMLAttributes<HTMLElement>)}
     />
   )
 }

@@ -193,13 +193,13 @@ export function OrdersNotifications() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "pending":
-        return "bg-yellow-500 text-black"
+        return "bg-warning text-black"
       case "preparing":
-        return "bg-blue-500 text-white"
+        return "bg-accent-blue text-white"
       case "ready":
-        return "bg-green-500 text-white"
+        return "bg-success text-white"
       case "served":
-        return "bg-gray-500 text-white"
+        return "bg-muted text-white"
       case "cancelled":
         return "bg-destructive text-destructive-foreground"
       default:
@@ -229,7 +229,7 @@ export function OrdersNotifications() {
       case "high":
         return "bg-destructive text-destructive-foreground"
       case "medium":
-        return "bg-orange-500 text-white"
+        return "bg-warning text-white"
       case "low":
         return "bg-muted text-muted-foreground"
       default:
@@ -298,24 +298,24 @@ export function OrdersNotifications() {
 
       {/* Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-accent-blue">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Active Orders</CardTitle>
-            <ShoppingCart className="h-4 w-4 text-blue-500" />
+            <ShoppingCart className="h-4 w-4 text-accent-blue" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-500">{activeOrders}</div>
+            <div className="text-2xl font-bold text-accent-blue">{activeOrders}</div>
             <p className="text-xs text-muted-foreground">Currently processing</p>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-success">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Today's Revenue</CardTitle>
-            <DollarSign className="h-4 w-4 text-green-500" />
+            <DollarSign className="h-4 w-4 text-success" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-500">${totalRevenue.toFixed(2)}</div>
+            <div className="text-2xl font-bold text-success">${totalRevenue.toFixed(2)}</div>
             <p className="text-xs text-muted-foreground">From completed orders</p>
           </CardContent>
         </Card>
@@ -331,13 +331,13 @@ export function OrdersNotifications() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-orange-500">
+        <Card className="border-l-4 border-l-warning">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Notifications</CardTitle>
-            <Bell className="h-4 w-4 text-orange-500" />
+            <Bell className="h-4 w-4 text-warning" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-500">{unreadNotifications}</div>
+            <div className="text-2xl font-bold text-warning">{unreadNotifications}</div>
             <p className="text-xs text-muted-foreground">Unread alerts</p>
           </CardContent>
         </Card>
@@ -629,7 +629,7 @@ export function OrdersNotifications() {
                                     <AlertCircle className="h-4 w-4" />
                                     Special Instructions
                                   </h3>
-                                  <div className="p-4 bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                                  <div className="p-4 bg-warning/10 border border-warning/30 rounded-lg">
                                     <p className="text-sm">{selectedOrder.specialInstructions}</p>
                                   </div>
                                 </div>
@@ -640,7 +640,7 @@ export function OrdersNotifications() {
                                 <Separator />
                                 <div className="flex items-center justify-between text-lg font-semibold">
                                   <span>Order Total:</span>
-                                  <span className="text-green-600 dark:text-green-400">
+                                  <span className="text-success dark:text-success">
                                     ${selectedOrder.total.toFixed(2)}
                                   </span>
                                 </div>
@@ -711,7 +711,7 @@ export function OrdersNotifications() {
                         <h4 className="font-medium">{notification.title}</h4>
                         <div className="flex items-center gap-2">
                           <Badge className={getPriorityColor(notification.priority)}>{notification.priority}</Badge>
-                          {!notification.isRead && <div className="w-2 h-2 bg-blue-500 rounded-full" />}
+                          {!notification.isRead && <div className="w-2 h-2 bg-accent-blue rounded-full" />}
                         </div>
                       </div>
                       <p className="text-sm text-muted-foreground mb-2">{notification.message}</p>

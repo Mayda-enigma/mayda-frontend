@@ -22,6 +22,7 @@ import {
 } from "recharts"
 import {
   TrendingUp,
+  TrendingDown,
   DollarSign,
   Users,
   ShoppingCart,
@@ -30,6 +31,7 @@ import {
   AlertTriangle,
   Lightbulb,
   Calendar,
+  ArrowUpRight,
 } from "lucide-react"
 
 const salesData = [
@@ -110,66 +112,131 @@ export function AnalyticsDashboard() {
         </div>
       </div>
 
-      {/* KPI Cards - Enhanced with animations and better styling */}
+      {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="border-l-4 border-l-primary hover:shadow-lg transition-all duration-300 hover:scale-105">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-primary">$38,400</div>
-            <div className="flex items-center text-xs text-muted-foreground">
-              <TrendingUp className="h-3 w-3 mr-1 text-green-500" />
-              +12.5% from last week
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-primary/15 text-primary">
+                <DollarSign className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Total Revenue</p>
+                <div className="text-2xl font-bold text-primary">$38,400</div>
+                <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <TrendingUp className="size-3 text-success" />
+                  +12.5% from last week
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-secondary hover:shadow-lg transition-all duration-300 hover:scale-105">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
-            <ShoppingCart className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-secondary">407</div>
-            <div className="flex items-center text-xs text-muted-foreground">
-              <TrendingUp className="h-3 w-3 mr-1 text-green-500" />
-              +8.2% from last week
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-accent-blue/15 text-accent-blue">
+                <ShoppingCart className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Total Orders</p>
+                <div className="text-2xl font-bold">407</div>
+                <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <TrendingUp className="size-3 text-success" />
+                  +8.2% from last week
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-accent hover:shadow-lg transition-all duration-300 hover:scale-105">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Avg. Order Value</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-accent">$94.35</div>
-            <div className="flex items-center text-xs text-muted-foreground">
-              <TrendingUp className="h-3 w-3 mr-1 text-green-500" />
-              +3.8% from last week
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-accent-orange/15 text-accent-orange">
+                <DollarSign className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Avg. Order Value</p>
+                <div className="text-2xl font-bold">$94.35</div>
+                <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <TrendingUp className="size-3 text-success" />
+                  +3.8% from last week
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-chart-5 hover:shadow-lg transition-all duration-300 hover:scale-105">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Customer Rating</CardTitle>
-            <Star className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold" style={{ color: "hsl(var(--chart-5))" }}>
-              4.8
-            </div>
-            <div className="flex items-center text-xs text-muted-foreground">
-              <TrendingUp className="h-3 w-3 mr-1 text-green-500" />
-              +0.2 from last week
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-accent-pink/15 text-accent-pink">
+                <Star className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Customer Rating</p>
+                <div className="text-2xl font-bold">4.8</div>
+                <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <TrendingUp className="size-3 text-success" />
+                  +0.2 from last week
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
       </div>
+
+      {/* Revenue Forecast */}
+      <Card>
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <p className="text-xs font-medium text-muted-foreground">Revenue Forecast</p>
+              <div className="flex items-baseline gap-2">
+                <span className="text-2xl font-bold">$52,400</span>
+                <span className="flex items-center gap-0.5 text-xs text-success font-medium">
+                  <ArrowUpRight className="size-3" />
+                  +15.3% projected
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 text-xs text-muted-foreground">
+              <div className="flex items-center gap-1.5">
+                <span className="size-2 rounded-sm bg-primary" />
+                Actual
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="size-2 rounded-sm bg-primary/40" />
+                Forecast
+              </div>
+            </div>
+          </div>
+          <div className="flex items-end gap-1.5 h-24">
+            {salesData.concat([
+              { name: "Forecast\nMon", revenue: 7800, orders: 0, profit: 0 },
+              { name: "Forecast\nTue", revenue: 8500, orders: 0, profit: 0 },
+              { name: "Forecast\nWed", revenue: 9200, orders: 0, profit: 0 },
+            ]).map((d, i) => {
+              const isForecast = i >= salesData.length
+              const height = ((d.revenue / 10000) * 100).toFixed(0)
+              return (
+                <div key={i} className="flex flex-1 flex-col items-center gap-1">
+                  <div
+                    className={`w-full rounded-sm transition-all duration-300 ${
+                      isForecast ? "bg-primary/40" : "bg-primary"
+                    }`}
+                    style={{ height: `${Math.max(Number(height), 4)}%` }}
+                  />
+                  <span className="text-[10px] text-muted-foreground text-center leading-tight">
+                    {d.name.split("\n")[0]}
+                  </span>
+                </div>
+              )
+            })}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* AI Insights */}
       <Card className="bg-gradient-to-r from-primary/10 to-secondary/10 border-primary/20">
@@ -181,7 +248,7 @@ export function AnalyticsDashboard() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-start gap-3 p-3 bg-background/50 rounded-lg">
-            <TrendingUp className="h-5 w-5 text-green-500 mt-0.5" />
+            <TrendingUp className="h-5 w-5 text-success mt-0.5" />
             <div>
               <p className="font-medium">Pizza Margherita demand expected +25% this weekend</p>
               <p className="text-sm text-muted-foreground">
@@ -341,14 +408,14 @@ export function AnalyticsDashboard() {
                         <div>
                           <p className="font-medium text-sm">{dish.name}</p>
                           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                            <Star className="h-3 w-3 fill-warning text-warning" />
                             {dish.rating}
                           </div>
                         </div>
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-medium">{dish.orders} orders</p>
-                        <p className="text-xs text-green-600">{dish.trend}</p>
+                        <p className="text-xs text-success">{dish.trend}</p>
                       </div>
                     </div>
                   ))}

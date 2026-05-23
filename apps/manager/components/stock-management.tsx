@@ -197,9 +197,9 @@ export function StockManagement() {
       case "critical":
         return "bg-destructive text-destructive-foreground"
       case "low":
-        return "bg-orange-500 text-white"
+        return "bg-warning text-white"
       case "good":
-        return "bg-green-500 text-white"
+        return "bg-success text-white"
       default:
         return "bg-muted text-muted-foreground"
     }
@@ -210,9 +210,9 @@ export function StockManagement() {
       case "critical":
         return "bg-destructive text-destructive-foreground"
       case "high":
-        return "bg-orange-500 text-white"
+        return "bg-warning text-white"
       case "medium":
-        return "bg-yellow-500 text-black"
+        return "bg-warning text-black"
       default:
         return "bg-muted text-muted-foreground"
     }
@@ -296,47 +296,63 @@ export function StockManagement() {
 
       {/* Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="border-l-4 border-l-destructive hover:shadow-lg transition-all duration-300 hover:scale-105">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Critical Items</CardTitle>
-            <AlertTriangle className="h-4 w-4 text-destructive" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-destructive">{criticalItems}</div>
-            <p className="text-xs text-muted-foreground">Require immediate attention</p>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-destructive/15 text-destructive">
+                <AlertTriangle className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Critical Items</p>
+                <div className="text-2xl font-bold text-destructive">{criticalItems}</div>
+                <p className="text-xs text-muted-foreground">Require immediate attention</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-orange-500 hover:shadow-lg transition-all duration-300 hover:scale-105">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Low Stock</CardTitle>
-            <TrendingDown className="h-4 w-4 text-orange-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-orange-500">{lowItems}</div>
-            <p className="text-xs text-muted-foreground">Below minimum threshold</p>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-warning/15 text-warning">
+                <TrendingDown className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Low Stock</p>
+                <div className="text-2xl font-bold text-warning">{lowItems}</div>
+                <p className="text-xs text-muted-foreground">Below minimum threshold</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-primary hover:shadow-lg transition-all duration-300 hover:scale-105">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Items</CardTitle>
-            <Package className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stockItems.length}</div>
-            <p className="text-xs text-muted-foreground">Active inventory items</p>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-primary/15 text-primary">
+                <Package className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Total Items</p>
+                <div className="text-2xl font-bold">{stockItems.length}</div>
+                <p className="text-xs text-muted-foreground">Active inventory items</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-green-500 hover:shadow-lg transition-all duration-300 hover:scale-105">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Stock Value</CardTitle>
-            <Package className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${totalValue.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">Total inventory value</p>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-success/15 text-success">
+                <Package className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Stock Value</p>
+                <div className="text-2xl font-bold">${totalValue.toLocaleString()}</div>
+                <p className="text-xs text-muted-foreground">Total inventory value</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -656,12 +672,12 @@ export function StockManagement() {
                     className={`flex items-center justify-between p-4 rounded-lg border hover:shadow-md transition-all duration-200 ${
                       item.status === "critical"
                         ? "bg-destructive/10 border-destructive/20"
-                        : "bg-orange-500/10 border-orange-500/20"
+                        : "bg-warning/10 border-warning/20"
                     }`}
                   >
                     <div className="flex items-center gap-4">
                       <AlertTriangle
-                        className={`h-5 w-5 ${item.status === "critical" ? "text-destructive" : "text-orange-500"}`}
+                        className={`h-5 w-5 ${item.status === "critical" ? "text-destructive" : "text-warning"}`}
                       />
                       <div>
                         <p className="font-medium">{item.name}</p>
@@ -689,49 +705,62 @@ export function StockManagement() {
         <TabsContent value="history" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Recent Restocking History</CardTitle>
-              <CardDescription>Track of recent inventory replenishments</CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Recent Restocking History</CardTitle>
+                  <CardDescription>Track of recent inventory replenishments</CardDescription>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Input placeholder="Filter items..." className="h-8 w-48" />
+                  <Select defaultValue="all">
+                    <SelectTrigger className="h-8 w-36">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Suppliers</SelectItem>
+                      <SelectItem value="Dairy Fresh Ltd.">Dairy Fresh Ltd.</SelectItem>
+                      <SelectItem value="Green Gardens">Green Gardens</SelectItem>
+                      <SelectItem value="Italian Imports">Italian Imports</SelectItem>
+                      <SelectItem value="Premium Meats">Premium Meats</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {[
-                  {
-                    item: "Mozzarella Cheese",
-                    quantity: "50 kg",
-                    date: "2024-01-18",
-                    supplier: "Dairy Fresh Ltd.",
-                    cost: "$300",
-                  },
-                  { item: "Lettuce", quantity: "30 heads", date: "2024-01-19", supplier: "Green Gardens", cost: "$45" },
-                  { item: "Pasta", quantity: "40 kg", date: "2024-01-17", supplier: "Italian Imports", cost: "$60" },
-                  {
-                    item: "Chicken Breast",
-                    quantity: "25 kg",
-                    date: "2024-01-16",
-                    supplier: "Premium Meats",
-                    cost: "$150",
-                  },
-                ].map((entry, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:shadow-md transition-all duration-200"
-                  >
-                    <div className="flex items-center gap-4">
-                      <CheckCircle className="h-5 w-5 text-green-500" />
-                      <div>
-                        <p className="font-medium">{entry.item}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {entry.quantity} from {entry.supplier}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-medium">{entry.cost}</p>
-                      <p className="text-sm text-muted-foreground">{entry.date}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-8"></TableHead>
+                    <TableHead>Item</TableHead>
+                    <TableHead>Quantity</TableHead>
+                    <TableHead>Supplier</TableHead>
+                    <TableHead>Cost</TableHead>
+                    <TableHead className="text-right">Date</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {[
+                    { item: "Mozzarella Cheese", quantity: "50 kg", date: "2024-01-18", supplier: "Dairy Fresh Ltd.", cost: "$300" },
+                    { item: "Lettuce", quantity: "30 heads", date: "2024-01-19", supplier: "Green Gardens", cost: "$45" },
+                    { item: "Pasta", quantity: "40 kg", date: "2024-01-17", supplier: "Italian Imports", cost: "$60" },
+                    { item: "Chicken Breast", quantity: "25 kg", date: "2024-01-16", supplier: "Premium Meats", cost: "$150" },
+                    { item: "Tomatoes", quantity: "20 kg", date: "2024-01-15", supplier: "Fresh Farm Co.", cost: "$40" },
+                    { item: "Olive Oil", quantity: "10 L", date: "2024-01-14", supplier: "Mediterranean Oils", cost: "$120" },
+                  ].map((entry, index) => (
+                    <TableRow key={index}>
+                      <TableCell>
+                        <CheckCircle className="size-4 text-success" />
+                      </TableCell>
+                      <TableCell className="font-medium">{entry.item}</TableCell>
+                      <TableCell>{entry.quantity}</TableCell>
+                      <TableCell className="text-muted-foreground">{entry.supplier}</TableCell>
+                      <TableCell className="font-medium">{entry.cost}</TableCell>
+                      <TableCell className="text-right text-muted-foreground">{entry.date}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </CardContent>
           </Card>
         </TabsContent>

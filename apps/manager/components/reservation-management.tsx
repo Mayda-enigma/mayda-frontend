@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback, useMemo } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card"
 import { Button } from "@/shared/ui/button"
 import { Input } from "@/shared/ui/input"
@@ -43,7 +43,14 @@ import {
   Trash2,
   CheckCircle,
   XCircle,
+  GripVertical,
 } from "lucide-react"
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  type DropResult,
+} from "@hello-pangea/dnd"
 
 // Mock data for reservations
 const initialReservations = [
@@ -263,9 +270,9 @@ export function ReservationManagement() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "confirmed":
-        return "bg-green-500 text-white"
+        return "bg-success text-white"
       case "pending":
-        return "bg-yellow-500 text-black"
+        return "bg-warning text-black"
       case "cancelled":
         return "bg-destructive text-destructive-foreground"
       default:
@@ -298,6 +305,69 @@ export function ReservationManagement() {
   const pendingCount = reservations.filter((r) => r.status === "pending").length
   const totalGuests = reservations.filter((r) => r.status === "confirmed").reduce((sum, r) => sum + r.guests, 0)
   const occupancyRate = Math.round((confirmedCount / tables.length) * 100)
+
+  const weekDays = useMemo(() => {
+    const start = new Date(selectedDate)
+    const day = start.getDay()
+    const diff = start.getDate() - day + (day === 0 ? -6 : 1)
+    const monday = new Date(start.setDate(diff))
+    return Array.from({ length: 7 }, (_, i) => {
+      const date = new Date(monday)
+      date.setDate(monday.getDate() + i)
+      return {
+        id: date.toISOString().split("T")[0],
+        label: date.toLocaleDateString("en-US", { weekday: "short" }),
+        dateLabel: date.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+      }
+    })
+  }, [selectedDate])
+
+  const kanbanColumns = useMemo(() => {
+    if (viewMode === "weekly") {
+      return weekDays.map((day) => ({
+        ...day,
+        items: filteredReservations.filter((r) => r.date === day.id),
+      }))
+    }
+    return timeSlots.map((time) => ({
+      id: time,
+      label: time,
+      dateLabel: "time slot",
+      items: filteredReservations.filter((r) => r.time === time),
+    }))
+  }, [viewMode, weekDays, filteredReservations])
+
+  const handleDragEnd = useCallback(
+    (result: DropResult) => {
+      if (!result.destination) return
+      const { source, destination, draggableId } = result
+      if (source.droppableId === destination.droppableId) return
+
+      const destinationId = destination.droppableId
+      const isDateColumn = /^\d{4}-\d{2}-\d{2}$/.test(destinationId)
+
+      setReservations((prev) => {
+        const dragged = prev.find((r) => r.id === Number(draggableId))
+        if (!dragged) return prev
+
+        toast({
+          title: "Reservation moved",
+          description: `${dragged.customerName} moved to ${isDateColumn ? destinationId : destinationId}`,
+        })
+
+        return prev.map((r) =>
+          r.id === dragged.id
+            ? {
+                ...r,
+                date: isDateColumn ? destinationId : r.date,
+                time: isDateColumn ? r.time : destinationId,
+              }
+            : r,
+        )
+      })
+    },
+    [],
+  )
 
   return (
     <div className="space-y-6">
@@ -577,139 +647,223 @@ export function ReservationManagement() {
 
       {/* Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="border-l-4 border-l-green-500">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Confirmed</CardTitle>
-            <CheckCircle className="h-4 w-4 text-green-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-500">{confirmedCount}</div>
-            <p className="text-xs text-muted-foreground">Active reservations</p>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-success/15 text-success">
+                <CheckCircle className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Confirmed</p>
+                <div className="text-2xl font-bold text-success">{confirmedCount}</div>
+                <p className="text-xs text-muted-foreground">Active reservations</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-yellow-500">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending</CardTitle>
-            <Clock className="h-4 w-4 text-yellow-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-yellow-500">{pendingCount}</div>
-            <p className="text-xs text-muted-foreground">Awaiting confirmation</p>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-warning/15 text-warning">
+                <Clock className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Pending</p>
+                <div className="text-2xl font-bold text-warning">{pendingCount}</div>
+                <p className="text-xs text-muted-foreground">Awaiting confirmation</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-primary">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Guests</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalGuests}</div>
-            <p className="text-xs text-muted-foreground">Expected today</p>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-primary/15 text-primary">
+                <Users className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Total Guests</p>
+                <div className="text-2xl font-bold">{totalGuests}</div>
+                <p className="text-xs text-muted-foreground">Expected today</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-secondary">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Occupancy</CardTitle>
-            <MapPin className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{occupancyRate}%</div>
-            <p className="text-xs text-muted-foreground">Table utilization</p>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-accent-blue/15 text-accent-blue">
+                <MapPin className="size-5" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground">Occupancy</p>
+                <div className="text-2xl font-bold">{occupancyRate}%</div>
+                <p className="text-xs text-muted-foreground">Table utilization</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Calendar View Controls */}
+      {/* Kanban Reservation Calendar */}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>Reservation Calendar</CardTitle>
+            <CardTitle>Reservation Kanban</CardTitle>
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm">
-                <ChevronLeft className="h-4 w-4" />
+                <ChevronLeft className="size-4" />
               </Button>
               <span className="text-sm font-medium px-4">January 2024</span>
               <Button variant="outline" size="sm">
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="size-4" />
               </Button>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant={viewMode === "daily" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setViewMode("daily")}
-            >
-              Daily
-            </Button>
-            <Button
-              variant={viewMode === "weekly" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setViewMode("weekly")}
-            >
-              Weekly
-            </Button>
-            <Button
-              variant={viewMode === "monthly" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setViewMode("monthly")}
-            >
-              Monthly
-            </Button>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Button
+                variant={viewMode === "daily" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setViewMode("daily")}
+              >
+                Daily
+              </Button>
+              <Button
+                variant={viewMode === "weekly" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setViewMode("weekly")}
+              >
+                Weekly
+              </Button>
+              <Button
+                variant={viewMode === "monthly" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setViewMode("monthly")}
+              >
+                Monthly
+              </Button>
+            </div>
+            <div className="flex items-center gap-2">
+              <Calendar className="size-4 text-muted-foreground" />
+              <Input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                className="h-8 w-44"
+              />
+            </div>
           </div>
         </CardHeader>
         <CardContent>
-          {/* Date Selector */}
-          <div className="flex items-center gap-2 mb-6">
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-            <Input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="w-48"
-            />
-          </div>
-
-          {/* Time Slot Grid */}
-          <div className="space-y-4">
-            <h3 className="font-medium">Time Slots for {selectedDate}</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-              {timeSlots.map((time) => {
-                const slotReservations = filteredReservations.filter((r) => r.time === time)
-                return (
-                  <Card key={time} className="p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium">{time}</span>
-                      <Badge variant="outline">{slotReservations.length}</Badge>
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <div className="flex gap-4 overflow-x-auto pb-2">
+              {kanbanColumns.map((column) => (
+                <div key={column.id} className="flex min-w-56 flex-1 flex-col">
+                  <div className="mb-3 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-sm">{column.label}</span>
+                      <Badge variant="outline" className="text-xs">{column.items.length}</Badge>
                     </div>
-                    <div className="space-y-2">
-                      {slotReservations.map((reservation) => (
-                        <div
-                          key={reservation.id}
-                          className={`p-2 rounded text-xs ${getStatusColor(reservation.status)}`}
-                        >
-                          <div className="flex items-center gap-1">
-                            {getStatusIcon(reservation.status)}
-                            <span className="font-medium">{reservation.customerName}</span>
+                    <span className="text-xs text-muted-foreground">{column.dateLabel}</span>
+                  </div>
+                  <Droppable droppableId={column.id}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className={`flex flex-col gap-2 rounded-lg border p-2 min-h-32 transition-colors ${
+                          snapshot.isDraggingOver
+                            ? "bg-accent/50 border-primary/30"
+                            : "bg-muted/30 border-border"
+                        }`}
+                      >
+                        {column.items.map((reservation, index) => (
+                          <Draggable
+                            key={reservation.id}
+                            draggableId={String(reservation.id)}
+                            index={index}
+                          >
+                            {(provided, snapshot) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                className={`rounded-md border bg-card p-3 text-sm transition-shadow ${
+                                  snapshot.isDragging
+                                    ? "shadow-depth-overlay"
+                                    : "shadow-depth-btn"
+                                }`}
+                              >
+                                <div className="flex items-start gap-2">
+                                  <span
+                                    {...provided.dragHandleProps}
+                                    className="mt-0.5 text-muted-foreground/40 hover:text-muted-foreground transition-colors cursor-grab active:cursor-grabbing"
+                                  >
+                                    <GripVertical className="size-3.5" />
+                                  </span>
+                                  <div className="min-w-0 flex-1">
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="size-1.5 shrink-0 rounded-full" style={{
+                                        backgroundColor:
+                                          reservation.status === "confirmed"
+                                            ? "hsl(var(--success))"
+                                            : reservation.status === "pending"
+                                              ? "hsl(var(--warning))"
+                                              : "hsl(var(--destructive))",
+                                      }} />
+                                      <span className="font-medium truncate">
+                                        {reservation.customerName}
+                                      </span>
+                                    </div>
+                                    <div className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5 text-xs text-muted-foreground">
+                                      <span>{reservation.time}</span>
+                                      <span>{reservation.guests} guests</span>
+                                      <span>{reservation.table}</span>
+                                    </div>
+                                    <div className="mt-1.5 flex items-center gap-2">
+                                      {getStatusIcon(reservation.status)}
+                                      <span className="text-xs capitalize">{reservation.status}</span>
+                                    </div>
+                                  </div>
+                                  <div className="flex gap-0.5 shrink-0">
+                                    <button
+                                      type="button"
+                                      onClick={() => openEditDialog(reservation)}
+                                      className="grid size-6 place-items-center rounded text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+                                      aria-label="Edit reservation"
+                                    >
+                                      <Edit className="size-3" />
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => openDeleteDialog(reservation)}
+                                      className="grid size-6 place-items-center rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                                      aria-label="Delete reservation"
+                                    >
+                                      <Trash2 className="size-3" />
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                        {column.items.length === 0 && !snapshot.isDraggingOver && (
+                          <div className="flex flex-1 items-center justify-center py-6">
+                            <p className="text-xs text-muted-foreground/60">Drop here</p>
                           </div>
-                          <div className="flex items-center justify-between mt-1">
-                            <span>{reservation.guests} guests</span>
-                            <span>{reservation.table}</span>
-                          </div>
-                        </div>
-                      ))}
-                      {slotReservations.length === 0 && (
-                        <div className="text-xs text-muted-foreground text-center py-2">Available</div>
-                      )}
-                    </div>
-                  </Card>
-                )
-              })}
+                        )}
+                      </div>
+                    )}
+                  </Droppable>
+                </div>
+              ))}
             </div>
-          </div>
+          </DragDropContext>
         </CardContent>
       </Card>
 

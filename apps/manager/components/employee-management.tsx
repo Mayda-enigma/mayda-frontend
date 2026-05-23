@@ -235,9 +235,9 @@ export function EmployeeManagement() {
   }
 
   const getPerformanceColor = (rating: number) => {
-    if (rating >= 4.5) return "text-green-500"
-    if (rating >= 4.0) return "text-yellow-500"
-    return "text-red-500"
+    if (rating >= 4.5) return "text-success"
+    if (rating >= 4.0) return "text-warning"
+    return "text-destructive"
   }
 
   const filteredEmployees = employees.filter((employee) => {
@@ -360,13 +360,13 @@ export function EmployeeManagement() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-green-500 hover:shadow-lg transition-all duration-300 hover:scale-105">
+        <Card className="border-l-4 border-l-success hover:shadow-lg transition-all duration-300 hover:scale-105">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Avg Performance</CardTitle>
-            <Star className="h-4 w-4 text-green-500" />
+            <Star className="h-4 w-4 text-success" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-500">{avgRating.toFixed(1)}</div>
+            <div className="text-2xl font-bold text-success">{avgRating.toFixed(1)}</div>
             <p className="text-xs text-muted-foreground">Out of 5.0 rating</p>
           </CardContent>
         </Card>
@@ -645,7 +645,7 @@ export function EmployeeManagement() {
                         <TableCell>{employee.performance.avgServiceTime}</TableCell>
                         <TableCell>
                           <div className="flex items-center gap-1">
-                            <Star className="h-3 w-3 text-yellow-500" />
+                            <Star className="h-3 w-3 text-warning" />
                             {employee.performance.customerScore}
                           </div>
                         </TableCell>
@@ -659,11 +659,11 @@ export function EmployeeManagement() {
                         </TableCell>
                         <TableCell>
                           {employee.performance.rating >= 4.5 ? (
-                            <Badge className="bg-green-500 text-white">Excellent</Badge>
+                            <Badge className="bg-success text-white">Excellent</Badge>
                           ) : employee.performance.rating >= 4.0 ? (
-                            <Badge className="bg-yellow-500 text-black">Good</Badge>
+                            <Badge className="bg-warning text-black">Good</Badge>
                           ) : (
-                            <Badge className="bg-red-500 text-white">Needs Improvement</Badge>
+                            <Badge className="bg-destructive text-white">Needs Improvement</Badge>
                           )}
                         </TableCell>
                       </TableRow>
@@ -759,13 +759,13 @@ export function EmployeeManagement() {
                     </div>
                     <div className="flex items-center gap-6">
                       <div className="text-center">
-                        <p className="text-2xl font-bold text-green-500">
+                        <p className="text-2xl font-bold text-success">
                           {Math.floor((employee.performance.attendance / 100) * 22)}
                         </p>
                         <p className="text-xs text-muted-foreground">Days Present</p>
                       </div>
                       <div className="text-center">
-                        <p className="text-2xl font-bold text-red-500">
+                        <p className="text-2xl font-bold text-destructive">
                           {22 - Math.floor((employee.performance.attendance / 100) * 22)}
                         </p>
                         <p className="text-xs text-muted-foreground">Days Absent</p>
