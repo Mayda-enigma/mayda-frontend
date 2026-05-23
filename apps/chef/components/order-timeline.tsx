@@ -7,7 +7,7 @@ interface Order {
   id: string
   timeReceived: Date
   status: string
-  estimatedCompletion: Date
+  estimatedCompletion?: Date
 }
 
 interface OrderTimelineProps {
@@ -31,14 +31,16 @@ export function OrderTimeline({ order }: OrderTimelineProps) {
       completed: order.status !== "pending",
     },
     {
-      time: order.estimatedCompletion,
+      time: order.estimatedCompletion ?? new Date(Date.now() + 15 * 60 * 1000),
       title: "Ready for Service",
       description: "Order completed and ready",
       icon: <CheckCircle className="w-4 h-4" />,
       completed: order.status === "ready",
     },
     {
-      time: new Date(order.estimatedCompletion.getTime() + 2 * 60 * 1000),
+      time: order.estimatedCompletion
+        ? new Date(order.estimatedCompletion.getTime() + 2 * 60 * 1000)
+        : new Date(Date.now() + 17 * 60 * 1000),
       title: "Served",
       description: "Delivered to customer",
       icon: <Utensils className="w-4 h-4" />,

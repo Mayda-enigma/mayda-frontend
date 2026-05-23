@@ -3,110 +3,46 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/shared/ui/button"
-import { Clock, ChefHat, Users } from "lucide-react"
+import { Clock, ChefHat, Users, AlertTriangle } from "lucide-react"
 import { OrderCard } from "@/components/order-card"
-import { StockAlert } from "@/components/stock-alert"
 import { NotificationBanner } from "@/components/notification-banner"
 import { NotificationCenter } from "@/components/notification-center"
 import { VoiceControlPanel } from "@/components/voice-control-panel"
 import { useKitchenNotifications } from "@/components/notification-system"
 import { useI18n } from "@/components/i18n-provider"
-
-// Mock data for demonstration
-const mockOrders = [
-  {
-    id: "ORD-001",
-    tableNumber: 12,
-    timeReceived: new Date(Date.now() - 15 * 60 * 1000), // 15 minutes ago
-    status: "pending",
-    complexity: "high",
-    dishes: [
-      {
-        name: "Grilled Salmon",
-        notes: "Medium rare, no sauce",
-        allergens: ["fish"],
-        image: "/grilled-salmon-dish.jpg",
-      },
-      {
-        name: "Caesar Salad",
-        notes: "Extra croutons",
-        allergens: ["gluten", "dairy"],
-        image: "/caesar-salad.png",
-      },
-    ],
-    specialRequests: "Customer has severe nut allergy",
-    priority: "urgent",
-  },
-  {
-    id: "ORD-002",
-    tableNumber: 8,
-    timeReceived: new Date(Date.now() - 8 * 60 * 1000), // 8 minutes ago
-    status: "in-progress",
-    complexity: "medium",
-    dishes: [
-      {
-        name: "Margherita Pizza",
-        notes: "Extra basil",
-        allergens: ["gluten", "dairy"],
-        image: "/margherita-pizza.png",
-      },
-      { name: "Garlic Bread", notes: "Light garlic", allergens: ["gluten"], image: "/garlic-bread.png" },
-    ],
-    specialRequests: "",
-    priority: "normal",
-  },
-  {
-    id: "ORD-003",
-    tableNumber: 5,
-    timeReceived: new Date(Date.now() - 3 * 60 * 1000), // 3 minutes ago
-    status: "pending",
-    complexity: "low",
-    dishes: [{ name: "House Salad", notes: "Dressing on side", allergens: [], image: "/house-salad.jpg" }],
-    specialRequests: "Vegan customer",
-    priority: "normal",
-  },
-]
-
-const mockStockAlerts = [
-  { ingredient: "Tomatoes", currentStock: 8, threshold: 10, unit: "%", category: "vegetable" },
-  { ingredient: "Salmon Fillets", currentStock: 3, threshold: 5, unit: "pieces", category: "protein" },
-]
+import { useOrders } from "@/features/orders/api/queries"
+import { useCurrentUser } from "@/features/auth"
+import { orderService } from "@/features/orders/api/services"
 
 export default function ChefDashboard() {
-  const [orders, setOrders] = useState(mockOrders)
+  const { data: user } = useCurrentUser()
+  const restaurantId = user?.restaurantId ?? 0
+  const { data: orders = [], isLoading, refetch } = useOrders(restaurantId)
   const [sortBy, setSortBy] = useState<"time" | "complexity">("time")
-  const [newOrderAlert, setNewOrderAlert] = useState(false)
   const { notifyNewOrder, notifyOrderReady, notifyOrderDelayed, notifyStockLow } = useKitchenNotifications()
   const { t } = useI18n()
   const router = useRouter()
 
-  // Simulate new order notifications
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (Math.random() > 0.8) {
-        // Simulate various kitchen notifications
-        const notificationType = Math.random()
+  // Poll for new orders and trigger notifications
+  const [knownOrderIds, setKnownOrderIds] = useState<Set<string>>(new Set())
 
-        if (notificationType > 0.7) {
-          notifyNewOrder({
-            id: `ORD-${Math.floor(Math.random() * 1000)}`,
-            tableNumber: Math.floor(Math.random() * 20) + 1,
-            priority: Math.random() > 0.7 ? "urgent" : "normal",
-          })
-        } else if (notificationType > 0.5) {
-          notifyStockLow("Tomatoes", 8, 20)
-        } else if (notificationType > 0.3) {
-          notifyOrderDelayed({
-            id: "ORD-001",
-            tableNumber: 12,
-            delay: 5,
-          })
+  useEffect(() => {
+    if (!orders.length) return
+    const currentIds = new Set(orders.map((o) => o.id))
+    const newIds = [...currentIds].filter((id) => !knownOrderIds.has(id))
+    if (newIds.length > 0) {
+      for (const id of newIds) {
+        const order = orders.find((o) => o.id === id)
+        if (order) {
+          notifyNewOrder({ id: order.backendId.toString(), tableNumber: order.tableNumber, priority: order.priority })
         }
       }
-    }, 15000)
-
-    return () => clearInterval(interval)
-  }, [notifyNewOrder, notifyStockLow, notifyOrderDelayed])
+      setKnownOrderIds(currentIds)
+    }
+    if (knownOrderIds.size === 0) {
+      setKnownOrderIds(currentIds)
+    }
+  }, [orders, knownOrderIds, notifyNewOrder])
 
   const sortedOrders = [...orders].sort((a, b) => {
     if (sortBy === "time") {
@@ -117,11 +53,29 @@ export default function ChefDashboard() {
     }
   })
 
-  const updateOrderStatus = (orderId: string, newStatus: string) => {
-    setOrders(orders.map((order) => (order.id === orderId ? { ...order, status: newStatus } : order)))
+  const updateOrderStatus = async (orderId: string, newStatus: string) => {
+    const order = orders.find((o) => o.id === orderId)
+    if (!order) return
+
+    const backendStatusMap: Record<string, string> = {
+      "in-progress": "PREPARING",
+      ready: "READY",
+    }
+    const backendStatus = backendStatusMap[newStatus]
+    if (!backendStatus) return
+
+    try {
+      await orderService.updateStatus(order.backendId, backendStatus)
+      refetch()
+    } catch {
+      // Error handled by apiClient
+    }
   }
 
   const handleVoiceOrderAction = (orderId: string, action: string) => {
+    const order = orders.find((o) => o.id === orderId)
+    if (!order) return
+
     if (action === "start" && orders.length > 0) {
       const firstPendingOrder = orders.find((order) => order.status === "pending")
       if (firstPendingOrder) {
@@ -130,7 +84,7 @@ export default function ChefDashboard() {
     } else if (action === "ready" && orders.length > 0) {
       const firstInProgressOrder = orders.find((order) => order.status === "in-progress")
       if (firstInProgressOrder) {
-        updateOrderStatus(firstInProgressOrder.id, "completed")
+        updateOrderStatus(firstInProgressOrder.id, "ready")
       }
     }
   }
@@ -139,13 +93,22 @@ export default function ChefDashboard() {
     router.push(path)
   }
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <div className="text-center">
+          <ChefHat className="w-16 h-16 mx-auto text-muted-foreground mb-4 animate-bounce" />
+          <p className="text-lg text-muted-foreground">Loading orders...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Voice Control Panel */}
       <VoiceControlPanel onOrderAction={handleVoiceOrderAction} onNavigate={handleVoiceNavigation} />
 
       <div className="p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6">
-        {/* Header */}
         <div className="space-y-3 sm:space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-500 leading-tight">
@@ -176,27 +139,6 @@ export default function ChefDashboard() {
           </div>
         </div>
 
-        {/* Stock Alerts */}
-        {mockStockAlerts.length > 0 && (
-          <div className="space-y-3">
-            <h2 className="text-lg sm:text-xl font-semibold text-amber-400">Stock Alerts</h2>
-            <div className="grid gap-2 sm:gap-3">
-              {mockStockAlerts.map((alert, index) => (
-                <StockAlert key={index} alert={alert} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* New Order Notification */}
-        {newOrderAlert && (
-          <NotificationBanner
-            message="New urgent order received - Table 15"
-            type="urgent"
-            onDismiss={() => setNewOrderAlert(false)}
-          />
-        )}
-
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
           <Button
             data-sort="time"
@@ -222,7 +164,6 @@ export default function ChefDashboard() {
           ))}
         </div>
 
-        {/* Empty State */}
         {orders.length === 0 && (
           <div className="text-center py-8 sm:py-12">
             <ChefHat className="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-muted-foreground mb-4 animate-bounce" />
