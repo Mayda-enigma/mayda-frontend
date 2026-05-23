@@ -48,16 +48,16 @@ export const useToggleAvailability = (restaurantId: number) => {
   const queryKey = menuKeys.list(restaurantId)
 
   return useMutation({
-    mutationFn: ({ id, isAvailable }: ToggleAvailabilityInput) =>
-      menuService.update(id, { is_available: isAvailable }),
-    onMutate: async ({ id, isAvailable }) => {
+    mutationFn: ({ id }: ToggleAvailabilityInput) =>
+      menuService.toggleAvailability(id),
+    onMutate: async ({ id }) => {
       await qc.cancelQueries({ queryKey })
 
       const previousMenu = qc.getQueryData<MenuItem[]>(queryKey)
 
       qc.setQueryData<MenuItem[]>(queryKey, (current = []) =>
         current.map((item) =>
-          item.id === id ? { ...item, isAvailable } : item,
+          item.id === id ? { ...item, isAvailable: !item.isAvailable } : item,
         ),
       )
 

@@ -13,6 +13,7 @@ const toMenuItem = (dish: DishDto, category: CategoryDto): MenuItem => ({
   description: dish.description,
   price: dish.price,
   category: category.name,
+  categoryId: category.id,
   image: dish.image ?? '/placeholder.svg',
   isAvailable: dish.isAvailable,
   preparationTime: dish.preparationTime,
@@ -30,12 +31,15 @@ export const toMenuItems = (menus: MenuDto[]): MenuItem[] =>
 export const toCreateMenuItemDto = (
   input: CreateMenuItemInput,
 ): CreateMenuItemDto => ({
+  categoryId: input.categoryId,
   name: input.name.trim(),
   description: input.description.trim(),
-  category_name: input.category.trim(),
   price: input.price,
-  image_url: input.imageUrl.trim() || null,
-  preparation_time: input.preparationTime,
-  is_available: input.isAvailable,
+  image: input.imageUrl.trim() || null,
+  isAvailable: input.isAvailable,
+  quantity: 0,
+  preparationTime: input.preparationTime,
+  popularity: 0,
+  displayOrder: 0,
 })
 

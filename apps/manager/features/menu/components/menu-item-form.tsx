@@ -21,10 +21,15 @@ import {
 import { Textarea } from "@/shared/ui/textarea"
 import type { CreateMenuItemInput, MenuItem } from "../types"
 
+interface CategoryOption {
+  id: number
+  name: string
+}
+
 const defaultForm: CreateMenuItemInput = {
   name: "",
   description: "",
-  category: "Pizza",
+  categoryId: 0,
   price: 0,
   imageUrl: "",
   preparationTime: 10,
@@ -36,7 +41,7 @@ interface MenuItemFormProps {
   onOpenChange: (open: boolean) => void
   onSubmit: (input: CreateMenuItemInput) => Promise<void>
   isPending: boolean
-  categories: string[]
+  categories: CategoryOption[]
   initialItem?: MenuItem | null
 }
 
@@ -59,7 +64,7 @@ export function MenuItemForm({
       setForm({
         name: initialItem.name,
         description: initialItem.description,
-        category: initialItem.category,
+        categoryId: initialItem.categoryId,
         price: initialItem.price,
         imageUrl: initialItem.image,
         preparationTime: initialItem.preparationTime,
@@ -103,18 +108,21 @@ export function MenuItemForm({
             <div className="space-y-2">
               <Label htmlFor="menu-category">Category</Label>
               <Select
-                value={form.category}
-                onValueChange={(category) =>
-                  setForm((current) => ({ ...current, category }))
+                value={String(form.categoryId)}
+                onValueChange={(categoryId) =>
+                  setForm((current) => ({
+                    ...current,
+                    categoryId: Number(categoryId),
+                  }))
                 }
               >
                 <SelectTrigger id="menu-category">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
+                  {categories.map((cat) => (
+                    <SelectItem key={cat.id} value={String(cat.id)}>
+                      {cat.name}
                     </SelectItem>
                   ))}
                 </SelectContent>

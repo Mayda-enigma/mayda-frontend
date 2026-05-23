@@ -6,18 +6,23 @@ export const menuService = {
     apiClient<MenuDto[]>(`/menus/restaurant/${restaurantId}`),
 
   create: (payload: CreateMenuItemDto) =>
-    apiClient<DishDto>('/menus', {
+    apiClient<DishDto>('/menus/dishes', {
       method: 'POST',
       body: JSON.stringify(payload),
     }),
 
   update: (id: string, payload: Partial<CreateMenuItemDto>) =>
-    apiClient<DishDto>(`/menus/${id}`, {
-      method: 'PATCH',
+    apiClient<DishDto>(`/menus/dishes/${id}`, {
+      method: 'PUT',
       body: JSON.stringify(payload),
     }),
 
   remove: (id: string) =>
-    apiClient<void>(`/menus/${id}`, { method: 'DELETE' }),
+    apiClient<void>(`/menus/dishes/${id}`, { method: 'DELETE' }),
+
+  toggleAvailability: (id: string) =>
+    apiClient<DishDto>(`/menus/dishes/${id}/toggle-availability`, {
+      method: 'PATCH',
+    }),
 }
 
