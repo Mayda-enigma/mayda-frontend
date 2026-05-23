@@ -67,7 +67,6 @@ export const useCartStore = create<CartState & CartActions>()(
       name: 'mayda_cart',
       partialize: (state) => ({
         items: state.items,
-        isOpen: state.isOpen,
         total: state.total,
       }),
     },
