@@ -4,15 +4,18 @@ import { Button } from "@/shared/ui/button"
 import { Card, CardContent } from "@/shared/ui/card"
 import { Badge } from "@/shared/ui/badge"
 import { useCart } from "@/features/cart"
-import { X, Plus, Minus, ShoppingBag, CreditCard } from "lucide-react"
+import { useCreateOrder } from "@/features/orders"
+import { X, Plus, Minus, ShoppingBag, CreditCard, AlertCircle } from "lucide-react"
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import type { ApiError } from "@/shared/api/client"
 
 export function CartSidebar() {
   const { state, dispatch } = useCart()
-  const [isCheckingOut, setIsCheckingOut] = useState(false)
+  const [checkoutError, setCheckoutError] = useState<string | null>(null)
   const router = useRouter()
+  const createOrder = useCreateOrder()
 
   const updateQuantity = (id: string, quantity: number) => {
     dispatch({ type: "UPDATE_QUANTITY", payload: { id, quantity } })
@@ -23,15 +26,26 @@ export function CartSidebar() {
   }
 
   const handleCheckout = () => {
-    setIsCheckingOut(true)
-    // Simulate checkout process
-    setTimeout(() => {
-      dispatch({ type: "CLEAR_CART" })
-      dispatch({ type: "CLOSE_CART" })
-      setIsCheckingOut(false)
-      // Navigate to orders page to see the new order
-      router.push("/orders")
-    }, 2000)
+    setCheckoutError(null)
+    createOrder.mutate(
+      { items: state.items.map((item) => ({ menuItemId: item.id, quantity: item.quantity })) },
+      {
+        onSuccess: () => {
+          dispatch({ type: "CLOSE_CART" })
+          router.push("/orders")
+        },
+        onError: (error: ApiError) => {
+          if (error.status === 422) {
+            const detail = error.body && typeof error.body === 'object' && 'detail' in error.body
+              ? (error.body as { detail: string }).detail
+              : 'Please check your order and try again.'
+            setCheckoutError(detail)
+          } else {
+            setCheckoutError('Something went wrong. Please try again.')
+          }
+        },
+      },
+    )
   }
 
   if (!state.isOpen) return null
@@ -155,15 +169,22 @@ export function CartSidebar() {
               </div>
             </div>
 
+            {checkoutError && (
+              <div className="flex items-start gap-2 text-destructive text-sm bg-destructive/10 p-3 rounded-md">
+                <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
+                <span>{checkoutError}</span>
+              </div>
+            )}
+
             <div className="space-y-2">
               <Button
                 className="w-full restaurant-gradient text-white hover:opacity-90 hover:scale-105 transition-all duration-200 hover:shadow-lg"
                 size="lg"
                 onClick={handleCheckout}
-                disabled={isCheckingOut}
+                disabled={createOrder.isPending}
               >
                 <CreditCard className="w-4 h-4 mr-2" />
-                {isCheckingOut ? (
+                {createOrder.isPending ? (
                   <>
                     <span className="animate-pulse">Processing...</span>
                   </>
