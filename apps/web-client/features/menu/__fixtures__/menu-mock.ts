@@ -1,3 +1,7 @@
+/**
+ * @file Test-only fixture. Do not import from production code.
+ * Used by unit/integration tests.
+ */
 import type { MenuItemDto } from '../types';
 
 export const menuMock: MenuItemDto[] = [
