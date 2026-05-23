@@ -28,30 +28,30 @@ export function KpiCards({ range }: KpiCardsProps) {
   const metrics = [
     {
       title: t.totalOrdersKpi,
-      value: kpis ? kpis.totalOrders.toLocaleString() : "—",
-      change: kpis ? formatTrend(kpis.ordersTrend) : "",
+      value: kpis?.totalOrders != null ? kpis.totalOrders.toLocaleString() : "—",
+      change: kpis?.ordersTrend != null ? formatTrend(kpis.ordersTrend) : "",
       trendUp: (kpis?.ordersTrend ?? 0) >= 0,
       Icon: ChefHat,
     },
     {
       title: t.revenue,
-      value: kpis ? formatCurrency(kpis.revenue) : "—",
-      change: kpis ? formatTrend(kpis.revenueTrend) : "",
+      value: kpis?.revenue != null ? formatCurrency(kpis.revenue) : "—",
+      change: kpis?.revenueTrend != null ? formatTrend(kpis.revenueTrend) : "",
       trendUp: (kpis?.revenueTrend ?? 0) >= 0,
       Icon: DollarSign,
     },
     {
       title: t.avgPrepTime,
-      value: kpis ? `${kpis.avgPrepTimeMinutes.toFixed(1)} min` : "—",
-      change: kpis ? formatTrend(kpis.avgPrepTimeTrend) : "",
+      value: kpis?.avgPrepTimeMinutes != null ? `${kpis.avgPrepTimeMinutes.toFixed(1)} min` : "—",
+      change: kpis?.avgPrepTimeTrend != null ? formatTrend(kpis.avgPrepTimeTrend) : "",
       // lower prep time is better → negative trend is "up" for this KPI
       trendUp: (kpis?.avgPrepTimeTrend ?? 0) <= 0,
       Icon: Clock,
     },
     {
       title: t.customerSatisfaction,
-      value: kpis ? `${kpis.customerRating.toFixed(1)}/5` : "—",
-      change: kpis ? formatTrend(kpis.customerRatingTrend) : "",
+      value: kpis?.customerRating != null ? `${kpis.customerRating.toFixed(1)}/5` : "—",
+      change: kpis?.customerRatingTrend != null ? formatTrend(kpis.customerRatingTrend) : "",
       trendUp: (kpis?.customerRatingTrend ?? 0) >= 0,
       Icon: Users,
     },
