@@ -10,13 +10,14 @@ import { ArrowLeft, Clock, Users, AlertTriangle, Play, Pause, CheckCircle, Timer
 import { OrderTimeline } from "@/components/order-timeline"
 import { VoiceControl } from "@/components/voice-control"
 import { useOrderDetail } from "@/features/orders/api/queries"
-import { orderService } from "@/features/orders/api/services"
+import { useUpdateOrderStatus } from "@/features/orders/api/mutations"
 
 export default function OrderDetailPage() {
   const params = useParams()
   const router = useRouter()
   const orderId = Number(params.id)
-  const { data: order, refetch } = useOrderDetail(orderId)
+  const { data: order } = useOrderDetail(orderId)
+  const updateStatus = useUpdateOrderStatus()
   const [timeElapsed, setTimeElapsed] = useState("")
   const [isVoiceActive, setIsVoiceActive] = useState(false)
 
@@ -63,20 +64,14 @@ export default function OrderDetailPage() {
     }
   }
 
-  const updateOrderStatus = async (newStatus: string) => {
+  const updateOrderStatus = (newStatus: string) => {
     const backendStatusMap: Record<string, string> = {
       "in-progress": "PREPARING",
       ready: "READY",
     }
     const backendStatus = backendStatusMap[newStatus]
     if (!backendStatus) return
-
-    try {
-      await orderService.updateStatus(order.backendId, backendStatus)
-      refetch()
-    } catch {
-      // Error handled by apiClient
-    }
+    updateStatus.mutate({ orderId: order.backendId, status: backendStatus })
   }
 
   const updateDishStep = (dishIndex: number, newStep: number) => {
@@ -284,25 +279,32 @@ export default function OrderDetailPage() {
               {order.status === "pending" && (
                 <Button
                   onClick={() => updateOrderStatus("in-progress")}
+                  disabled={updateStatus.isPending}
                   className="w-full bg-orange-500 hover:bg-orange-600"
                 >
                   <Play className="w-4 h-4 mr-2" />
-                  Start Order
+                  {updateStatus.isPending ? "Updating..." : "Start Order"}
                 </Button>
               )}
               {order.status === "in-progress" && (
                 <Button
                   onClick={() => updateOrderStatus("ready")}
+                  disabled={updateStatus.isPending}
                   className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
                 >
                   <CheckCircle className="w-4 h-4 mr-2" />
-                  Mark Ready
+                  {updateStatus.isPending ? "Updating..." : "Mark Ready"}
                 </Button>
               )}
               <Button variant="outline" className="w-full border-border hover:bg-accent bg-transparent">
                 <Pause className="w-4 h-4 mr-2" />
                 Pause Order
               </Button>
+              {updateStatus.error && (
+                <p className="text-sm text-destructive text-center">
+                  {updateStatus.error instanceof Error ? updateStatus.error.message : "Failed to update status"}
+                </p>
+              )}
             </CardContent>
           </Card>
         </div>
