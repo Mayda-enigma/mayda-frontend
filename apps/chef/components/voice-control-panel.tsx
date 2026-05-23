@@ -138,7 +138,7 @@ export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPan
           {lastCommand && (
             <div className="mt-3 p-2 bg-muted rounded text-sm">
               <span className="text-muted-foreground">Last command: </span>
-              <span className="text-orange-500">"{lastCommand}"</span>
+              <span className="text-orange-500">&quot;{lastCommand}&quot;</span>
             </div>
           )}
         </CardContent>
@@ -157,7 +157,7 @@ export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPan
                 <div key={index} className="flex items-center justify-between p-2 bg-muted rounded">
                   <div>
                     <Badge variant="outline" className="text-xs mb-1">
-                      "{cmd.command}"
+                      &quot;{cmd.command}&quot;
                     </Badge>
                     <p className="text-sm text-muted-foreground">{cmd.description}</p>
                   </div>
