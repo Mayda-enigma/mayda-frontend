@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Menu, Home, UtensilsCrossed, ShoppingBag, Clock, X } from "lucide-react"
 import Link from "next/link"
-import { useCart } from "@/components/cart-context"
+import { useCart } from "@/features/cart"
 import { Badge } from "@/components/ui/badge"
 import { ThemeToggle } from "@/components/theme-toggle"
 
@@ -16,7 +16,7 @@ interface BurgerMenuProps {
 
 export function BurgerMenu({ currentPage }: BurgerMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const { state } = useCart()
+  const cart = useCart()
 
   const menuItems = [
     { href: "/", icon: Home, label: "Home", id: "home" },
@@ -66,8 +66,8 @@ export function BurgerMenu({ currentPage }: BurgerMenuProps) {
                     >
                       <Icon className="w-5 h-5" />
                       {item.label}
-                      {item.id === "cart" && currentPage === "cart" && state.items.length > 0 && (
-                        <Badge className="ml-auto bg-primary text-white">{state.items.length}</Badge>
+                      {item.id === "cart" && currentPage === "cart" && cart.items.length > 0 && (
+                        <Badge className="ml-auto bg-primary text-white">{cart.items.length}</Badge>
                       )}
                     </Button>
                   </Link>

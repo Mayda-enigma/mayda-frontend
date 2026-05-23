@@ -5,7 +5,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { useCart } from "@/components/cart-context"
+import { useCart } from "@/features/cart"
 import { Sparkles, Clock, Calendar, TrendingUp, Plus, X } from "lucide-react"
 
 interface MenuItem {
@@ -37,7 +37,7 @@ interface SmartRecommendationsProps {
 }
 
 export function SmartRecommendations({ menuItems, cartItems }: SmartRecommendationsProps) {
-  const { dispatch } = useCart()
+  const cart = useCart()
   const [recommendations, setRecommendations] = useState<Recommendation[]>([])
   const [dismissedRecommendations, setDismissedRecommendations] = useState<string[]>([])
 
@@ -193,15 +193,7 @@ export function SmartRecommendations({ menuItems, cartItems }: SmartRecommendati
   }, [menuItems, cartItems, dismissedRecommendations])
 
   const addToCart = (item: MenuItem) => {
-    dispatch({
-      type: "ADD_ITEM",
-      payload: {
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        image: item.image,
-      },
-    })
+    cart.add({ id: item.id, name: item.name, price: item.price, image: item.image })
   }
 
   const dismissRecommendation = (recommendationId: string) => {
