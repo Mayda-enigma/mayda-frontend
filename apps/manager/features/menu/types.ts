@@ -35,6 +35,7 @@ export interface MenuItem {
   description: string
   price: number
   category: string
+  categoryId: number
   image: string
   isAvailable: boolean
   preparationTime: number
@@ -45,7 +46,7 @@ export interface MenuItem {
 export interface CreateMenuItemInput {
   name: string
   description: string
-  category: string
+  categoryId: number
   price: number
   imageUrl: string
   preparationTime: number
@@ -53,17 +54,19 @@ export interface CreateMenuItemInput {
 }
 
 export interface CreateMenuItemDto {
+  categoryId: number
   name: string
   description: string
-  category_name: string
   price: number
-  image_url: string | null
-  preparation_time: number
-  is_available: boolean
+  image: string | null
+  isAvailable: boolean
+  quantity: number
+  preparationTime: number
+  popularity: number
+  displayOrder: number
 }
 
 export interface ToggleAvailabilityInput {
   id: string
-  isAvailable: boolean
 }
 

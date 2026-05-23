@@ -57,7 +57,7 @@ import {
 import { useRemoveEmployee, useUpdateEmployee } from "../api/mutations"
 import { useEmployees } from "../api/queries"
 import { InviteModal } from "./invite-modal"
-import type { Employee, UpdateDto } from "../types"
+import type { Employee } from "../types"
 
 const roles = [
   "Head Chef",
@@ -78,18 +78,14 @@ const departments = [
   "Cleaning",
 ]
 
-type EditFormState = Pick<
-  Employee,
-  "name" | "email" | "phone" | "role" | "department" | "salary"
->
+type EditFormState = {
+  role: string
+  isActive: boolean
+}
 
 const emptyEditForm: EditFormState = {
-  name: "",
-  email: "",
-  phone: "",
   role: "Waiter",
-  department: "Service",
-  salary: 0,
+  isActive: true,
 }
 
 function getInitials(name: string) {
@@ -133,15 +129,11 @@ function getEstimatedShift(role: string, department: string) {
   return "Not assigned"
 }
 
-function toUpdatePayload(form: EditFormState, employee: Employee): UpdateDto {
-  const payload: UpdateDto = {}
+function toUpdatePayload(form: EditFormState, employee: Employee) {
+  const payload: { role?: string; isActive?: boolean } = {}
 
-  if (form.name !== employee.name) payload.name = form.name
-  if (form.email !== employee.email) payload.email = form.email
-  if (form.phone !== employee.phone) payload.phone = form.phone
   if (form.role !== employee.role) payload.role = form.role
-  if (form.department !== employee.department) payload.department = form.department
-  if (form.salary !== employee.salary) payload.salary = form.salary
+  if (form.isActive !== (employee.status === "active")) payload.isActive = form.isActive
 
   return payload
 }
@@ -199,12 +191,8 @@ export function EmployeeManagement() {
   const beginEditing = (employee: Employee) => {
     setEditingEmployeeId(employee.id)
     setEditForm({
-      name: employee.name,
-      email: employee.email,
-      phone: employee.phone,
       role: employee.role,
-      department: employee.department,
-      salary: employee.salary,
+      isActive: employee.status === "active",
     })
   }
 
@@ -228,7 +216,7 @@ export function EmployeeManagement() {
       await updateEmployee.mutateAsync({ id: employee.id, data: payload })
       toast({
         title: "Employee updated",
-        description: `${employee.name} was saved successfully.`,
+        description: `${employee.name}'s role or status was updated.`,
       })
       cancelEditing()
     } catch {
@@ -462,19 +450,7 @@ export function EmployeeManagement() {
                         <AvatarFallback>{getInitials(employee.name)}</AvatarFallback>
                       </Avatar>
                       <div className="min-w-0 flex-1">
-                        {isEditing ? (
-                          <Input
-                            value={editForm.name}
-                            onChange={(event) =>
-                              setEditForm((current) => ({
-                                ...current,
-                                name: event.target.value,
-                              }))
-                            }
-                          />
-                        ) : (
-                          <h3 className="truncate font-semibold">{employee.name}</h3>
-                        )}
+                        <h3 className="truncate font-semibold">{employee.name}</h3>
                         <div className="mt-2">
                           <Badge variant={getRoleVariant(employee.role)}>
                             {employee.role}
@@ -487,72 +463,25 @@ export function EmployeeManagement() {
                     <div className="space-y-3 text-sm">
                       <div className="flex items-start gap-2">
                         <Mail className="mt-0.5 h-3 w-3 text-muted-foreground" />
-                        {isEditing ? (
-                          <Input
-                            value={editForm.email}
-                            onChange={(event) =>
-                              setEditForm((current) => ({
-                                ...current,
-                                email: event.target.value,
-                              }))
-                            }
-                          />
-                        ) : (
-                          <span className="min-w-0 truncate text-muted-foreground">
-                            {employee.email}
-                          </span>
-                        )}
+                        <span className="min-w-0 truncate text-muted-foreground">
+                          {employee.email}
+                        </span>
                       </div>
                       <div className="flex items-start gap-2">
                         <Phone className="mt-0.5 h-3 w-3 text-muted-foreground" />
-                        {isEditing ? (
-                          <Input
-                            value={editForm.phone}
-                            onChange={(event) =>
-                              setEditForm((current) => ({
-                                ...current,
-                                phone: event.target.value,
-                              }))
-                            }
-                          />
-                        ) : (
-                          <span className="text-muted-foreground">
-                            {employee.phone || "No phone on file"}
-                          </span>
-                        )}
+                        <span className="text-muted-foreground">
+                          {employee.phone || "No phone on file"}
+                        </span>
                       </div>
                       <div className="grid gap-3 sm:grid-cols-2">
                         <div className="space-y-2">
                           <Label className="text-xs text-muted-foreground">
                             Department
                           </Label>
-                          {isEditing ? (
-                            <Select
-                              value={editForm.department}
-                              onValueChange={(department) =>
-                                setEditForm((current) => ({
-                                  ...current,
-                                  department,
-                                }))
-                              }
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder="Department" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {departments.map((department) => (
-                                  <SelectItem key={department} value={department}>
-                                    {department}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          ) : (
-                            <div className="flex items-center gap-2 text-muted-foreground">
-                              <MapPin className="h-3 w-3" />
-                              <span>{employee.department}</span>
-                            </div>
-                          )}
+                          <div className="flex items-center gap-2 text-muted-foreground">
+                            <MapPin className="h-3 w-3" />
+                            <span>{employee.department}</span>
+                          </div>
                         </div>
                         <div className="space-y-2">
                           <Label className="text-xs text-muted-foreground">Role</Label>
@@ -582,23 +511,9 @@ export function EmployeeManagement() {
                       <div className="grid gap-3 sm:grid-cols-2">
                         <div className="space-y-2">
                           <Label className="text-xs text-muted-foreground">Salary</Label>
-                          {isEditing ? (
-                            <Input
-                              type="number"
-                              min="0"
-                              value={editForm.salary}
-                              onChange={(event) =>
-                                setEditForm((current) => ({
-                                  ...current,
-                                  salary: Number(event.target.value) || 0,
-                                }))
-                              }
-                            />
-                          ) : (
-                            <p className="text-muted-foreground">
-                              {formatCurrency(employee.salary)}
-                            </p>
-                          )}
+                          <p className="text-muted-foreground">
+                            {formatCurrency(employee.salary)}
+                          </p>
                         </div>
                         <div className="space-y-2">
                           <Label className="text-xs text-muted-foreground">
@@ -610,6 +525,30 @@ export function EmployeeManagement() {
                           </div>
                         </div>
                       </div>
+                      {isEditing ? (
+                        <div className="space-y-2">
+                          <Label className="text-xs text-muted-foreground">
+                            Active Status
+                          </Label>
+                          <Select
+                            value={editForm.isActive ? "active" : "inactive"}
+                            onValueChange={(value) =>
+                              setEditForm((current) => ({
+                                ...current,
+                                isActive: value === "active",
+                              }))
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="active">Active</SelectItem>
+                              <SelectItem value="inactive">Inactive</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      ) : null}
                     </div>
 
                     <div className="rounded-lg border border-border bg-muted/30 p-3">

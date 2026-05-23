@@ -37,18 +37,16 @@ export interface EmployeeDto {
 }
 
 export interface InviteDto {
-  email: string;
+  firstName: string;
+  lastName: string;
+  phone: number;
+  email?: string;
   role: string;
-  department: string;
 }
 
 export interface UpdateDto {
-  name?: string;
-  email?: string;
-  phone?: string;
   role?: string;
-  department?: string;
-  salary?: number;
+  isActive?: boolean;
 }
 
 export interface EmployeesQueryParams {

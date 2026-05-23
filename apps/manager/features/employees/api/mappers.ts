@@ -19,19 +19,23 @@ export const toEmployee = (dto: EmployeeDto): Employee => ({
   },
 });
 
-export const toInviteDto = (data: { email: string; role: string; department: string }): InviteDto => ({
-  email: data.email,
+export const toInviteDto = (data: {
+  firstName: string;
+  lastName: string;
+  phone: number;
+  email?: string;
+  role: string;
+}): InviteDto => ({
+  firstName: data.firstName,
+  lastName: data.lastName,
+  phone: data.phone,
+  email: data.email || undefined,
   role: data.role,
-  department: data.department,
 });
 
-export const toUpdateDto = (data: Partial<Employee>): UpdateDto => {
+export const toUpdateDto = (data: { role?: string; isActive?: boolean }): UpdateDto => {
   const update: UpdateDto = {};
-  if (data.name !== undefined) update.name = data.name;
-  if (data.email !== undefined) update.email = data.email;
-  if (data.phone !== undefined) update.phone = data.phone;
   if (data.role !== undefined) update.role = data.role;
-  if (data.department !== undefined) update.department = data.department;
-  if (data.salary !== undefined) update.salary = data.salary;
+  if (data.isActive !== undefined) update.isActive = data.isActive;
   return update;
 };

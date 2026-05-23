@@ -45,10 +45,22 @@ export function MenuManagement() {
   const deleteMenuItem = useDeleteMenuItem(restaurantId ?? 0)
   const toggleAvailability = useToggleAvailability(restaurantId ?? 0)
 
-  const categories = useMemo(
-    () => Array.from(new Set(menuItems.map((item) => item.category))).sort(),
-    [menuItems],
-  )
+  const categories = useMemo(() => {
+    const seen = new Map<number, { id: number; name: string }>()
+    menuItems.forEach((item) => {
+      if (!seen.has(item.categoryId)) {
+        seen.set(item.categoryId, { id: item.categoryId, name: item.category })
+      }
+    })
+    return Array.from(seen.values()).sort((a, b) => a.name.localeCompare(b.name))
+  }, [menuItems])
+
+  const fallbackCategories = [
+    { id: 1, name: "Pizza" },
+    { id: 2, name: "Pasta" },
+    { id: 3, name: "Salads" },
+    { id: 4, name: "Burgers" },
+  ]
 
   const filteredItems = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLowerCase()
@@ -138,10 +150,7 @@ export function MenuManagement() {
 
   const handleToggleAvailability = async (item: MenuItem) => {
     try {
-      await toggleAvailability.mutateAsync({
-        id: item.id,
-        isAvailable: !item.isAvailable,
-      })
+      await toggleAvailability.mutateAsync({ id: item.id })
       toast({
         title: item.isAvailable ? "Item disabled" : "Item enabled",
         description: `${item.name} is now ${
@@ -179,7 +188,7 @@ export function MenuManagement() {
         onOpenChange={setIsCreateOpen}
         onSubmit={handleCreate}
         isPending={createMenuItem.isPending}
-        categories={categories.length > 0 ? categories : ["Pizza", "Pasta", "Salads", "Burgers"]}
+        categories={categories.length > 0 ? categories : fallbackCategories}
       />
       <MenuItemForm
         open={editingItem !== null}
@@ -190,7 +199,7 @@ export function MenuManagement() {
         }}
         onSubmit={handleUpdate}
         isPending={updateMenuItem.isPending}
-        categories={categories.length > 0 ? categories : ["Pizza", "Pasta", "Salads", "Burgers"]}
+        categories={categories.length > 0 ? categories : fallbackCategories}
         initialItem={editingItem}
       />
 
@@ -287,9 +296,9 @@ export function MenuManagement() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Categories</SelectItem>
-                {categories.map((category) => (
-                  <SelectItem key={category} value={category}>
-                    {category}
+                {categories.map((cat) => (
+                  <SelectItem key={cat.id} value={cat.name}>
+                    {cat.name}
                   </SelectItem>
                 ))}
               </SelectContent>
