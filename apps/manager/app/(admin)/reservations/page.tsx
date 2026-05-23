@@ -1,6 +1,6 @@
 "use client"
 
-import { ReservationManagement } from "@/components/reservation-management"
+import { ReservationManagement } from "@/features/reservations"
 
 export default function ReservationsPage() {
   return <ReservationManagement />
