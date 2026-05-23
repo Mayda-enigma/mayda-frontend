@@ -6,7 +6,7 @@ import { toOrders } from './mappers'
 export const useMyOrders = () =>
   useQuery({
     queryKey: ordersKeys.mine(),
-    queryFn: () => orderService.list(),
+    queryFn: () => orderService.myOrders(),
     select: toOrders,
     refetchInterval: 30_000,
     staleTime: 10_000,
