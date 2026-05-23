@@ -63,6 +63,13 @@ export const useCartStore = create<CartState & CartActions>()(
 
       close: () => set({ isOpen: false }),
     }),
-    { name: 'mayda_cart' },
+    {
+      name: 'mayda_cart',
+      partialize: (state) => ({
+        items: state.items,
+        isOpen: state.isOpen,
+        total: state.total,
+      }),
+    },
   ),
 )

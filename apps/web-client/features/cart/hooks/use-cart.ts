@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useCartStore } from '../store'
 import type { CartItem } from '../types'
 
@@ -11,32 +12,29 @@ type CartAction =
   | { type: 'CLOSE_CART' }
 
 export function useCart() {
-  const state = useCartStore((s) => ({
-    items: s.items,
-    isOpen: s.isOpen,
-    total: s.total,
-  }))
+  const items = useCartStore((s) => s.items)
+  const isOpen = useCartStore((s) => s.isOpen)
+  const total = useCartStore((s) => s.total)
 
-  const store = useCartStore.getState()
-
-  const dispatch = (action: CartAction) => {
+  const dispatch = useCallback((action: CartAction) => {
+    const s = useCartStore.getState()
     switch (action.type) {
       case 'ADD_ITEM':
-        return store.addItem(action.payload)
+        return s.addItem(action.payload)
       case 'REMOVE_ITEM':
-        return store.removeItem(action.payload)
+        return s.removeItem(action.payload)
       case 'UPDATE_QUANTITY':
-        return store.updateQuantity(action.payload.id, action.payload.quantity)
+        return s.updateQuantity(action.payload.id, action.payload.quantity)
       case 'CLEAR_CART':
-        return store.clear()
+        return s.clear()
       case 'TOGGLE_CART':
-        return store.toggle()
+        return s.toggle()
       case 'OPEN_CART':
-        return store.open()
+        return s.open()
       case 'CLOSE_CART':
-        return store.close()
+        return s.close()
     }
-  }
+  }, [])
 
-  return { state, dispatch }
+  return { state: { items, isOpen, total }, dispatch }
 }
