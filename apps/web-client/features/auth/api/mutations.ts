@@ -4,6 +4,14 @@ import { authService } from './services';
 import { toLoginPayloadDto } from './mappers';
 import type { LoginInput, RegisterInput, RegisterPayloadDto } from '../types';
 
+function setTokenCookie(token: string) {
+  document.cookie = `mayda_token=${token}; path=/; max-age=604800; SameSite=Lax`;
+}
+
+function clearTokenCookie() {
+  document.cookie = 'mayda_token=; path=/; max-age=0; SameSite=Lax';
+}
+
 export const useLogin = () => {
   const qc = useQueryClient();
   return useMutation({
@@ -11,6 +19,7 @@ export const useLogin = () => {
       authService.login(toLoginPayloadDto(input)),
     onSuccess: (data) => {
       localStorage.setItem('mayda_token', data.access_token);
+      setTokenCookie(data.access_token);
       qc.invalidateQueries({ queryKey: authKeys.currentUser() });
     },
   });
@@ -20,6 +29,11 @@ export const useRegister = () => {
   return useMutation({
     mutationFn: (input: RegisterInput) =>
       authService.register(input as RegisterPayloadDto),
+    onSuccess: (data) => {
+      localStorage.setItem('mayda_token', data.access_token);
+      setTokenCookie(data.access_token);
+      qc.invalidateQueries({ queryKey: authKeys.currentUser() });
+    },
   });
 };
 
@@ -28,6 +42,7 @@ export const useLogout = () => {
   return useMutation({
     mutationFn: async () => {
       localStorage.removeItem('mayda_token');
+      clearTokenCookie();
     },
     onSuccess: () => {
       qc.clear();
