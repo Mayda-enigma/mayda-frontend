@@ -1,10 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/shared/ui/button"
+import { Card, CardContent } from "@/shared/ui/card"
+import { Badge } from "@/shared/ui/badge"
+import { Textarea } from "@/shared/ui/textarea"
 import { useCart } from "@/components/cart-context"
 import { X, Plus, Minus, Heart, Leaf, Wheat, AlertTriangle } from "lucide-react"
 

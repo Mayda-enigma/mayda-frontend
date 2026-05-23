@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect, createContext, useContext, type ReactNode } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/shared/ui/card"
+import { Button } from "@/shared/ui/button"
 import { X, AlertTriangle, Info, CheckCircle, Clock } from "lucide-react"
 
 interface Notification {

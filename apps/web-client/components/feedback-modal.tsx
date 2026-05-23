@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/shared/ui/button"
+import { Card, CardContent } from "@/shared/ui/card"
+import { Textarea } from "@/shared/ui/textarea"
 import { Star, X, Mic, MicOff, Send, Heart } from "lucide-react"
 
 interface FeedbackModalProps {

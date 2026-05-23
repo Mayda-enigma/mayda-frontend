@@ -1,7 +1,7 @@
 "use client"
 
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/shared/ui/card"
+import { Button } from "@/shared/ui/button"
 import { AlertTriangle, Package, ShoppingCart } from "lucide-react"
 import { getIngredientIcon } from "@/lib/ingredient-icons"
 

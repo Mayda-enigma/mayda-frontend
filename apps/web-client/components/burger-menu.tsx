@@ -2,12 +2,12 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Button } from "@/shared/ui/button"
+import { Sheet, SheetContent, SheetTrigger } from "@/shared/ui/sheet"
 import { Menu, Home, UtensilsCrossed, ShoppingBag, Clock, X } from "lucide-react"
 import Link from "next/link"
 import { useCart } from "@/components/cart-context"
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/shared/ui/badge"
 import { ThemeToggle } from "@/components/theme-toggle"
 
 interface BurgerMenuProps {

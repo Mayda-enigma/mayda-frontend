@@ -2,9 +2,9 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Button } from "@/shared/ui/button"
+import { Card, CardContent } from "@/shared/ui/card"
+import { Badge } from "@/shared/ui/badge"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { QrCode, Globe, Utensils, Clock, Star, ChefHat, Award, Users } from "lucide-react"
 import Link from "next/link"

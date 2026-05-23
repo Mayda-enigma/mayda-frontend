@@ -3,8 +3,8 @@
 import type React from "react"
 
 import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/shared/ui/button"
+import { Card, CardContent } from "@/shared/ui/card"
 import { useCart } from "@/components/cart-context"
 import { Sparkles, Clock, Calendar, TrendingUp, Plus, X } from "lucide-react"
 

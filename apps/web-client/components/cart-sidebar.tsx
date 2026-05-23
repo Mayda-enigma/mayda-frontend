@@ -1,8 +1,8 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Button } from "@/shared/ui/button"
+import { Card, CardContent } from "@/shared/ui/card"
+import { Badge } from "@/shared/ui/badge"
 import { useCart } from "@/components/cart-context"
 import { X, Plus, Minus, ShoppingBag, CreditCard } from "lucide-react"
 import { useState } from "react"

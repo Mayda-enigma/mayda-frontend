@@ -4,7 +4,7 @@ import { useCart } from "@/components/cart-context"
 import { Home, UtensilsCrossed, Clock, ShoppingBag } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
+import { cn } from "@/shared/utils"
 
 export function BottomNavigation() {
   const { state } = useCart()
