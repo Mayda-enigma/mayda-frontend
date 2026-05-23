@@ -9,51 +9,7 @@ import { Progress } from "@/shared/ui/progress"
 import { ArrowLeft, Clock, Users, AlertTriangle, Play, Pause, CheckCircle, Timer } from "lucide-react"
 import { OrderTimeline } from "@/components/order-timeline"
 import { VoiceControl } from "@/components/voice-control"
-
-// Mock data - in real app this would come from API
-const mockOrderDetails = {
-  "ORD-001": {
-    id: "ORD-001",
-    tableNumber: 12,
-    timeReceived: new Date(Date.now() - 15 * 60 * 1000),
-    status: "in-progress",
-    complexity: "high",
-    dishes: [
-      {
-        name: "Grilled Salmon",
-        notes: "Medium rare, no sauce",
-        allergens: ["fish"],
-        prepTime: 18,
-        steps: [
-          "Season salmon with salt and pepper",
-          "Heat grill to medium-high",
-          "Grill for 6-8 minutes per side",
-          "Check internal temperature (145°F)",
-          "Rest for 2 minutes before plating",
-        ],
-        currentStep: 2,
-      },
-      {
-        name: "Caesar Salad",
-        notes: "Extra croutons",
-        allergens: ["gluten", "dairy"],
-        prepTime: 8,
-        steps: [
-          "Wash and chop romaine lettuce",
-          "Prepare Caesar dressing",
-          "Toast croutons until golden",
-          "Toss lettuce with dressing",
-          "Top with croutons and parmesan",
-        ],
-        currentStep: 4,
-      },
-    ],
-    specialRequests: "Customer has severe nut allergy",
-    priority: "urgent",
-    customerNotes: "Anniversary dinner - please make it special",
-    estimatedCompletion: new Date(Date.now() + 8 * 60 * 1000),
-  },
-}
+import { mockOrderDetails } from "@/features/orders/__fixtures__/orders-mock"
 
 export default function OrderDetailPage() {
   const params = useParams()

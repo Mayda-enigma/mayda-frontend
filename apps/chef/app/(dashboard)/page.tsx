@@ -11,66 +11,7 @@ import { NotificationCenter } from "@/components/notification-center"
 import { VoiceControlPanel } from "@/components/voice-control-panel"
 import { useKitchenNotifications } from "@/components/notification-system"
 import { useI18n } from "@/components/i18n-provider"
-
-// Mock data for demonstration
-const mockOrders = [
-  {
-    id: "ORD-001",
-    tableNumber: 12,
-    timeReceived: new Date(Date.now() - 15 * 60 * 1000), // 15 minutes ago
-    status: "pending",
-    complexity: "high",
-    dishes: [
-      {
-        name: "Grilled Salmon",
-        notes: "Medium rare, no sauce",
-        allergens: ["fish"],
-        image: "/grilled-salmon-dish.jpg",
-      },
-      {
-        name: "Caesar Salad",
-        notes: "Extra croutons",
-        allergens: ["gluten", "dairy"],
-        image: "/caesar-salad.png",
-      },
-    ],
-    specialRequests: "Customer has severe nut allergy",
-    priority: "urgent",
-  },
-  {
-    id: "ORD-002",
-    tableNumber: 8,
-    timeReceived: new Date(Date.now() - 8 * 60 * 1000), // 8 minutes ago
-    status: "in-progress",
-    complexity: "medium",
-    dishes: [
-      {
-        name: "Margherita Pizza",
-        notes: "Extra basil",
-        allergens: ["gluten", "dairy"],
-        image: "/margherita-pizza.png",
-      },
-      { name: "Garlic Bread", notes: "Light garlic", allergens: ["gluten"], image: "/garlic-bread.png" },
-    ],
-    specialRequests: "",
-    priority: "normal",
-  },
-  {
-    id: "ORD-003",
-    tableNumber: 5,
-    timeReceived: new Date(Date.now() - 3 * 60 * 1000), // 3 minutes ago
-    status: "pending",
-    complexity: "low",
-    dishes: [{ name: "House Salad", notes: "Dressing on side", allergens: [], image: "/house-salad.jpg" }],
-    specialRequests: "Vegan customer",
-    priority: "normal",
-  },
-]
-
-const mockStockAlerts = [
-  { ingredient: "Tomatoes", currentStock: 8, threshold: 10, unit: "%", category: "vegetable" },
-  { ingredient: "Salmon Fillets", currentStock: 3, threshold: 5, unit: "pieces", category: "protein" },
-]
+import { mockOrders, mockStockAlerts } from "@/features/orders/__fixtures__/orders-mock"
 
 export default function ChefDashboard() {
   const [orders, setOrders] = useState(mockOrders)
