@@ -1,11 +1,11 @@
 "use client"
 
-import { OrderFilteredTable } from "@/components/order-filtered-table"
+import { OrderFilteredTable } from "@/features/orders"
 
 export default function CompletedOrdersPage() {
   return (
     <OrderFilteredTable
-      statusFilter="served"
+      statusFilter="completed"
       title="Completed Orders"
       description="Orders that have been served"
     />

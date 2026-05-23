@@ -1,7 +1,7 @@
 "use client"
 
-import { OrdersNotifications } from "@/components/orders-notifications"
+import { OrderManagement } from "@/features/orders"
 
 export default function OrdersPage() {
-  return <OrdersNotifications />
+  return <OrderManagement />
 }

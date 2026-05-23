@@ -1,6 +1,6 @@
 "use client"
 
-import { OrderFilteredTable } from "@/components/order-filtered-table"
+import { OrderFilteredTable } from "@/features/orders"
 
 export default function ReadyOrdersPage() {
   return (
