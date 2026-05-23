@@ -8,6 +8,7 @@ import { useCart } from '@/features/cart';
 import { useMenu } from '../api/queries';
 import { DishDetailModal } from './dish-detail-modal';
 import { MenuCard } from './menu-card';
+import { RecommendationList } from '@/features/recommendations';
 import { SmartRecommendations } from '@/components/smart-recommendations';
 import { RamadanBanner } from '@/components/ramadan-banner';
 import { NotificationSystem } from '@/components/notification-system';
@@ -228,7 +229,19 @@ export function MenuGrid() {
 
       <div className="p-4">
         <RamadanBanner onPreOrder={handleRamadanPreOrder} />
-        <SmartRecommendations menuItems={items} cartItems={state.items} />
+        {state.items.length > 0 ? (
+          <RecommendationList
+            cartItemIds={state.items.map((i) => Number(i.id))}
+            onAddToCart={(item) =>
+              dispatch({
+                type: 'ADD_ITEM',
+                payload: { id: item.id, name: item.name, price: item.price, image: item.image },
+              })
+            }
+          />
+        ) : (
+          <SmartRecommendations menuItems={items} cartItems={state.items} />
+        )}
 
         {filteredItems.length > 0 && (
           <div className="mt-6 mb-4">
