@@ -1,17 +1,22 @@
-import type { MenuItemDto, MenuItem } from '../types';
+import type { MenuDto, MenuItem, DishDto } from '../types';
 
-export const toMenuItem = (dto: MenuItemDto): MenuItem => ({
-  id: dto.id,
+const toDishMenuItem = (dto: DishDto, categoryName: string): MenuItem => ({
+  id: String(dto.id),
   name: dto.name,
   description: dto.description,
-  price: dto.price_cents / 100,
-  category: dto.category,
-  image: dto.image_url,
-  dietary: dto.dietary_tags,
-  ingredients: dto.ingredients,
-  allergens: dto.allergens,
-  popular: dto.is_popular,
+  price: dto.price,
+  category: categoryName.toLowerCase(),
+  image: dto.image ?? '/placeholder.svg',
+  dietary: [],
+  ingredients: [],
+  allergens: [],
+  popular: dto.popularity >= 4.0,
+  preparationTime: dto.preparationTime,
 });
 
-export const toMenuItems = (dtos: MenuItemDto[]): MenuItem[] =>
-  dtos.map(toMenuItem);
+export const toMenuItems = (menus: MenuDto[]): MenuItem[] =>
+  menus.flatMap((menu) =>
+    menu.categories.flatMap((cat) =>
+      cat.dishes.map((dish) => toDishMenuItem(dish, cat.name)),
+    ),
+  );

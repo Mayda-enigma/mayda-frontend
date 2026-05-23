@@ -1,25 +1,44 @@
-export interface MenuItemDto {
-  id: string;
-  name: string;
-  description: string;
-  price_cents: number;
-  category: string;
-  image_url: string;
-  dietary_tags: string[];
-  ingredients: string[];
-  allergens: string[];
-  is_popular?: boolean;
+export interface DishDto {
+  id: number
+  name: string
+  description: string
+  price: number
+  image: string | null
+  isAvailable: boolean
+  quantity: number
+  preparationTime: number
+  popularity: number
+}
+
+export interface CategoryDto {
+  id: number
+  name: string
+  description: string
+  image: string | null
+  isActive: boolean
+  displayOrder: number
+  dishes: DishDto[]
+}
+
+export interface MenuDto {
+  id: number
+  name: string
+  description: string
+  isActive: boolean
+  displayOrder: number
+  categories: CategoryDto[]
 }
 
 export interface MenuItem {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  category: string;
-  image: string;
-  dietary: string[];
-  ingredients: string[];
-  allergens: string[];
-  popular?: boolean;
+  id: string
+  name: string
+  description: string
+  price: number
+  category: string
+  image: string
+  dietary: string[]
+  ingredients: string[]
+  allergens: string[]
+  popular?: boolean
+  preparationTime?: number
 }
