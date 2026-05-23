@@ -10,14 +10,14 @@ import { NotificationCenter } from "@/components/notification-center"
 import { VoiceControlPanel } from "@/components/voice-control-panel"
 import { useKitchenNotifications } from "@/components/notification-system"
 import { useI18n } from "@/components/i18n-provider"
-import { useOrders } from "@/features/orders/api/queries"
+import { useKitchenQueue } from "@/features/orders/api/queries"
 import { useCurrentUser } from "@/features/auth"
 import { orderService } from "@/features/orders/api/services"
 
 export default function ChefDashboard() {
   const { data: user } = useCurrentUser()
   const restaurantId = user?.restaurantId ?? 0
-  const { data: orders = [], isLoading, refetch } = useOrders(restaurantId)
+  const { data: orders = [], isLoading, refetch } = useKitchenQueue(restaurantId)
   const [sortBy, setSortBy] = useState<"time" | "complexity">("time")
   const { notifyNewOrder, notifyOrderReady, notifyOrderDelayed, notifyStockLow } = useKitchenNotifications()
   const { t } = useI18n()
