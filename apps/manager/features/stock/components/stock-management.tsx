@@ -1,770 +1,578 @@
 "use client"
 
-import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card"
+import { useDeferredValue, useEffect, useState } from "react"
+import { useCurrentUser } from "@/features/auth/api/queries"
+import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert"
 import { Button } from "@/shared/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
 import { Input } from "@/shared/ui/input"
-import { Badge } from "@/shared/ui/badge"
-import { Progress } from "@/shared/ui/progress"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/shared/ui/dialog"
 import { Label } from "@/shared/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table"
 import {
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts"
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/ui/select"
+import { Textarea } from "@/shared/ui/textarea"
+import { useToast } from "@/shared/ui/use-toast"
 import {
+  AlertCircle,
+  BrainCircuit,
   Package,
-  AlertTriangle,
-  TrendingDown,
-  Plus,
-  Search,
+  Save,
   ShoppingCart,
-  Clock,
-  Zap,
-  CheckCircle,
-  TrendingUp,
-  BarChart3,
+  TrendingDown,
+  TriangleAlert,
 } from "lucide-react"
+import {
+  useCreateRestockOrder,
+  useUpdateThreshold,
+} from "../api/mutations"
+import { useStock, useStockForecast } from "../api/queries"
+import { StockTable } from "./stock-table"
+import type { StockItem } from "../types"
 
-// Mock data for stock items
-const stockItems = [
-  {
-    id: 1,
-    name: "Tomatoes",
-    category: "Vegetables",
-    currentStock: 15,
-    minThreshold: 20,
-    unit: "kg",
-    supplier: "Fresh Farm Co.",
-    lastRestocked: "2024-01-15",
-    avgConsumption: "8 kg/day",
-    status: "low",
-    daysRemaining: 2,
-  },
-  {
-    id: 2,
-    name: "Mozzarella Cheese",
-    category: "Dairy",
-    currentStock: 45,
-    minThreshold: 25,
-    unit: "kg",
-    supplier: "Dairy Fresh Ltd.",
-    lastRestocked: "2024-01-18",
-    avgConsumption: "12 kg/day",
-    status: "good",
-    daysRemaining: 4,
-  },
-  {
-    id: 3,
-    name: "Chicken Breast",
-    category: "Meat",
-    currentStock: 8,
-    minThreshold: 15,
-    unit: "kg",
-    supplier: "Premium Meats",
-    lastRestocked: "2024-01-16",
-    avgConsumption: "6 kg/day",
-    status: "critical",
-    daysRemaining: 1,
-  },
-  {
-    id: 4,
-    name: "Olive Oil",
-    category: "Oils",
-    currentStock: 12,
-    minThreshold: 8,
-    unit: "L",
-    supplier: "Mediterranean Oils",
-    lastRestocked: "2024-01-10",
-    avgConsumption: "2 L/day",
-    status: "good",
-    daysRemaining: 6,
-  },
-  {
-    id: 5,
-    name: "Pasta",
-    category: "Grains",
-    currentStock: 25,
-    minThreshold: 30,
-    unit: "kg",
-    supplier: "Italian Imports",
-    lastRestocked: "2024-01-17",
-    avgConsumption: "5 kg/day",
-    status: "low",
-    daysRemaining: 5,
-  },
-  {
-    id: 6,
-    name: "Lettuce",
-    category: "Vegetables",
-    currentStock: 18,
-    minThreshold: 12,
-    unit: "heads",
-    supplier: "Green Gardens",
-    lastRestocked: "2024-01-19",
-    avgConsumption: "4 heads/day",
-    status: "good",
-    daysRemaining: 4,
-  },
-]
+const today = new Date().toISOString().slice(0, 10)
 
-const reorderSuggestions = [
-  {
-    item: "Chicken Breast",
-    suggestedQuantity: "30 kg",
-    urgency: "critical",
-    reason: "Stock critically low, high demand expected",
-    estimatedCost: "$180",
-  },
-  {
-    item: "Tomatoes",
-    suggestedQuantity: "40 kg",
-    urgency: "high",
-    reason: "Below threshold, weekend rush approaching",
-    estimatedCost: "$120",
-  },
-  {
-    item: "Pasta",
-    suggestedQuantity: "50 kg",
-    urgency: "medium",
-    reason: "Popular dish ingredient, maintain buffer",
-    estimatedCost: "$75",
-  },
-]
-
-const stockTrendData = [
-  { date: "Jan 15", tomatoes: 45, cheese: 60, chicken: 35, pasta: 80 },
-  { date: "Jan 16", tomatoes: 38, cheese: 55, chicken: 28, pasta: 75 },
-  { date: "Jan 17", tomatoes: 32, cheese: 50, chicken: 22, pasta: 70 },
-  { date: "Jan 18", tomatoes: 25, cheese: 45, chicken: 15, pasta: 65 },
-  { date: "Jan 19", tomatoes: 18, cheese: 40, chicken: 8, pasta: 60 },
-  { date: "Jan 20", tomatoes: 15, cheese: 35, chicken: 5, pasta: 55 },
-]
-
-const predictionData = [
-  { item: "Tomatoes", current: 15, predicted: 5, days: 2, action: "Order 40kg" },
-  { item: "Chicken Breast", current: 8, predicted: 0, days: 1, action: "Order 30kg" },
-  { item: "Pasta", current: 25, predicted: 10, days: 5, action: "Order 50kg" },
-  { item: "Mozzarella", current: 45, predicted: 25, days: 4, action: "Monitor" },
-]
-
-const categoryDistribution = [
-  { name: "Vegetables", value: 35, color: "#06FFA5" },
-  { name: "Meat", value: 25, color: "#FF6B35" },
-  { name: "Dairy", value: 20, color: "#FFD23F" },
-  { name: "Grains", value: 15, color: "#F7931E" },
-  { name: "Others", value: 5, color: "#4ECDC4" },
-]
-
-const consumptionData = [
-  { day: "Mon", consumed: 45, restocked: 0 },
-  { day: "Tue", consumed: 38, restocked: 50 },
-  { day: "Wed", consumed: 52, restocked: 0 },
-  { day: "Thu", consumed: 48, restocked: 30 },
-  { day: "Fri", consumed: 68, restocked: 0 },
-  { day: "Sat", consumed: 82, restocked: 40 },
-  { day: "Sun", consumed: 74, restocked: 0 },
-]
+const metricFormatter = new Intl.NumberFormat("en-US", {
+  maximumFractionDigits: 2,
+})
 
 export function StockManagement() {
+  const { toast } = useToast()
+  const { data: user, isLoading: isUserLoading } = useCurrentUser()
+  const restaurantId = user?.restaurantId ?? null
+
+  const stockQuery = useStock(restaurantId)
+  const stockItems = stockQuery.data ?? []
+
   const [searchTerm, setSearchTerm] = useState("")
-  const [filterCategory, setFilterCategory] = useState("all")
-  const [filterStatus, setFilterStatus] = useState("all")
+  const deferredSearchTerm = useDeferredValue(searchTerm)
+  const [categoryFilter, setCategoryFilter] = useState("all")
+  const [statusFilter, setStatusFilter] = useState("all")
+  const [forecastDate, setForecastDate] = useState(today)
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null)
+  const [thresholdDrafts, setThresholdDrafts] = useState<Record<string, string>>({})
+  const [restockQuantity, setRestockQuantity] = useState("")
+  const [restockReason, setRestockReason] = useState("Manual replenishment")
+  const [restockNotes, setRestockNotes] = useState("")
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "critical":
-        return "bg-destructive text-destructive-foreground"
-      case "low":
-        return "bg-warning text-white"
-      case "good":
-        return "bg-success text-white"
-      default:
-        return "bg-muted text-muted-foreground"
-    }
-  }
+  const updateThreshold = useUpdateThreshold(restaurantId ?? 0)
+  const createRestockOrder = useCreateRestockOrder(restaurantId ?? 0)
 
-  const getUrgencyColor = (urgency: string) => {
-    switch (urgency) {
-      case "critical":
-        return "bg-destructive text-destructive-foreground"
-      case "high":
-        return "bg-warning text-white"
-      case "medium":
-        return "bg-warning text-black"
-      default:
-        return "bg-muted text-muted-foreground"
-    }
-  }
+  const categories = Array.from(
+    new Set(stockItems.map((item) => item.category)),
+  ).sort()
 
+  const normalizedSearch = deferredSearchTerm.trim().toLowerCase()
   const filteredItems = stockItems.filter((item) => {
-    const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = filterCategory === "all" || item.category.toLowerCase() === filterCategory
-    const matchesStatus = filterStatus === "all" || item.status === filterStatus
+    const matchesSearch =
+      normalizedSearch.length === 0 ||
+      item.name.toLowerCase().includes(normalizedSearch) ||
+      item.description.toLowerCase().includes(normalizedSearch)
+    const matchesCategory =
+      categoryFilter === "all" || item.category === categoryFilter
+    const matchesStatus = statusFilter === "all" || item.status === statusFilter
+
     return matchesSearch && matchesCategory && matchesStatus
   })
 
-  const criticalItems = stockItems.filter((item) => item.status === "critical").length
-  const lowItems = stockItems.filter((item) => item.status === "low").length
-  const totalValue = stockItems.reduce((sum, item) => sum + item.currentStock * 10, 0) // Mock calculation
+  useEffect(() => {
+    if (filteredItems.length === 0) {
+      setSelectedItemId(null)
+      return
+    }
+
+    if (
+      selectedItemId === null ||
+      !filteredItems.some((item) => item.id === selectedItemId)
+    ) {
+      setSelectedItemId(filteredItems[0].id)
+    }
+  }, [filteredItems, selectedItemId])
+
+  const selectedItem =
+    filteredItems.find((item) => item.id === selectedItemId) ?? null
+
+  const forecastQuery = useStockForecast(
+    selectedItem?.name ?? null,
+    forecastDate,
+    restaurantId !== null,
+  )
+
+  const changedThresholds = filteredItems
+    .map((item) => {
+      const draft = thresholdDrafts[item.id]
+      if (draft === undefined) {
+        return null
+      }
+
+      if (draft.trim().length === 0) {
+        return null
+      }
+
+      const value = Number(draft)
+      if (!Number.isFinite(value) || value < 0 || value === item.minimumStock) {
+        return null
+      }
+
+      return { id: item.id, minimumStock: value }
+    })
+    .filter((item): item is NonNullable<typeof item> => item !== null)
+
+  const pendingRestockId =
+    createRestockOrder.isPending && createRestockOrder.variables
+      ? createRestockOrder.variables.itemId
+      : null
+
+  const criticalCount = stockItems.filter((item) => item.status === "critical").length
+  const lowCount = stockItems.filter((item) => item.status === "low").length
+  const totalValue = stockItems.reduce((sum, item) => sum + item.totalValue, 0)
+
+  const handleThresholdDraftChange = (id: string, value: string) => {
+    setThresholdDrafts((current) => ({
+      ...current,
+      [id]: value,
+    }))
+  }
+
+  const handleBulkThresholdSave = async () => {
+    if (changedThresholds.length === 0) {
+      return
+    }
+
+    try {
+      for (const item of changedThresholds) {
+        await updateThreshold.mutateAsync({
+          id: item.id,
+          minimumStock: item.minimumStock,
+        })
+      }
+
+      setThresholdDrafts((current) => {
+        const next = { ...current }
+        changedThresholds.forEach((item) => {
+          delete next[item.id]
+        })
+        return next
+      })
+
+      toast({
+        title: "Thresholds updated",
+        description: `${changedThresholds.length} stock thresholds were saved.`,
+      })
+    } catch {
+      toast({
+        title: "Threshold update failed",
+        description: "One or more threshold changes could not be saved.",
+        variant: "destructive",
+      })
+    }
+  }
+
+  const handleSelectItem = (item: StockItem) => {
+    setSelectedItemId(item.id)
+    if (restockQuantity.length === 0 && item.shortage > 0) {
+      setRestockQuantity(String(item.shortage))
+    }
+  }
+
+  const handleRestock = async () => {
+    if (!selectedItem) {
+      return
+    }
+
+    const quantity = Number(restockQuantity)
+    if (!Number.isFinite(quantity) || quantity <= 0) {
+      toast({
+        title: "Invalid quantity",
+        description: "Enter a positive quantity before restocking.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (restockReason.trim().length === 0) {
+      toast({
+        title: "Reason required",
+        description: "Add a short reason for the stock update.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    try {
+      await createRestockOrder.mutateAsync({
+        itemId: selectedItem.id,
+        quantity,
+        reason: restockReason,
+        notes: restockNotes,
+      })
+
+      setRestockQuantity("")
+      setRestockNotes("")
+
+      toast({
+        title: "Restock saved",
+        description: `${selectedItem.name} increased by ${quantity} ${selectedItem.unit}.`,
+      })
+    } catch {
+      toast({
+        title: "Restock failed",
+        description: "The stock update could not be recorded.",
+        variant: "destructive",
+      })
+    }
+  }
 
   return (
     <div className="space-y-6 animate-in fade-in-50 duration-500">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-balance">Stock Management</h1>
-          <p className="text-muted-foreground text-pretty">Monitor inventory levels and manage stock efficiently</p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="space-y-1">
+          <h1 className="text-3xl font-semibold text-balance">Stock Management</h1>
+          <p className="text-base text-muted-foreground">
+            Track current inventory, tune thresholds, and review AI forecast signals.
+          </p>
         </div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="hover:scale-105 transition-transform duration-200">
-              <Plus className="h-4 w-4 mr-2" />
-              Add Item
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add New Stock Item</DialogTitle>
-              <DialogDescription>Enter details for the new inventory item</DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Name
-                </Label>
-                <Input id="name" className="col-span-3" />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="category" className="text-right">
-                  Category
-                </Label>
-                <Select>
-                  <SelectTrigger className="col-span-3">
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="vegetables">Vegetables</SelectItem>
-                    <SelectItem value="meat">Meat</SelectItem>
-                    <SelectItem value="dairy">Dairy</SelectItem>
-                    <SelectItem value="grains">Grains</SelectItem>
-                    <SelectItem value="oils">Oils</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="quantity" className="text-right">
-                  Quantity
-                </Label>
-                <Input id="quantity" type="number" className="col-span-3" />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="threshold" className="text-right">
-                  Min Threshold
-                </Label>
-                <Input id="threshold" type="number" className="col-span-3" />
-              </div>
-            </div>
-            <div className="flex justify-end gap-2">
-              <Button variant="outline">Cancel</Button>
-              <Button>Add Item</Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <div className="flex items-center gap-2">
+          <Label htmlFor="forecast-date" className="text-sm text-muted-foreground">
+            Forecast date
+          </Label>
+          <Input
+            id="forecast-date"
+            type="date"
+            value={forecastDate}
+            onChange={(event) => setForecastDate(event.target.value)}
+            className="w-44"
+          />
+        </div>
       </div>
 
-      {/* Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {isUserLoading || stockQuery.isLoading ? (
+        <Alert>
+          <AlertTitle>Loading stock</AlertTitle>
+          <AlertDescription>
+            Fetching inventory items for this restaurant.
+          </AlertDescription>
+        </Alert>
+      ) : null}
+      {!isUserLoading && restaurantId === null ? (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Restaurant context missing</AlertTitle>
+          <AlertDescription>
+            This manager account is not linked to a restaurant, so stock actions are unavailable.
+          </AlertDescription>
+        </Alert>
+      ) : null}
+      {stockQuery.isError ? (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Could not load stock</AlertTitle>
+          <AlertDescription>
+            The inventory API request failed. Refresh the page and try again.
+          </AlertDescription>
+        </Alert>
+      ) : null}
+
+      <div className="grid gap-6 md:grid-cols-3 xl:grid-cols-4">
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
-              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-destructive/15 text-destructive">
-                <AlertTriangle className="size-5" />
+              <span className="grid size-10 place-items-center rounded-md bg-destructive/15 text-destructive">
+                <TriangleAlert className="size-5" />
               </span>
-              <div className="min-w-0 flex-1">
-                <p className="text-xs font-medium text-muted-foreground">Critical Items</p>
-                <div className="text-2xl font-bold text-destructive">{criticalItems}</div>
-                <p className="text-xs text-muted-foreground">Require immediate attention</p>
+              <div>
+                <p className="text-xs font-medium text-muted-foreground">Critical</p>
+                <p className="text-2xl font-semibold tabular-nums">{criticalCount}</p>
               </div>
             </div>
           </CardContent>
         </Card>
-
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
-              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-warning/15 text-warning">
+              <span className="grid size-10 place-items-center rounded-md bg-warning/15 text-warning">
                 <TrendingDown className="size-5" />
               </span>
-              <div className="min-w-0 flex-1">
+              <div>
                 <p className="text-xs font-medium text-muted-foreground">Low Stock</p>
-                <div className="text-2xl font-bold text-warning">{lowItems}</div>
-                <p className="text-xs text-muted-foreground">Below minimum threshold</p>
+                <p className="text-2xl font-semibold tabular-nums">{lowCount}</p>
               </div>
             </div>
           </CardContent>
         </Card>
-
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
-              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-primary/15 text-primary">
+              <span className="grid size-10 place-items-center rounded-md bg-primary/15 text-primary">
                 <Package className="size-5" />
               </span>
-              <div className="min-w-0 flex-1">
-                <p className="text-xs font-medium text-muted-foreground">Total Items</p>
-                <div className="text-2xl font-bold">{stockItems.length}</div>
-                <p className="text-xs text-muted-foreground">Active inventory items</p>
+              <div>
+                <p className="text-xs font-medium text-muted-foreground">Active Items</p>
+                <p className="text-2xl font-semibold tabular-nums">{stockItems.length}</p>
               </div>
             </div>
           </CardContent>
         </Card>
-
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
-              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-success/15 text-success">
-                <Package className="size-5" />
+              <span className="grid size-10 place-items-center rounded-md bg-success/15 text-success">
+                <ShoppingCart className="size-5" />
               </span>
-              <div className="min-w-0 flex-1">
-                <p className="text-xs font-medium text-muted-foreground">Stock Value</p>
-                <div className="text-2xl font-bold">${totalValue.toLocaleString()}</div>
-                <p className="text-xs text-muted-foreground">Total inventory value</p>
+              <div>
+                <p className="text-xs font-medium text-muted-foreground">Inventory Value</p>
+                <p className="text-2xl font-semibold tabular-nums">
+                  {metricFormatter.format(totalValue)}
+                </p>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* AI Reorder Suggestions */}
-      <Card className="bg-gradient-to-r from-primary/10 to-secondary/10 border-primary/20">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Zap className="h-5 w-5 text-primary" />
-            AI Reorder Suggestions
-          </CardTitle>
-          <CardDescription>Smart recommendations based on consumption patterns and demand forecasting</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            {reorderSuggestions.map((suggestion, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between p-4 bg-background/50 rounded-lg hover:shadow-md transition-all duration-200"
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
+        <Card>
+          <CardHeader className="gap-4">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+              <div className="space-y-1">
+                <CardTitle>Current Inventory</CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  Use the threshold column for bulk edits, then save all pending changes together.
+                </p>
+              </div>
+              <Button
+                onClick={handleBulkThresholdSave}
+                disabled={
+                  changedThresholds.length === 0 || updateThreshold.isPending || restaurantId === null
+                }
               >
-                <div className="flex items-center gap-4">
-                  <Badge className={getUrgencyColor(suggestion.urgency)}>{suggestion.urgency}</Badge>
-                  <div>
-                    <p className="font-medium">{suggestion.item}</p>
-                    <p className="text-sm text-muted-foreground">{suggestion.reason}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="text-right">
-                    <p className="font-medium">{suggestion.suggestedQuantity}</p>
-                    <p className="text-sm text-muted-foreground">{suggestion.estimatedCost}</p>
-                  </div>
-                  <Button size="sm" className="hover:scale-105 transition-transform duration-200">
-                    <ShoppingCart className="h-4 w-4 mr-2" />
-                    Order
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+                <Save className="h-4 w-4" />
+                {updateThreshold.isPending
+                  ? "Saving thresholds..."
+                  : `Save ${changedThresholds.length} change${changedThresholds.length === 1 ? "" : "s"}`}
+              </Button>
+            </div>
+            <div className="grid gap-3 md:grid-cols-3">
+              <Input
+                placeholder="Search stock items"
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+              />
+              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All categories</SelectItem>
+                  {categories.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All statuses</SelectItem>
+                  <SelectItem value="critical">Critical</SelectItem>
+                  <SelectItem value="low">Low</SelectItem>
+                  <SelectItem value="good">Good</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <StockTable
+              items={filteredItems}
+              emptyMessage="No stock items match the current filters."
+              thresholdDrafts={thresholdDrafts}
+              onThresholdChange={handleThresholdDraftChange}
+              onSelectItem={handleSelectItem}
+              selectedItemId={selectedItemId}
+              onRestock={handleSelectItem}
+              restockingId={pendingRestockId}
+              editableThresholds
+            />
+          </CardContent>
+        </Card>
 
-      {/* Stock Management Tabs */}
-      <Tabs defaultValue="inventory" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="inventory">Current Inventory</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="predictions">Predictions</TabsTrigger>
-          <TabsTrigger value="alerts">Stock Alerts</TabsTrigger>
-          <TabsTrigger value="history">Restock History</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="inventory" className="space-y-6">
-          {/* Filters */}
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex flex-col sm:flex-row gap-4">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search items..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-                <Select value={filterCategory} onValueChange={setFilterCategory}>
-                  <SelectTrigger className="w-full sm:w-48">
-                    <SelectValue placeholder="Category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Categories</SelectItem>
-                    <SelectItem value="vegetables">Vegetables</SelectItem>
-                    <SelectItem value="meat">Meat</SelectItem>
-                    <SelectItem value="dairy">Dairy</SelectItem>
-                    <SelectItem value="grains">Grains</SelectItem>
-                    <SelectItem value="oils">Oils</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select value={filterStatus} onValueChange={setFilterStatus}>
-                  <SelectTrigger className="w-full sm:w-48">
-                    <SelectValue placeholder="Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="critical">Critical</SelectItem>
-                    <SelectItem value="low">Low</SelectItem>
-                    <SelectItem value="good">Good</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Inventory Table */}
+        <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Inventory Items</CardTitle>
-              <CardDescription>Complete list of all stock items with current levels</CardDescription>
+              <CardTitle>Selected Item</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="min-w-[150px]">Item</TableHead>
-                      <TableHead className="min-w-[100px]">Category</TableHead>
-                      <TableHead className="min-w-[150px]">Current Stock</TableHead>
-                      <TableHead className="min-w-[100px]">Status</TableHead>
-                      <TableHead className="min-w-[130px]">Days Remaining</TableHead>
-                      <TableHead className="min-w-[150px]">Supplier</TableHead>
-                      <TableHead className="min-w-[100px]">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredItems.map((item) => (
-                      <TableRow key={item.id} className="hover:bg-muted/50 transition-colors">
-                        <TableCell className="font-medium">{item.name}</TableCell>
-                        <TableCell>{item.category}</TableCell>
-                        <TableCell>
-                          <div className="space-y-1">
-                            <div className="flex items-center gap-2">
-                              <span>
-                                {item.currentStock} {item.unit}
-                              </span>
-                            </div>
-                            <Progress
-                              value={(item.currentStock / (item.minThreshold * 2)) * 100}
-                              className="h-2 w-20"
-                            />
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge className={getStatusColor(item.status)}>{item.status}</Badge>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-1">
-                            <Clock className="h-3 w-3 text-muted-foreground" />
-                            {item.daysRemaining} days
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-sm text-muted-foreground">{item.supplier}</TableCell>
-                        <TableCell>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="hover:scale-105 transition-transform duration-200 bg-transparent"
-                          >
-                            Restock
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
+              {selectedItem ? (
+                <div className="space-y-4">
+                  <div className="space-y-1">
+                    <p className="font-medium">{selectedItem.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {selectedItem.category} · {selectedItem.supplier}
+                    </p>
+                  </div>
+                  <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
+                    <div className="rounded-xl border bg-secondary/30 p-4">
+                      <p className="text-xs font-medium text-muted-foreground">Current stock</p>
+                      <p className="text-xl font-semibold tabular-nums">
+                        {metricFormatter.format(selectedItem.currentStock)} {selectedItem.unit}
+                      </p>
+                    </div>
+                    <div className="rounded-xl border bg-secondary/30 p-4">
+                      <p className="text-xs font-medium text-muted-foreground">Minimum threshold</p>
+                      <p className="text-xl font-semibold tabular-nums">
+                        {metricFormatter.format(selectedItem.minimumStock)} {selectedItem.unit}
+                      </p>
+                    </div>
+                    <div className="rounded-xl border bg-secondary/30 p-4">
+                      <p className="text-xs font-medium text-muted-foreground">Current gap</p>
+                      <p className="text-xl font-semibold tabular-nums">
+                        {metricFormatter.format(selectedItem.shortage)} {selectedItem.unit}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  Select an inventory row to inspect forecast and restock details.
+                </p>
+              )}
             </CardContent>
           </Card>
-        </TabsContent>
 
-        {/* Analytics Tab */}
-        <TabsContent value="analytics" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="hover:shadow-lg transition-shadow duration-300">
+          {selectedItem && !forecastQuery.isError ? (
+            <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5" />
-                  Stock Trends
+                  <BrainCircuit className="h-4 w-4 text-primary" />
+                  AI Forecast
                 </CardTitle>
-                <CardDescription>Stock levels over time for key ingredients</CardDescription>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={stockTrendData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                    <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" />
-                    <YAxis stroke="hsl(var(--muted-foreground))" />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "hsl(var(--card))",
-                        border: "1px solid hsl(var(--border))",
-                        borderRadius: "8px",
-                      }}
-                    />
-                    <Legend />
-                    <Line type="monotone" dataKey="tomatoes" stroke="#FF6B35" strokeWidth={2} name="Tomatoes" />
-                    <Line type="monotone" dataKey="cheese" stroke="#FFD23F" strokeWidth={2} name="Cheese" />
-                    <Line type="monotone" dataKey="chicken" stroke="#06FFA5" strokeWidth={2} name="Chicken" />
-                    <Line type="monotone" dataKey="pasta" stroke="#4ECDC4" strokeWidth={2} name="Pasta" />
-                  </LineChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-
-            <Card className="hover:shadow-lg transition-shadow duration-300">
-              <CardHeader>
-                <CardTitle>Category Distribution</CardTitle>
-                <CardDescription>Stock distribution by category</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie
-                      data={categoryDistribution}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      dataKey="value"
-                    >
-                      {categoryDistribution.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "hsl(var(--card))",
-                        border: "1px solid hsl(var(--border))",
-                        borderRadius: "8px",
-                      }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-          </div>
-
-          <Card className="hover:shadow-lg transition-shadow duration-300">
-            <CardHeader>
-              <CardTitle>Weekly Consumption vs Restocking</CardTitle>
-              <CardDescription>Daily consumption patterns and restocking activities</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
-                <BarChart data={consumptionData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="day" stroke="hsl(var(--muted-foreground))" />
-                  <YAxis stroke="hsl(var(--muted-foreground))" />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: "8px",
-                    }}
-                  />
-                  <Legend />
-                  <Bar dataKey="consumed" fill="#FF6B35" name="Consumed (kg)" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="restocked" fill="#06FFA5" name="Restocked (kg)" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Predictions Tab */}
-        <TabsContent value="predictions" className="space-y-6">
-          <Card className="bg-gradient-to-r from-primary/10 to-secondary/10 border-primary/20">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-primary" />
-                AI Stock Predictions
-              </CardTitle>
-              <CardDescription>Machine learning predictions for stock levels and reorder timing</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {predictionData.map((prediction, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-4 bg-background/50 rounded-lg hover:shadow-md transition-all duration-200"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="text-center">
-                        <p className="text-2xl font-bold text-primary">{prediction.current}</p>
-                        <p className="text-xs text-muted-foreground">Current</p>
+                {forecastQuery.isLoading ? (
+                  <p className="text-sm text-muted-foreground">
+                    Fetching AI guidance for {selectedItem.name}.
+                  </p>
+                ) : forecastQuery.data ? (
+                  <div className="space-y-4">
+                    <p className="text-sm text-muted-foreground">
+                      {forecastQuery.data.summary}
+                    </p>
+                    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
+                      <div className="rounded-xl border bg-secondary/30 p-4">
+                        <p className="text-xs font-medium text-muted-foreground">Predicted demand</p>
+                        <p className="text-lg font-semibold tabular-nums">
+                          {forecastQuery.data.predictedDemand === null
+                            ? "Unavailable"
+                            : `${metricFormatter.format(forecastQuery.data.predictedDemand)} ${selectedItem.unit}`}
+                        </p>
                       </div>
-                      <div className="text-center">
-                        <p className="text-2xl font-bold text-destructive">{prediction.predicted}</p>
-                        <p className="text-xs text-muted-foreground">Predicted</p>
-                      </div>
-                      <div>
-                        <p className="font-medium">{prediction.item}</p>
-                        <p className="text-sm text-muted-foreground">
-                          Will reach {prediction.predicted} units in {prediction.days} days
+                      <div className="rounded-xl border bg-secondary/30 p-4">
+                        <p className="text-xs font-medium text-muted-foreground">Suggested order</p>
+                        <p className="text-lg font-semibold tabular-nums">
+                          {forecastQuery.data.recommendedOrderQuantity === null
+                            ? "Unavailable"
+                            : `${metricFormatter.format(forecastQuery.data.recommendedOrderQuantity)} ${selectedItem.unit}`}
                         </p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <Badge variant="outline" className="mb-2">
-                        {prediction.action}
-                      </Badge>
-                      <p className="text-sm text-muted-foreground">Recommended Action</p>
-                    </div>
+                    {forecastQuery.data.confidence || forecastQuery.data.urgency ? (
+                      <p className="text-xs text-muted-foreground">
+                        {[forecastQuery.data.confidence, forecastQuery.data.urgency]
+                          .filter(Boolean)
+                          .join(" · ")}
+                      </p>
+                    ) : null}
+                    {forecastQuery.data.details.length > 0 ? (
+                      <div className="space-y-2 rounded-xl border bg-secondary/20 p-4">
+                        {forecastQuery.data.details.map((detail) => (
+                          <p key={detail} className="text-xs text-muted-foreground">
+                            {detail}
+                          </p>
+                        ))}
+                      </div>
+                    ) : null}
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    No forecast returned for this item.
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          ) : selectedItem ? (
+            <Card>
+              <CardHeader>
+                <CardTitle>AI Forecast</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  AI forecast is unavailable right now. Stock operations still work normally.
+                </p>
+              </CardContent>
+            </Card>
+          ) : null}
 
-        {/* Alerts Tab */}
-        <TabsContent value="alerts" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Stock Alerts</CardTitle>
-              <CardDescription>Items requiring immediate attention</CardDescription>
+              <CardTitle>Restock Update</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {stockItems
-                .filter((item) => item.status === "critical" || item.status === "low")
-                .map((item) => (
-                  <div
-                    key={item.id}
-                    className={`flex items-center justify-between p-4 rounded-lg border hover:shadow-md transition-all duration-200 ${
-                      item.status === "critical"
-                        ? "bg-destructive/10 border-destructive/20"
-                        : "bg-warning/10 border-warning/20"
-                    }`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <AlertTriangle
-                        className={`h-5 w-5 ${item.status === "critical" ? "text-destructive" : "text-warning"}`}
-                      />
-                      <div>
-                        <p className="font-medium">{item.name}</p>
-                        <p className="text-sm text-muted-foreground">
-                          Current: {item.currentStock} {item.unit} | Min: {item.minThreshold} {item.unit}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          Estimated {item.daysRemaining} days remaining at current consumption
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
-                        Dismiss
-                      </Button>
-                      <Button size="sm">Restock Now</Button>
-                    </div>
+              {selectedItem ? (
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor="restock-quantity">Quantity to add</Label>
+                    <Input
+                      id="restock-quantity"
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={restockQuantity}
+                      onChange={(event) => setRestockQuantity(event.target.value)}
+                      placeholder={`In ${selectedItem.unit}`}
+                    />
                   </div>
-                ))}
+                  <div className="space-y-2">
+                    <Label htmlFor="restock-reason">Reason</Label>
+                    <Input
+                      id="restock-reason"
+                      value={restockReason}
+                      onChange={(event) => setRestockReason(event.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="restock-notes">Notes</Label>
+                    <Textarea
+                      id="restock-notes"
+                      value={restockNotes}
+                      onChange={(event) => setRestockNotes(event.target.value)}
+                      placeholder="Optional receiving notes"
+                      rows={4}
+                    />
+                  </div>
+                  <Button
+                    onClick={handleRestock}
+                    disabled={createRestockOrder.isPending || restaurantId === null}
+                    className="w-full"
+                  >
+                    <ShoppingCart className="h-4 w-4" />
+                    {createRestockOrder.isPending ? "Saving restock..." : "Record restock"}
+                  </Button>
+                </>
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  Select an item first to add stock and log the replenishment reason.
+                </p>
+              )}
             </CardContent>
           </Card>
-        </TabsContent>
-
-        {/* History Tab */}
-        <TabsContent value="history" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle>Recent Restocking History</CardTitle>
-                  <CardDescription>Track of recent inventory replenishments</CardDescription>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Input placeholder="Filter items..." className="h-8 w-48" />
-                  <Select defaultValue="all">
-                    <SelectTrigger className="h-8 w-36">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Suppliers</SelectItem>
-                      <SelectItem value="Dairy Fresh Ltd.">Dairy Fresh Ltd.</SelectItem>
-                      <SelectItem value="Green Gardens">Green Gardens</SelectItem>
-                      <SelectItem value="Italian Imports">Italian Imports</SelectItem>
-                      <SelectItem value="Premium Meats">Premium Meats</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-8"></TableHead>
-                    <TableHead>Item</TableHead>
-                    <TableHead>Quantity</TableHead>
-                    <TableHead>Supplier</TableHead>
-                    <TableHead>Cost</TableHead>
-                    <TableHead className="text-right">Date</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {[
-                    { item: "Mozzarella Cheese", quantity: "50 kg", date: "2024-01-18", supplier: "Dairy Fresh Ltd.", cost: "$300" },
-                    { item: "Lettuce", quantity: "30 heads", date: "2024-01-19", supplier: "Green Gardens", cost: "$45" },
-                    { item: "Pasta", quantity: "40 kg", date: "2024-01-17", supplier: "Italian Imports", cost: "$60" },
-                    { item: "Chicken Breast", quantity: "25 kg", date: "2024-01-16", supplier: "Premium Meats", cost: "$150" },
-                    { item: "Tomatoes", quantity: "20 kg", date: "2024-01-15", supplier: "Fresh Farm Co.", cost: "$40" },
-                    { item: "Olive Oil", quantity: "10 L", date: "2024-01-14", supplier: "Mediterranean Oils", cost: "$120" },
-                  ].map((entry, index) => (
-                    <TableRow key={index}>
-                      <TableCell>
-                        <CheckCircle className="size-4 text-success" />
-                      </TableCell>
-                      <TableCell className="font-medium">{entry.item}</TableCell>
-                      <TableCell>{entry.quantity}</TableCell>
-                      <TableCell className="text-muted-foreground">{entry.supplier}</TableCell>
-                      <TableCell className="font-medium">{entry.cost}</TableCell>
-                      <TableCell className="text-right text-muted-foreground">{entry.date}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+        </div>
+      </div>
     </div>
   )
 }
