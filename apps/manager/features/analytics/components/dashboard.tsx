@@ -2,7 +2,8 @@
 
 import { Button } from "@/shared/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
-import { Calendar, Clock, DollarSign, Lightbulb, TrendingUp } from "lucide-react"
+import { cn } from "@/shared/utils"
+import { Clock, DollarSign, Lightbulb, TrendingUp } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs"
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
@@ -13,12 +14,22 @@ import { TopDishes } from "./top-dishes"
 import { HourlyHeatmap } from "./hourly-heatmap"
 import { CuisineShare } from "./cuisine-share"
 import { PerformanceMetrics } from "./performance-metrics"
+import { useRange } from "../hooks/use-range"
+import type { RangePreset } from "../types"
+
+const RANGES: { label: string; value: RangePreset }[] = [
+  { label: "7 Days", value: "7d" },
+  { label: "30 Days", value: "30d" },
+  { label: "90 Days", value: "90d" },
+]
+
 const monthlyData = [
   { month: "Jan", thisYear: 45000, lastYear: 38000 }, { month: "Feb", thisYear: 48000, lastYear: 42000 },
   { month: "Mar", thisYear: 52000, lastYear: 45000 }, { month: "Apr", thisYear: 58000, lastYear: 48000 },
   { month: "May", thisYear: 62000, lastYear: 52000 }, { month: "Jun", thisYear: 68000, lastYear: 58000 },
 ]
 export function AnalyticsDashboard() {
+  const { range, setRange } = useRange()
   return (
     <div className="space-y-6 animate-in fade-in-50 duration-500">
       <div className="flex items-center justify-between">
@@ -26,14 +37,26 @@ export function AnalyticsDashboard() {
           <h1 className="text-3xl font-bold text-balance">Analytics Dashboard</h1>
           <p className="text-muted-foreground text-pretty">Comprehensive insights and performance metrics for your restaurant</p>
         </div>
-        <Button variant="outline" size="sm" className="hover:bg-primary/10 transition-colors bg-transparent">
-          <Calendar className="h-4 w-4 mr-2" />
-          Last 7 Days
-        </Button>
+        <div className="flex items-center gap-1 rounded-lg border p-0.5">
+          {RANGES.map((r) => (
+            <Button
+              key={r.value}
+              variant="ghost"
+              size="sm"
+              onClick={() => setRange(r.value)}
+              className={cn(
+                "h-7 px-3 text-xs font-medium",
+                range === r.value && "bg-muted text-foreground shadow-sm",
+              )}
+            >
+              {r.label}
+            </Button>
+          ))}
+        </div>
       </div>
 
-      <KpiCards />
-      <RevenueChart />
+      <KpiCards range={range} />
+      <RevenueChart range={range} />
 
       <Card className="bg-gradient-to-r from-primary/10 to-secondary/10 border-primary/20">
         <CardHeader>
@@ -67,10 +90,10 @@ export function AnalyticsDashboard() {
           <TabsTrigger value="hours">Busy Hours</TabsTrigger>
           <TabsTrigger value="monthly">Monthly</TabsTrigger>
         </TabsList>
-        <TabsContent value="revenue"><RevenueChart /></TabsContent>
-        <TabsContent value="popular"><TopDishes /></TabsContent>
+        <TabsContent value="revenue"><RevenueChart range={range} /></TabsContent>
+        <TabsContent value="popular"><TopDishes range={range} /></TabsContent>
         <TabsContent value="cuisine"><CuisineShare /></TabsContent>
-        <TabsContent value="hours"><HourlyHeatmap /></TabsContent>
+        <TabsContent value="hours"><HourlyHeatmap range={range} /></TabsContent>
         <TabsContent value="monthly">
           <Card>
             <CardHeader>
