@@ -129,3 +129,62 @@ export const useDeleteMenuItem = () => {
 ```
 
 **Rule:** mutations invalidate query keys on success so the UI auto-reflects changes.
+
+## QueryClient Defaults
+
+Create `shared/lib/query-client.ts` once per app with these defaults:
+
+```ts
+import { QueryClient } from '@tanstack/react-query';
+
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 30_000,
+      gcTime: 5 * 60_000,
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+    mutations: { retry: 0 },
+  },
+});
+```
+
+## Provider Setup
+
+Create `shared/lib/query-provider.tsx` as a `"use client"` component:
+
+```tsx
+'use client';
+
+import { QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { queryClient } from './query-client';
+
+export function QueryProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <QueryClientProvider client={queryClient}>
+      {children}
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+  );
+}
+```
+
+Wrap your `app/layout.tsx` with `<QueryProvider>`:
+
+```tsx
+import { QueryProvider } from '@/shared/lib/query-provider';
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html>
+      <body>
+        <QueryProvider>{children}</QueryProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+The devtools panel appears in development as a floating icon (bottom-left). It is automatically excluded from production builds by the library.
