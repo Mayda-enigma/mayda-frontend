@@ -1,7 +1,7 @@
 import { apiClient } from '@/shared/api/client';
-import type { MenuItemDto } from '../types';
+import type { MenuDto } from '../types';
 
 export const menuService = {
-  list: (restaurantId: string): Promise<MenuItemDto[]> =>
-    apiClient<MenuItemDto[]>(`/restaurants/${restaurantId}/menus`),
+  list: (restaurantId: string): Promise<MenuDto[]> =>
+    apiClient<MenuDto[]>(`/menus/restaurant/${restaurantId}`),
 };

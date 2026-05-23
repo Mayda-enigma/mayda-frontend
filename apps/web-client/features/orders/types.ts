@@ -1,68 +1,68 @@
-export type OrderStatus = 'placed' | 'confirmed' | 'preparing' | 'ready' | 'completed'
+export type OrderStatus = 'PENDING' | 'CONFIRMED' | 'PREPARING' | 'READY' | 'COMPLETED' | 'CANCELLED'
 
-export type OrderItemStatus = 'pending' | 'preparing' | 'ready' | 'served'
-
-export interface OrderDto {
-  id: string
-  table_number: string
-  items: OrderItemDto[]
-  status: OrderStatus
-  total_cents: number
-  estimated_minutes: number
-  placed_at: string
-  actual_minutes?: number
-  has_review?: boolean
+export interface OrderUserDto {
+  id: number
+  firstName: string
+  lastName: string
+  email: string
+  phone: number
 }
 
-export interface OrderItemDto {
-  id: string
-  name: string
-  quantity: number
-  price_cents: number
-  image_url: string
-  status: OrderItemStatus
+export interface OrderTableDto {
+  id: number
+  number: string
+  capacity: number
+}
+
+export interface OrderDto {
+  id: number
+  orderNumber: string
+  restaurantId: number
+  tableId: number
+  type: string
+  status: OrderStatus
+  totalAmount: number
+  paymentStatus: string
+  orderTime: string
+  user: OrderUserDto
+  table: OrderTableDto
+  itemCount: number
 }
 
 export interface Order {
   id: string
+  orderNumber: string
   tableNumber: string
-  items: OrderItem[]
   status: OrderStatus
   total: number
-  estimatedMinutes: number
+  type: string
+  paymentStatus: string
   placedAt: Date
-  actualMinutes?: number
-  hasReview?: boolean
-}
-
-export interface OrderItem {
-  id: string
-  name: string
-  quantity: number
-  price: number
-  image: string
-  status: OrderItemStatus
+  itemCount: number
 }
 
 export interface CreateOrderItemInput {
-  menuItemId: string
+  dishId: number
   quantity: number
 }
 
 export interface CreateOrderInput {
+  restaurantId: number
+  tableId: number
+  type: 'DINE_IN' | 'TAKEAWAY' | 'DELIVERY'
   items: CreateOrderItemInput[]
 }
 
 export interface CreateOrderItemDto {
-  menu_item_id: string
+  dishId: number
   quantity: number
+  unitPrice: number
+  totalPrice: number
 }
 
 export interface CreateOrderDto {
+  restaurantId: number
+  tableId: number
+  type: string
   items: CreateOrderItemDto[]
-}
-
-export interface OrderError {
-  detail?: string
-  message?: string
 }

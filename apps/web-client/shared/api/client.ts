@@ -12,6 +12,18 @@ export class ApiError extends Error {
   }
 }
 
+function clearAuth() {
+  localStorage.removeItem('mayda_token');
+  localStorage.removeItem('mayda_cart');
+  document.cookie = 'mayda_token=; path=/; max-age=0; SameSite=Lax';
+}
+
+function redirectToLogin() {
+  if (typeof window !== 'undefined') {
+    window.location.href = '/login';
+  }
+}
+
 export async function apiClient<T>(
   path: string,
   init?: RequestInit,
@@ -29,6 +41,12 @@ export async function apiClient<T>(
     ...init,
     headers: { ...headers, ...(init?.headers as Record<string, string>) },
   });
+
+  if (res.status === 401) {
+    clearAuth();
+    redirectToLogin();
+    throw new ApiError(res.status, 'Session expired. Please log in again.');
+  }
 
   if (!res.ok) {
     const body = await res.json().catch(() => null);

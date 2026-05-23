@@ -36,7 +36,7 @@ const dietaryFilters = [
 
 export function MenuGrid() {
   const { state, dispatch } = useCart();
-  const { data: menuItems } = useMenu('default');
+  const { data: menuItems } = useMenu('1');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
