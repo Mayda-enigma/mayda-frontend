@@ -12,6 +12,15 @@ export const useOrders = (restaurantId: number) =>
     staleTime: 5_000,
   });
 
+export const useKitchenQueue = (restaurantId: number) =>
+  useQuery({
+    queryKey: ['kitchenQueue', restaurantId] as const,
+    queryFn: () => orderService.list(restaurantId),
+    select: toOrders,
+    refetchInterval: 15_000,
+    staleTime: 5_000,
+  });
+
 export const useOrderDetail = (orderId: number) =>
   useQuery({
     queryKey: ordersKeys.detail(String(orderId)),
