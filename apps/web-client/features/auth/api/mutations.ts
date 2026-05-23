@@ -43,6 +43,7 @@ export const useLogout = () => {
   return useMutation({
     mutationFn: async () => {
       localStorage.removeItem('mayda_token');
+      localStorage.removeItem('mayda_cart');
       clearTokenCookie();
     },
     onSuccess: () => {
