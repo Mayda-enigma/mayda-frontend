@@ -1,6 +1,6 @@
 "use client"
 
-import { StockFilteredTable } from "@/components/stock-filtered-table"
+import { StockFilteredTable } from "@/features/stock"
 
 export default function LowStockPage() {
   return (

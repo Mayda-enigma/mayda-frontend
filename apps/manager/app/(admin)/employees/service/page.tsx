@@ -1,6 +1,6 @@
 "use client"
 
-import { EmployeeFilteredTable } from "@/components/employee-filtered-table"
+import { EmployeeFilteredTable } from "@/features/employees"
 
 export default function ServiceStaffPage() {
   return (

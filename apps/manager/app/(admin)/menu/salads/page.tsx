@@ -1,6 +1,6 @@
 "use client"
 
-import { MenuFilteredTable } from "@/components/menu-filtered-table"
+import { MenuFilteredTable } from "@/features/menu"
 
 export default function SaladsMenuPage() {
   return (
