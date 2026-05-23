@@ -23,90 +23,82 @@ import {
 } from "recharts"
 import { TrendingUp, TrendingDown, Clock, ChefHat, DollarSign, Users } from "lucide-react"
 import { useI18n } from "@/components/i18n-provider"
+import {
+  useKitchenKpis,
+  useOrderVolume,
+  useTopDishes,
+  useKitchenEfficiency,
+  useOrderStatus,
+  useRevenueTrend,
+  type RangePreset,
+} from "@/features/analytics"
 
-// Mock analytics data
-const orderVolumeData = [
-  { time: "9:00", orders: 12 },
-  { time: "10:00", orders: 19 },
-  { time: "11:00", orders: 25 },
-  { time: "12:00", orders: 45 },
-  { time: "13:00", orders: 52 },
-  { time: "14:00", orders: 38 },
-  { time: "15:00", orders: 28 },
-  { time: "16:00", orders: 22 },
-  { time: "17:00", orders: 35 },
-  { time: "18:00", orders: 48 },
-  { time: "19:00", orders: 55 },
-  { time: "20:00", orders: 42 },
-]
+const ORDER_STATUS_COLORS: Record<string, string> = {
+  Completed: "#10b981",
+  "In Progress": "#f59e0b",
+  Delayed: "#ef4444",
+}
 
-const dishPopularityData = [
-  { name: "Margherita Pizza", orders: 145, revenue: 2175 },
-  { name: "Grilled Salmon", orders: 98, revenue: 2450 },
-  { name: "Caesar Salad", orders: 87, revenue: 1305 },
-  { name: "Beef Burger", orders: 76, revenue: 1520 },
-  { name: "Pasta Carbonara", orders: 65, revenue: 1300 },
-]
+const formatCurrency = (value: number) =>
+  new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(value)
 
-const kitchenEfficiencyData = [
-  { day: "Mon", avgTime: 12, orders: 156 },
-  { day: "Tue", avgTime: 11, orders: 142 },
-  { day: "Wed", avgTime: 13, orders: 178 },
-  { day: "Thu", avgTime: 10, orders: 134 },
-  { day: "Fri", avgTime: 15, orders: 203 },
-  { day: "Sat", avgTime: 14, orders: 189 },
-  { day: "Sun", avgTime: 12, orders: 167 },
-]
-
-const orderStatusData = [
-  { name: "Completed", value: 85, color: "#10b981" },
-  { name: "In Progress", value: 12, color: "#f59e0b" },
-  { name: "Delayed", value: 3, color: "#ef4444" },
-]
-
-const revenueData = [
-  { month: "Jan", revenue: 45000, orders: 1200 },
-  { month: "Feb", revenue: 52000, orders: 1350 },
-  { month: "Mar", revenue: 48000, orders: 1280 },
-  { month: "Apr", revenue: 61000, orders: 1520 },
-  { month: "May", revenue: 55000, orders: 1420 },
-  { month: "Jun", revenue: 67000, orders: 1680 },
-]
+const formatTrend = (value: number) => `${value >= 0 ? "+" : ""}${value.toFixed(1)}%`
 
 export default function AnalyticsPage() {
-  const [timeRange, setTimeRange] = useState<"today" | "week" | "month">("today")
+  const [timeRange, setTimeRange] = useState<RangePreset>("today")
   const { t } = useI18n()
 
+  const kpisQuery = useKitchenKpis(timeRange)
+  const orderVolumeQuery = useOrderVolume(timeRange)
+  const topDishesQuery = useTopDishes(timeRange)
+  const efficiencyQuery = useKitchenEfficiency(timeRange)
+  const orderStatusQuery = useOrderStatus(timeRange)
+  const revenueQuery = useRevenueTrend(timeRange)
+
+  const orderVolumeData = orderVolumeQuery.data ?? []
+  const topDishesData = topDishesQuery.data ?? []
+  const efficiencyData = (efficiencyQuery.data ?? []).map((p) => ({
+    day: p.day,
+    avgTime: p.avgTimeMinutes,
+    orders: p.orders,
+  }))
+  const orderStatusData = (orderStatusQuery.data ?? []).map((s) => ({
+    ...s,
+    color: ORDER_STATUS_COLORS[s.name] ?? "#94a3b8",
+  }))
+  const revenueData = revenueQuery.data ?? []
+
+  const kpis = kpisQuery.data
   const kpiData = [
     {
       title: t.totalOrdersKpi,
-      value: "1,247",
-      change: "+12.5%",
-      trend: "up",
+      value: kpis ? kpis.totalOrders.toLocaleString() : "—",
+      change: kpis ? formatTrend(kpis.ordersTrend) : "",
+      trend: (kpis?.ordersTrend ?? 0) >= 0 ? "up" : "down",
       icon: ChefHat,
       color: "text-green-400",
     },
     {
       title: t.revenue,
-      value: "$18,420",
-      change: "+8.2%",
-      trend: "up",
+      value: kpis ? formatCurrency(kpis.revenue) : "—",
+      change: kpis ? formatTrend(kpis.revenueTrend) : "",
+      trend: (kpis?.revenueTrend ?? 0) >= 0 ? "up" : "down",
       icon: DollarSign,
       color: "text-green-400",
     },
     {
       title: t.avgPrepTime,
-      value: "12.3 min",
-      change: "-2.1%",
-      trend: "down",
+      value: kpis ? `${kpis.avgPrepTimeMinutes.toFixed(1)} min` : "—",
+      change: kpis ? formatTrend(kpis.avgPrepTimeTrend) : "",
+      trend: (kpis?.avgPrepTimeTrend ?? 0) <= 0 ? "up" : "down",
       icon: Clock,
       color: "text-green-400",
     },
     {
       title: t.customerSatisfaction,
-      value: "4.8/5",
-      change: "+0.3",
-      trend: "up",
+      value: kpis ? `${kpis.customerRating.toFixed(1)}/5` : "—",
+      change: kpis ? formatTrend(kpis.customerRatingTrend) : "",
+      trend: (kpis?.customerRatingTrend ?? 0) >= 0 ? "up" : "down",
       icon: Users,
       color: "text-green-400",
     },
@@ -135,7 +127,7 @@ export default function AnalyticsPage() {
             <Button
               key={range.key}
               variant={timeRange === range.key ? "default" : "outline"}
-              onClick={() => setTimeRange(range.key as "today" | "week" | "month")}
+              onClick={() => setTimeRange(range.key)}
               className={
                 timeRange === range.key
                   ? "bg-orange-500 hover:bg-orange-600 transition-all duration-200 transform hover:scale-105 min-h-[44px]"
@@ -265,7 +257,7 @@ export default function AnalyticsPage() {
             </CardHeader>
             <CardContent className="p-4 sm:p-6 pt-0">
               <div className="space-y-3 sm:space-y-4">
-                {dishPopularityData.map((dish, index) => (
+                {topDishesData.map((dish, index) => (
                   <div key={index} className="flex items-center justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
@@ -274,7 +266,10 @@ export default function AnalyticsPage() {
                         </Badge>
                         <span className="font-medium text-card-foreground text-sm sm:text-base">{dish.name}</span>
                       </div>
-                      <Progress value={(dish.orders / dishPopularityData[0].orders) * 100} className="h-2" />
+                      <Progress
+                        value={topDishesData[0]?.orders ? (dish.orders / topDishesData[0].orders) * 100 : 0}
+                        className="h-2"
+                      />
                     </div>
                     <div className="text-right ml-4">
                       <p className="font-semibold text-card-foreground text-sm sm:text-base">{dish.orders}</p>
@@ -294,7 +289,7 @@ export default function AnalyticsPage() {
             </CardHeader>
             <CardContent className="p-4 sm:p-6 pt-0">
               <ResponsiveContainer width="100%" height={200}>
-                <BarChart data={kitchenEfficiencyData}>
+                <BarChart data={efficiencyData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                   <XAxis dataKey="day" stroke="hsl(var(--muted-foreground))" fontSize={12} />
                   <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
