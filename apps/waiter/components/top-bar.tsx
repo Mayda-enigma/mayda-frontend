@@ -31,10 +31,10 @@ export function TopBar() {
  <div className="flex items-center justify-between px-2 py-1.5 sm:px-3 sm:py-2">
  <div className="flex items-center gap-1.5">
  <Image
- src="/LogoWaiter.svg"
+ src="/LogoAdmin.svg"
  alt="WaiterApp Logo"
- width={200}
- height={200}
+ width={40}
+ height={40}
  style={{ filter: 'drop-shadow(2px 2px 4px rgba(255, 255, 255, 0.8))' }}
  />
  </div>
