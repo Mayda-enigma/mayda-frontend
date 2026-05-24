@@ -15,31 +15,10 @@ import {
 import { useHourlyHeatmap } from "../api/queries"
 import type { RangePreset } from "../types"
 
-const MOCK_DATA = [
-  { hour: "6AM", orders: 2, revenue: 45 },
-  { hour: "7AM", orders: 8, revenue: 180 },
-  { hour: "8AM", orders: 15, revenue: 340 },
-  { hour: "9AM", orders: 12, revenue: 275 },
-  { hour: "10AM", orders: 8, revenue: 185 },
-  { hour: "11AM", orders: 18, revenue: 420 },
-  { hour: "12PM", orders: 45, revenue: 1080 },
-  { hour: "1PM", orders: 52, revenue: 1248 },
-  { hour: "2PM", orders: 38, revenue: 912 },
-  { hour: "3PM", orders: 22, revenue: 528 },
-  { hour: "4PM", orders: 15, revenue: 360 },
-  { hour: "5PM", orders: 28, revenue: 672 },
-  { hour: "6PM", orders: 48, revenue: 1152 },
-  { hour: "7PM", orders: 65, revenue: 1560 },
-  { hour: "8PM", orders: 58, revenue: 1392 },
-  { hour: "9PM", orders: 42, revenue: 1008 },
-  { hour: "10PM", orders: 25, revenue: 600 },
-  { hour: "11PM", orders: 12, revenue: 288 },
-]
-
 export function HourlyHeatmap({ range }: { range: RangePreset }) {
   const { data: hourly } = useHourlyHeatmap(range)
 
-  const d = hourly ?? MOCK_DATA
+  if (!hourly) return null
 
   return (
     <Card className="hover:shadow-lg transition-shadow duration-300">
@@ -49,7 +28,7 @@ export function HourlyHeatmap({ range }: { range: RangePreset }) {
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={350}>
-          <BarChart data={d} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+          <BarChart data={hourly} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
             <XAxis
               dataKey="hour"

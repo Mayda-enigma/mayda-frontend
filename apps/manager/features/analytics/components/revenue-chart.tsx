@@ -15,23 +15,12 @@ import { ArrowUpRight } from "lucide-react"
 import { useRevenue } from "../api/queries"
 import type { RangePreset } from "../types"
 
-const MOCK_DATA = {
-  salesData: [
-    { name: "Mon", revenue: 4200, orders: 45, profit: 1260 },
-    { name: "Tue", revenue: 3800, orders: 38, profit: 1140 },
-    { name: "Wed", revenue: 5200, orders: 52, profit: 1560 },
-    { name: "Thu", revenue: 4800, orders: 48, profit: 1440 },
-    { name: "Fri", revenue: 6800, orders: 68, profit: 2040 },
-    { name: "Sat", revenue: 8200, orders: 82, profit: 2460 },
-    { name: "Sun", revenue: 7400, orders: 74, profit: 2220 },
-  ],
-  forecast: { revenue: 52400, change: 15.3 },
-}
-
 export function RevenueChart({ range }: { range: RangePreset }) {
   const { data: revenue } = useRevenue(range)
 
-  const d = revenue ?? MOCK_DATA
+  if (!revenue) return null
+
+  const salesData = revenue.salesData
 
   return (
     <>
@@ -41,10 +30,10 @@ export function RevenueChart({ range }: { range: RangePreset }) {
             <div>
               <p className="text-xs font-medium text-muted-foreground">Revenue Forecast</p>
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-bold">${d.forecast.revenue.toLocaleString()}</span>
+                <span className="text-2xl font-bold">${revenue.forecast.revenue.toLocaleString()}</span>
                 <span className="flex items-center gap-0.5 text-xs text-success font-medium">
                   <ArrowUpRight className="size-3" />
-                  +{d.forecast.change}% projected
+                  +{revenue.forecast.change}% projected
                 </span>
               </div>
             </div>
@@ -60,27 +49,23 @@ export function RevenueChart({ range }: { range: RangePreset }) {
             </div>
           </div>
           <div className="flex items-end gap-1.5 h-24">
-            {d.salesData.concat([
-              { name: "Forecast Mon", revenue: 7800, orders: 0, profit: 0 },
-              { name: "Forecast Tue", revenue: 8500, orders: 0, profit: 0 },
-              { name: "Forecast Wed", revenue: 9200, orders: 0, profit: 0 },
-            ]).map((item, i) => {
-              const isForecast = i >= d.salesData.length
-              const height = ((item.revenue / 10000) * 100).toFixed(0)
-              return (
-                <div key={i} className="flex flex-1 flex-col items-center gap-1">
-                  <div
-                    className={`w-full rounded-sm transition-all duration-300 ${
-                      isForecast ? "bg-primary/40" : "bg-primary"
-                    }`}
-                    style={{ height: `${Math.max(Number(height), 4)}%` }}
-                  />
-                  <span className="text-[10px] text-muted-foreground text-center leading-tight">
-                    {d.salesData[i]?.name ?? item.name.split(" ")[0]}
-                  </span>
-                </div>
-              )
-            })}
+            {(() => {
+              const maxRevenue = Math.max(...salesData.map((d) => d.revenue), 1)
+              return salesData.map((item, i) => {
+                const height = ((item.revenue / maxRevenue) * 100).toFixed(0)
+                return (
+                  <div key={i} className="flex flex-1 flex-col items-center gap-1">
+                    <div
+                      className="w-full rounded-sm bg-primary transition-all duration-300"
+                      style={{ height: `${Math.max(Number(height), 4)}%` }}
+                    />
+                    <span className="text-[10px] text-muted-foreground text-center leading-tight">
+                      {item.name}
+                    </span>
+                  </div>
+                )
+              })
+            })()}
           </div>
         </CardContent>
       </Card>
@@ -88,18 +73,18 @@ export function RevenueChart({ range }: { range: RangePreset }) {
       <Card className="hover:shadow-lg transition-shadow duration-300">
         <CardHeader>
           <CardTitle>Daily Revenue & Orders</CardTitle>
-          <CardDescription>Revenue and order trends over the last 7 days</CardDescription>
+          <CardDescription>Revenue and order trends over the selected period</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={350}>
-            <LineChart data={d.salesData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+            <LineChart data={salesData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
               <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tickMargin={10} />
               <YAxis
                 yAxisId="left"
                 stroke="hsl(var(--muted-foreground))"
                 fontSize={12}
-                domain={[0, "dataMax + 1000"]}
+                domain={[0, "auto"]}
                 tickFormatter={(value) => `$${value}`}
               />
               <YAxis
@@ -107,7 +92,7 @@ export function RevenueChart({ range }: { range: RangePreset }) {
                 orientation="right"
                 stroke="hsl(var(--muted-foreground))"
                 fontSize={12}
-                domain={[0, "dataMax + 10"]}
+                domain={[0, "auto"]}
               />
               <Tooltip
                 contentStyle={{

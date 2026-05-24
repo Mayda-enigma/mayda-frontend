@@ -6,4 +6,7 @@ export const analyticsKeys = {
   revenue: (range: RangePreset) => [...analyticsKeys.all, 'revenue', range] as const,
   topDishes: (range: RangePreset) => [...analyticsKeys.all, 'topDishes', range] as const,
   hourlyHeatmap: (range: RangePreset) => [...analyticsKeys.all, 'hourlyHeatmap', range] as const,
+  cuisineShare: (range: RangePreset) => [...analyticsKeys.all, 'cuisineShare', range] as const,
+  performance: () => [...analyticsKeys.all, 'performance'] as const,
+  monthly: (range: RangePreset) => [...analyticsKeys.all, 'monthly', range] as const,
 };

@@ -10,16 +10,14 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts"
+import { useCuisineShare } from "../api/queries"
+import type { RangePreset } from "../types"
 
-const cuisineShare = [
-  { name: "Italian", value: 35, color: "#FF6B35", orders: 342 },
-  { name: "American", value: 25, color: "#F7931E", orders: 245 },
-  { name: "Mediterranean", value: 20, color: "#FFD23F", orders: 196 },
-  { name: "Asian", value: 12, color: "#06FFA5", orders: 118 },
-  { name: "Other", value: 8, color: "#4ECDC4", orders: 78 },
-]
+export function CuisineShare({ range }: { range: RangePreset }) {
+  const { data: cuisineData } = useCuisineShare(range)
 
-export function CuisineShare() {
+  if (!cuisineData) return null
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <Card className="hover:shadow-lg transition-shadow duration-300">
@@ -31,7 +29,7 @@ export function CuisineShare() {
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
-                data={cuisineShare}
+                data={cuisineData}
                 cx="50%"
                 cy="50%"
                 labelLine={false}
@@ -40,8 +38,8 @@ export function CuisineShare() {
                 fill="#8884d8"
                 dataKey="value"
               >
-                {cuisineShare.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
+                {cuisineData.map((entry) => (
+                  <Cell key={entry.name} fill={entry.color} />
                 ))}
               </Pie>
               <Tooltip
