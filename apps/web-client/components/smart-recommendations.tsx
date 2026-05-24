@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import Image from "next/image"
 
 import { useState, useEffect } from "react"
 import { Button } from "@/shared/ui/button"
@@ -222,7 +223,7 @@ export function SmartRecommendations({ menuItems, cartItems }: SmartRecommendati
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 restaurant-gradient rounded-full flex items-center justify-center">
+                  <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
                     <Icon className="w-4 h-4 text-white" />
                   </div>
                   <div>
@@ -243,10 +244,10 @@ export function SmartRecommendations({ menuItems, cartItems }: SmartRecommendati
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {recommendation.items.map((item) => (
                   <div key={item.id} className="flex items-center gap-3 p-3 bg-background/50 rounded-lg">
-                    <img
+                    <Image
                       src={item.image || "/placeholder.svg"}
                       alt={item.name}
-                      className="w-12 h-12 object-cover rounded-md"
+                      width={48} height={48} className="w-12 h-12 object-cover rounded-md"
                     />
                     <div className="flex-1 min-w-0">
                       <h4 className="font-medium text-sm leading-tight">{item.name}</h4>
@@ -255,7 +256,7 @@ export function SmartRecommendations({ menuItems, cartItems }: SmartRecommendati
                         <span className="text-sm font-semibold text-primary">${item.price}</span>
                         <Button
                           size="sm"
-                          className="h-7 px-2 text-xs restaurant-gradient text-white hover:opacity-90"
+                          className="h-7 px-2 text-xs bg-primary text-primary-foreground hover:opacity-90"
                           onClick={() => addToCart(item)}
                         >
                           <Plus className="w-3 h-3 mr-1" />

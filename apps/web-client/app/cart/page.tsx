@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Image from "next/image"
 import { Button } from "@/shared/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
 import { Textarea } from "@/shared/ui/textarea"
@@ -42,7 +43,7 @@ export default function CartPage() {
 
   if (state.items.length === 0) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-dvh bg-background">
         <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
           <div className="flex items-center justify-between p-2 sm:p-3 md:p-4">
             <div className="flex items-center gap-2 sm:gap-3">
@@ -70,7 +71,7 @@ export default function CartPage() {
               Add some delicious dishes to get started
             </p>
             <Link href="/menu">
-              <Button className="restaurant-gradient text-white">Browse Menu</Button>
+              <Button className="bg-primary text-primary-foreground">Browse Menu</Button>
             </Link>
           </div>
         </div>
@@ -79,7 +80,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
         <div className="flex items-center justify-between p-2 sm:p-3 md:p-4">
           <div className="flex items-center gap-2 sm:gap-3">
@@ -115,10 +116,10 @@ export default function CartPage() {
                 key={item.id}
                 className="flex items-center gap-2 sm:gap-3 md:gap-4 p-2 sm:p-3 md:p-4 border rounded-lg"
               >
-                <img
+                <Image
                   src={item.image || "/placeholder.svg"}
                   alt={item.name}
-                  className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 object-cover rounded-lg flex-shrink-0"
+                  width={80} height={80} className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 object-cover rounded-lg flex-shrink-0"
                 />
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-xs sm:text-sm md:text-base truncate">{item.name}</h3>
@@ -131,16 +132,16 @@ export default function CartPage() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                    aria-label="Decrease quantity" onClick={() => updateQuantity(item.id, item.quantity - 1)}
                     className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 p-0"
                   >
-                    <Minus className="w-2 h-2 sm:w-3 sm:h-3" />
+                    <Minus className="w-2 h-2 sm:w-3 sm:h-3" aria-hidden />
                   </Button>
                   <span className="w-4 sm:w-6 md:w-8 text-center font-medium text-xs sm:text-sm">{item.quantity}</span>
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                    aria-label="Increase quantity" onClick={() => updateQuantity(item.id, item.quantity + 1)}
                     className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 p-0"
                   >
                     <Plus className="w-2 h-2 sm:w-3 sm:h-3" />
@@ -156,7 +157,7 @@ export default function CartPage() {
                     onClick={() => dispatch({ type: "REMOVE_ITEM", payload: item.id })}
                     className="text-destructive hover:text-destructive p-1 mt-1"
                   >
-                    <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" aria-hidden />
                   </Button>
                 </div>
               </div>
@@ -220,7 +221,7 @@ export default function CartPage() {
         <Button
           onClick={handleCheckout}
           disabled={isProcessing}
-          className="w-full h-10 sm:h-12 md:h-14 text-sm sm:text-base md:text-lg restaurant-gradient text-white"
+          className="w-full h-10 sm:h-12 md:h-14 text-sm sm:text-base md:text-lg bg-primary text-primary-foreground"
         >
           {isProcessing ? "Processing Order..." : `Place Order • $${total.toFixed(2)}`}
         </Button>

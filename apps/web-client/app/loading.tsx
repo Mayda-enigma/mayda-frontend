@@ -2,7 +2,7 @@ import { Skeleton } from '@/shared/ui/skeleton';
 
 export default function HomeLoading() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <div className="relative w-full h-48 sm:h-64 md:h-80">
         <Skeleton className="w-full h-full rounded-none" />
       </div>

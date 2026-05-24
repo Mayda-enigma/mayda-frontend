@@ -54,12 +54,12 @@ export default function FiltersPage() {
   const count = activeCount()
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
         <div className="flex items-center justify-between p-2 sm:p-3 md:p-4">
           <div className="flex items-center gap-2 sm:gap-3">
             <BurgerMenu currentPage="filters" />
-            <Link href="/menu" className="hidden md:block">
+            <Link href="/menu" className="hidden md:block" aria-label="Back to filters">
               <Button variant="ghost" size="sm" className="p-2">
                 <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
@@ -108,7 +108,7 @@ export default function FiltersPage() {
                   variant={sortBy === option.id ? "default" : "outline"}
                   size="sm"
                   onClick={() => setSortBy(option.id)}
-                  className={`text-xs sm:text-sm ${sortBy === option.id ? "restaurant-gradient text-white" : ""}`}
+                  className={`text-xs sm:text-sm ${sortBy === option.id ? "bg-primary text-primary-foreground" : ""}`}
                 >
                   {option.name}
                 </Button>
@@ -194,7 +194,7 @@ export default function FiltersPage() {
                   key={cuisine}
                   variant={cuisines.includes(cuisine) ? "default" : "outline"}
                   className={`cursor-pointer text-xs sm:text-sm hover:scale-105 transition-transform duration-200 ${
-                    cuisines.includes(cuisine) ? "restaurant-gradient text-white" : ""
+                    cuisines.includes(cuisine) ? "bg-primary text-primary-foreground" : ""
                   }`}
                   onClick={() => toggleCuisine(cuisine)}
                 >
@@ -218,7 +218,7 @@ export default function FiltersPage() {
                   variant={spice.includes(level.id) ? "default" : "outline"}
                   size="sm"
                   onClick={() => toggleSpice(level.id)}
-                  className={`text-xs sm:text-sm ${spice.includes(level.id) ? "restaurant-gradient text-white" : ""}`}
+                  className={`text-xs sm:text-sm ${spice.includes(level.id) ? "bg-primary text-primary-foreground" : ""}`}
                 >
                   {level.name}
                 </Button>
@@ -236,7 +236,7 @@ export default function FiltersPage() {
             <Button
               variant={popularOnly ? "default" : "outline"}
               onClick={() => setPopularOnly(!popularOnly)}
-              className={`w-full text-xs sm:text-sm ${popularOnly ? "restaurant-gradient text-white" : ""}`}
+              className={`w-full text-xs sm:text-sm ${popularOnly ? "bg-primary text-primary-foreground" : ""}`}
             >
               <Star className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
               Show Popular Items Only
@@ -248,7 +248,7 @@ export default function FiltersPage() {
         <div className="sticky bottom-4">
           <Button
             onClick={() => router.push("/menu")}
-            className="w-full h-12 sm:h-14 text-sm sm:text-base md:text-lg restaurant-gradient text-white"
+            className="w-full h-12 sm:h-14 text-sm sm:text-base md:text-lg bg-primary text-primary-foreground"
           >
             Apply Filters {count > 0 && `(${count})`}
           </Button>
