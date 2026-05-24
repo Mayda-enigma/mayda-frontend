@@ -11,7 +11,6 @@ import {
 } from "recharts"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card"
 import { Skeleton } from "@/shared/ui/skeleton"
-import { useI18n } from "@/components/i18n-provider"
 import { useOrderVolume } from "../api/queries"
 import type { RangePreset } from "../types"
 
@@ -20,14 +19,13 @@ interface OrderVolumeChartProps {
 }
 
 export function OrderVolumeChart({ range }: OrderVolumeChartProps) {
-  const { t } = useI18n()
   const { data, isLoading } = useOrderVolume(range)
 
   return (
     <Card className="bg-card border-border">
       <CardHeader className="p-4 sm:p-6">
-        <CardTitle className="text-primary text-base sm:text-lg">{t.orderVolumeToday}</CardTitle>
-        <CardDescription className="text-xs sm:text-sm">Orders received throughout the day</CardDescription>
+        <CardTitle className="text-primary text-base sm:text-lg">Volume des commandes aujourd'hui</CardTitle>
+        <CardDescription className="text-xs sm:text-sm">Commandes reçues au cours de la journée</CardDescription>
       </CardHeader>
       <CardContent className="p-4 sm:p-6 pt-0">
         {isLoading ? (

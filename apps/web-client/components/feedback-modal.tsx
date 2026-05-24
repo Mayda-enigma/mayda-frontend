@@ -21,12 +21,12 @@ export function FeedbackModal({ isOpen, onClose, orderId }: FeedbackModalProps) 
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const aspects = [
-    { id: "food_quality", label: "Food Quality", icon: "🍽️" },
+    { id: "food_quality", label: "Qualité des plats", icon: "🍽️" },
     { id: "service", label: "Service", icon: "👨‍💼" },
     { id: "ambiance", label: "Ambiance", icon: "🕯️" },
-    { id: "value", label: "Value for Money", icon: "💰" },
-    { id: "cleanliness", label: "Cleanliness", icon: "✨" },
-    { id: "speed", label: "Service Speed", icon: "⚡" },
+    { id: "value", label: "Rapport qualité-prix", icon: "💰" },
+    { id: "cleanliness", label: "Propreté", icon: "✨" },
+    { id: "speed", label: "Rapidité du service", icon: "⚡" },
   ]
 
   if (!isOpen) return null
@@ -75,8 +75,8 @@ export function FeedbackModal({ isOpen, onClose, orderId }: FeedbackModalProps) 
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-border sm:p-6">
           <div>
-            <h2 className="text-lg font-bold sm:text-xl">Rate Your Experience</h2>
-            <p className="text-xs text-muted-foreground sm:text-sm">Order #{orderId}</p>
+            <h2 className="text-lg font-bold sm:text-xl">Notez votre expérience</h2>
+            <p className="text-xs text-muted-foreground sm:text-sm">Commande n°{orderId}</p>
           </div>
           <Button variant="ghost" size="sm" aria-label="Close" onClick={onClose}>
             <X className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -88,7 +88,7 @@ export function FeedbackModal({ isOpen, onClose, orderId }: FeedbackModalProps) 
           {/* Star Rating */}
           <div className="text-center">
             <h3 className="font-semibold mb-3 text-sm sm:text-base sm:mb-4">
-              How would you rate your overall experience?
+              Comment évaluez-vous votre expérience ?
             </h3>
             <div className="flex justify-center gap-1.5 mb-2 sm:gap-2">
               {[1, 2, 3, 4, 5].map((star) => (
@@ -110,11 +110,11 @@ export function FeedbackModal({ isOpen, onClose, orderId }: FeedbackModalProps) 
               ))}
             </div>
             <div className="text-xs text-muted-foreground sm:text-sm">
-              {rating === 0 && "Click to rate"}
-              {rating === 1 && "Poor"}
-              {rating === 2 && "Fair"}
-              {rating === 3 && "Good"}
-              {rating === 4 && "Very Good"}
+              {rating === 0 && "Cliquez pour noter"}
+              {rating === 1 && "Mauvais"}
+              {rating === 2 && "Moyen"}
+              {rating === 3 && "Bien"}
+              {rating === 4 && "Très bien"}
               {rating === 5 && "Excellent"}
             </div>
           </div>
@@ -122,7 +122,7 @@ export function FeedbackModal({ isOpen, onClose, orderId }: FeedbackModalProps) 
           {/* Aspect Rating */}
           {rating > 0 && (
             <div>
-              <h3 className="font-semibold mb-2 text-sm sm:text-base sm:mb-3">What did you like most? (Optional)</h3>
+              <h3 className="font-semibold mb-2 text-sm sm:text-base sm:mb-3">Qu&apos;avez-vous préféré ? (optionnel)</h3>
               <div className="grid grid-cols-2 gap-1.5 sm:gap-2 md:grid-cols-3">
                 {aspects.map((aspect) => (
                   <Button
@@ -146,7 +146,7 @@ export function FeedbackModal({ isOpen, onClose, orderId }: FeedbackModalProps) 
           {rating > 0 && (
             <div>
               <div className="flex items-center justify-between mb-2 sm:mb-3">
-                <h3 className="font-semibold text-sm sm:text-base">Tell us more (Optional)</h3>
+                <h3 className="font-semibold text-sm sm:text-base">Dites-nous en plus (optionnel)</h3>
                 <Button
                   variant="outline"
                   size="sm"
@@ -157,18 +157,18 @@ export function FeedbackModal({ isOpen, onClose, orderId }: FeedbackModalProps) 
                   {isVoiceRecording ? (
                     <>
                       <MicOff className="w-3 h-3 mr-1.5 animate-pulse sm:w-4 sm:h-4 sm:mr-2" />
-                      Recording...
+                      Enregistrement...
                     </>
                   ) : (
                     <>
                       <Mic className="w-3 h-3 mr-1.5 sm:w-4 sm:h-4 sm:mr-2" />
-                      Voice Input
+                      Entrée vocale
                     </>
                   )}
                 </Button>
               </div>
               <Textarea
-                placeholder="Share your thoughts about the food, service, or overall experience..."
+                placeholder="Partagez vos impressions sur les plats, le service..."
                 value={textFeedback}
                 onChange={(e) => setTextFeedback(e.target.value)}
                 className="resize-none text-sm"
@@ -183,10 +183,10 @@ export function FeedbackModal({ isOpen, onClose, orderId }: FeedbackModalProps) 
               <CardContent className="p-4">
                 <div className="flex items-center gap-2 text-success">
                   <Heart className="w-4 h-4" />
-                  <span className="font-medium">Thank you for the great feedback!</span>
+                  <span className="font-medium">Merci pour votre excellent retour !</span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-1">
-                  We&apos;re thrilled you enjoyed your experience. Your review helps us maintain our high standards.
+                  Nous sommes ravis que vous ayez apprécié votre expérience. Votre avis nous aide à maintenir nos standards.
                 </p>
               </CardContent>
             </Card>
@@ -201,7 +201,7 @@ export function FeedbackModal({ isOpen, onClose, orderId }: FeedbackModalProps) 
               aria-label="Close" onClick={onClose}
               className="flex-1 bg-transparent text-sm h-9 sm:text-base sm:h-10"
             >
-              Maybe Later
+              Peut-être plus tard
             </Button>
             <Button
               className="flex-1 bg-primary text-primary-foreground hover:opacity-90 transition-opacity text-sm h-9 sm:text-base sm:h-10"
@@ -209,11 +209,11 @@ export function FeedbackModal({ isOpen, onClose, orderId }: FeedbackModalProps) 
               disabled={rating === 0 || isSubmitting}
             >
               <Send className="w-3 h-3 mr-1.5 sm:w-4 sm:h-4 sm:mr-2" />
-              {isSubmitting ? "Submitting..." : "Submit Review"}
+              {isSubmitting ? "Envoi..." : "Envoyer l'avis"}
             </Button>
           </div>
           <p className="text-xs text-muted-foreground text-center mt-2 sm:mt-3">
-            Your feedback is anonymous and helps us improve our service
+            Votre avis est anonyme et nous aide à nous améliorer
           </p>
         </div>
       </div>

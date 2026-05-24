@@ -84,15 +84,15 @@ export function InviteModal({
     >
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>Invite Employee</DialogTitle>
+          <DialogTitle>Inviter un employé</DialogTitle>
           <DialogDescription>
-            Send an access invite for a new staff member.
+            Envoyez une invitation à un nouveau membre du personnel.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="invite-firstname">First Name</Label>
+              <Label htmlFor="invite-firstname">Prénom</Label>
               <Input
                 id="invite-firstname"
                 autoComplete="given-name"
@@ -105,7 +105,7 @@ export function InviteModal({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="invite-lastname">Last Name</Label>
+              <Label htmlFor="invite-lastname">Nom</Label>
               <Input
                 id="invite-lastname"
                 autoComplete="family-name"
@@ -120,7 +120,7 @@ export function InviteModal({
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="invite-phone">Phone</Label>
+              <Label htmlFor="invite-phone">Téléphone</Label>
               <Input
                 id="invite-phone"
                 type="tel"
@@ -148,7 +148,7 @@ export function InviteModal({
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="invite-role">Role</Label>
+            <Label htmlFor="invite-role">Rôle</Label>
             <Select
               value={form.role}
               onValueChange={(role) =>
@@ -156,10 +156,10 @@ export function InviteModal({
               }
             >
               <SelectTrigger id="invite-role">
-                <SelectValue placeholder="Select role" />
+                <SelectValue placeholder="Sélectionner un rôle" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="WAITER">Waiter</SelectItem>
+                <SelectItem value="WAITER">Serveur</SelectItem>
                 <SelectItem value="CHEF">Chef</SelectItem>
                 <SelectItem value="MANAGER">Manager</SelectItem>
               </SelectContent>
@@ -168,10 +168,10 @@ export function InviteModal({
           {inviteEmployee.isError ? (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Invite failed</AlertTitle>
+              <AlertTitle>Échec de l'invitation</AlertTitle>
               <AlertDescription>
-                The request was rejected by the API. Check the employee details and
-                try again.
+                La requête a été rejetée par l'API. Vérifiez les détails et
+                réessayez.
               </AlertDescription>
             </Alert>
           ) : null}
@@ -182,10 +182,10 @@ export function InviteModal({
               onClick={() => onOpenChange(false)}
               disabled={inviteEmployee.isPending}
             >
-              Cancel
+              Annuler
             </Button>
             <Button type="submit" disabled={inviteEmployee.isPending}>
-              {inviteEmployee.isPending ? "Sending Invite..." : "Send Invite"}
+              {inviteEmployee.isPending ? "Envoi en cours..." : "Envoyer l'invitation"}
             </Button>
           </div>
         </form>

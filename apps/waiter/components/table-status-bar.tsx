@@ -18,9 +18,9 @@ export function TableStatusBar({ tables }: TableStatusBarProps) {
     <div className="grid grid-cols-4 gap-2">
       {[
         { label: "Total", value: totalTables, color: "text-foreground" },
-        { label: "Free", value: freeTables, color: "text-green-600" },
-        { label: "Occupied", value: occupiedTables, color: "text-blue-600" },
-        { label: "Priority", value: highPriority, color: "text-primary" },
+        { label: "Libre", value: freeTables, color: "text-green-600" },
+        { label: "Occupée", value: occupiedTables, color: "text-blue-600" },
+        { label: "Priorité", value: highPriority, color: "text-primary" },
       ].map(({ label, value, color }) => (
         <Card key={label}>
           <CardContent className="p-2 sm:p-3 text-center">

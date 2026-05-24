@@ -21,17 +21,17 @@ import { BurgerMenu } from '@/components/burger-menu';
 import type { MenuItem } from '../types';
 
 const categories = [
-  { id: 'all', name: 'All', icon: '🍽️' },
-  { id: 'starters', name: 'Starters', icon: '🥗' },
-  { id: 'mains', name: 'Mains', icon: '🍖' },
+  { id: 'all', name: 'Tout', icon: '🍽️' },
+  { id: 'starters', name: 'Entrées', icon: '🥗' },
+  { id: 'mains', name: 'Plats', icon: '🍖' },
   { id: 'desserts', name: 'Desserts', icon: '🍰' },
-  { id: 'drinks', name: 'Drinks', icon: '🍷' },
+  { id: 'drinks', name: 'Boissons', icon: '🍷' },
 ];
 
 const dietaryFilters = [
-  { id: 'vegetarian', name: 'Vegetarian', icon: Leaf, color: 'text-success' },
-  { id: 'vegan', name: 'Vegan', icon: Heart, color: 'text-success' },
-  { id: 'gluten-free', name: 'Gluten Free', icon: Wheat, color: 'text-amber-600' },
+  { id: 'vegetarian', name: 'Végétarien', icon: Leaf, color: 'text-success' },
+  { id: 'vegan', name: 'Végan', icon: Heart, color: 'text-success' },
+  { id: 'gluten-free', name: 'Sans gluten', icon: Wheat, color: 'text-amber-600' },
   { id: 'halal', name: 'Halal', icon: Heart, color: 'text-blue-600' },
 ];
 
@@ -143,7 +143,7 @@ export function MenuGrid() {
                 className="hover:scale-105 transition-all duration-200 hover:shadow-md bg-transparent text-xs sm:text-sm px-2 sm:px-3"
               >
                 <Filter className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                <span className="hidden sm:inline">Filter</span>
+                <span className="hidden sm:inline">Filtrer</span>
               </Button>
             </Link>
             <NotificationSystem onFeedbackRequest={handleFeedbackRequest} />
@@ -168,7 +168,7 @@ export function MenuGrid() {
           <div className="relative">
             <Search className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground transition-colors duration-200" />
             <Input
-              placeholder="Search dishes..."
+              placeholder="Rechercher des plats..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-8 sm:pl-10 pr-10 sm:pr-12 h-10 sm:h-12 text-sm sm:text-base focus:ring-2 focus:ring-primary/20 transition-all duration-200 hover:shadow-sm"
@@ -251,7 +251,7 @@ export function MenuGrid() {
 
         {filteredItems.length > 0 && (
           <div className="mt-6 mb-4">
-            <h2 className="text-lg font-semibold mb-4">All Dishes</h2>
+            <h2 className="text-lg font-semibold mb-4">Tous les plats</h2>
           </div>
         )}
       </div>
@@ -271,8 +271,8 @@ export function MenuGrid() {
 
         {filteredItems.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-muted-foreground text-lg">No dishes found</p>
-            <p className="text-muted-foreground text-sm">Try adjusting your filters or search</p>
+            <p className="text-muted-foreground text-lg">Aucun plat trouvé</p>
+            <p className="text-muted-foreground text-sm">Essayez d'ajuster vos filtres ou votre recherche</p>
           </div>
         )}
       </div>

@@ -60,10 +60,10 @@ export default function CartPage() {
           if (error instanceof ApiError && error.status === 422) {
             const detail = error.body && typeof error.body === 'object' && 'detail' in error.body
               ? (error.body as { detail: string }).detail
-              : 'Please check your order and try again.'
+              : 'Veuillez vérifier votre commande et réessayer.'
             setCheckoutError(detail)
           } else {
-            setCheckoutError('Something went wrong. Please try again.')
+            setCheckoutError('Une erreur est survenue. Veuillez réessayer.')
           }
         },
       },
@@ -82,7 +82,7 @@ export default function CartPage() {
                   <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                 </Button>
               </Link>
-              <h1 className="text-lg sm:text-xl font-bold">Cart</h1>
+              <h1 className="text-lg sm:text-xl font-bold">Panier</h1>
             </div>
             <div className="hidden md:block">
               <ThemeToggle />
@@ -95,12 +95,12 @@ export default function CartPage() {
             <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mx-auto mb-4 sm:mb-6 bg-muted rounded-full flex items-center justify-center">
               <CreditCard className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-muted-foreground" />
             </div>
-            <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-2">Your cart is empty</h2>
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-2">Votre panier est vide</h2>
             <p className="text-muted-foreground mb-4 sm:mb-6 text-sm sm:text-base">
-              Add some delicious dishes to get started
+              Ajoutez de délicieux plats pour commencer
             </p>
             <Link href="/menu">
-              <Button className="bg-primary text-primary-foreground">Browse Menu</Button>
+              <Button className="bg-primary text-primary-foreground">Voir le menu</Button>
             </Link>
           </div>
         </div>
@@ -120,7 +120,7 @@ export default function CartPage() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-lg sm:text-xl font-bold">Cart & Checkout</h1>
+              <h1 className="text-lg sm:text-xl font-bold">Panier & Commandes</h1>
               <p className="text-xs sm:text-sm text-muted-foreground">Table {tableId}</p>
             </div>
           </div>
@@ -136,7 +136,7 @@ export default function CartPage() {
           <CardHeader className="pb-3 sm:pb-4 md:pb-6">
             <CardTitle className="flex items-center gap-2 text-sm sm:text-base md:text-lg">
               <CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />
-              Your Order ({state.items.length} items)
+              Votre commande ({state.items.length} articles)
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 sm:space-y-3 md:space-y-4">
@@ -152,16 +152,16 @@ export default function CartPage() {
                 />
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-xs sm:text-sm md:text-base truncate">{item.name}</h3>
-                  <p className="text-xs sm:text-sm text-muted-foreground">${item.price.toFixed(2)} each</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">{item.price.toFixed(2)} DZD chaque</p>
                   {item.specialInstructions && (
-                    <p className="text-xs text-muted-foreground mt-1 line-clamp-2">Note: {item.specialInstructions}</p>
+                    <p className="text-xs text-muted-foreground mt-1 line-clamp-2">Note : {item.specialInstructions}</p>
                   )}
                 </div>
                 <div className="flex items-center gap-1 sm:gap-2">
                   <Button
                     variant="outline"
                     size="sm"
-                    aria-label="Decrease quantity" onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                    aria-label="Diminuer quantité" onClick={() => updateQuantity(item.id, item.quantity - 1)}
                     className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 p-0"
                   >
                     <Minus className="w-2 h-2 sm:w-3 sm:h-3" aria-hidden />
@@ -170,7 +170,7 @@ export default function CartPage() {
                   <Button
                     variant="outline"
                     size="sm"
-                    aria-label="Increase quantity" onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                    aria-label="Augmenter quantité" onClick={() => updateQuantity(item.id, item.quantity + 1)}
                     className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 p-0"
                   >
                     <Plus className="w-2 h-2 sm:w-3 sm:h-3" />
@@ -178,7 +178,7 @@ export default function CartPage() {
                 </div>
                 <div className="text-right flex-shrink-0">
                   <p className="font-semibold text-xs sm:text-sm md:text-base">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    {(item.price * item.quantity).toFixed(2)} DZD
                   </p>
                   <Button
                     variant="ghost"
@@ -197,11 +197,11 @@ export default function CartPage() {
         {/* Order Notes */}
         <Card>
           <CardHeader className="pb-3 sm:pb-4 md:pb-6">
-            <CardTitle className="text-sm sm:text-base md:text-lg">Special Instructions</CardTitle>
+            <CardTitle className="text-sm sm:text-base md:text-lg">Instructions spéciales</CardTitle>
           </CardHeader>
           <CardContent>
             <Textarea
-              placeholder="Any special requests or dietary requirements..."
+              placeholder="Demandes spéciales ou restrictions alimentaires..."
               value={orderNotes}
               onChange={(e) => setOrderNotes(e.target.value)}
               className="min-h-[60px] sm:min-h-[80px] md:min-h-[100px] text-xs sm:text-sm md:text-base"
@@ -212,21 +212,21 @@ export default function CartPage() {
         {/* Order Summary */}
         <Card>
           <CardHeader className="pb-3 sm:pb-4 md:pb-6">
-            <CardTitle className="text-sm sm:text-base md:text-lg">Order Summary</CardTitle>
+            <CardTitle className="text-sm sm:text-base md:text-lg">Résumé de la commande</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 sm:space-y-3">
             <div className="flex justify-between text-xs sm:text-sm md:text-base">
-              <span>Subtotal</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span>Sous-total</span>
+              <span>{subtotal.toFixed(2)} DZD</span>
             </div>
             <div className="flex justify-between text-xs sm:text-sm text-muted-foreground">
-              <span>Service Fee (10%)</span>
-              <span>${serviceFee.toFixed(2)}</span>
+              <span>Frais de service (10%)</span>
+              <span>{serviceFee.toFixed(2)} DZD</span>
             </div>
             <div className="border-t pt-2 sm:pt-3">
               <div className="flex justify-between font-bold text-sm sm:text-base md:text-lg">
                 <span>Total</span>
-                <span>${total.toFixed(2)}</span>
+                <span>{total.toFixed(2)} DZD</span>
               </div>
             </div>
           </CardContent>
@@ -237,11 +237,11 @@ export default function CartPage() {
           <CardContent className="pt-3 sm:pt-4 md:pt-6">
             <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground">
               <MapPin className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-              <span>Dine-in service • Table {tableId}</span>
+              <span>Service sur place • Table {tableId}</span>
             </div>
             <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground mt-2">
               <Clock className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-              <span>Estimated preparation time: 15-25 minutes</span>
+              <span>Temps de préparation estimé : 15-25 min</span>
             </div>
           </CardContent>
         </Card>
@@ -259,7 +259,7 @@ export default function CartPage() {
           disabled={createOrder.isPending}
           className="w-full h-10 sm:h-12 md:h-14 text-sm sm:text-base md:text-lg bg-primary text-primary-foreground"
         >
-          {createOrder.isPending ? "Processing Order..." : `Place Order • $${total.toFixed(2)}`}
+          {createOrder.isPending ? "Traitement..." : `Passer commande • ${total.toFixed(2)} DZD`}
         </Button>
       </div>
 

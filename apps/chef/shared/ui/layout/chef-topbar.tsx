@@ -8,19 +8,16 @@ import { ChefHat, Package, BarChart3, Menu } from "lucide-react"
 import { Button } from "@/shared/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/shared/ui/sheet"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { LanguageSelector } from "@/components/language-selector"
 import { NotificationCenter } from "@/components/notification-center"
-import { useI18n } from "@/components/i18n-provider"
 
 export function ChefTopbar() {
   const pathname = usePathname()
-  const { language, setLanguage, t } = useI18n()
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const navItems = [
-    { href: "/", label: t.dashboard, icon: ChefHat },
-    { href: "/stock", label: t.stock, icon: Package },
-    { href: "/analytics", label: t.analytics, icon: BarChart3 },
+    { href: "/", label: "Tableau de bord", icon: ChefHat },
+    { href: "/stock", label: "Stock", icon: Package },
+    { href: "/analytics", label: "Analyses", icon: BarChart3 },
   ]
 
   const NavLinks = ({ onNavigate }: { onNavigate?: () => void }) => (
@@ -46,10 +43,9 @@ export function ChefTopbar() {
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b border-border bg-card px-4 md:px-6">
-      {/* Mobile menu trigger */}
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
         <SheetTrigger asChild>
-          <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open navigation">
+          <Button variant="ghost" size="icon" className="md:hidden" aria-label="Ouvrir la navigation">
             <Menu />
           </Button>
         </SheetTrigger>
@@ -60,10 +56,9 @@ export function ChefTopbar() {
         </SheetContent>
       </Sheet>
 
-      {/* Logo */}
       <Link href="/" className="flex items-center gap-2 font-semibold text-sm shrink-0">
         <Image
-          src="/LogoChef.svg"
+          src="/LogoAdmin.svg"
           alt="Mayda Chef"
           width={24}
           height={24}
@@ -72,15 +67,12 @@ export function ChefTopbar() {
         <span className="hidden sm:inline">Mayda Chef</span>
       </Link>
 
-      {/* Desktop nav */}
       <nav className="hidden md:flex items-center gap-1">
         <NavLinks />
       </nav>
 
-      {/* Right cluster */}
       <div className="ml-auto flex items-center gap-2">
         <NotificationCenter />
-        <LanguageSelector currentLanguage={language} onLanguageChange={setLanguage} />
         <ThemeToggle />
       </div>
     </header>

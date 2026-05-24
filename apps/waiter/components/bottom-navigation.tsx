@@ -4,17 +4,17 @@ import { Home, QrCode, ClipboardList } from "lucide-react"
 import { cn } from "@/shared/utils"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useLanguage } from "@/components/language-provider"
+
 
 const navItems = [
- { id: "tables", icon: Home, href: "/" },
- { id: "scanner", icon: QrCode, href: "/scanner" },
- { id: "orders", icon: ClipboardList, href: "/orders" },
+ { id: "tables", icon: Home, href: "/", label: "Tables" },
+ { id: "scanner", icon: QrCode, href: "/scanner", label: "Scanner" },
+ { id: "orders", icon: ClipboardList, href: "/orders", label: "Commandes" },
 ]
 
 export function BottomNavigation() {
  const pathname = usePathname()
- const { t } = useLanguage()
+
 
  const getActiveTab = () => {
  if (pathname === "/") return "tables"
@@ -71,7 +71,7 @@ export function BottomNavigation() {
  isActive ? "font-semibold" : "font-normal",
  "group-hover:font-medium"
  )}>
- {t(item.id)}
+ {item.label}
  </span>
 
  

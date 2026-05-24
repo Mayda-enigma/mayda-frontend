@@ -20,7 +20,7 @@ export function MonthlySection({ range }: { range: RangePreset }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Monthly Performance Comparison</CardTitle>
+        <CardTitle>Comparaison mensuelle des performances</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={400}>

@@ -40,10 +40,10 @@ export default function OrderDetailPage() {
     return (
       <div className="min-h-screen bg-background text-foreground p-6 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Loading order...</h1>
+          <h1 className="text-2xl font-bold mb-4">Chargement de la commande...</h1>
           <Button onClick={() => router.push("/")} className="bg-primary hover:bg-primary/90">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Dashboard
+            Retour au tableau de bord
           </Button>
         </div>
       </div>
@@ -95,9 +95,9 @@ export default function OrderDetailPage() {
         <div className="flex items-center gap-4 mb-4">
           <Button variant="outline" onClick={() => router.push("/")} className="border-border hover:bg-accent">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back
+            Retour
           </Button>
-          <h1 className="text-3xl font-bold text-primary">Order {order.id}</h1>
+          <h1 className="text-3xl font-bold text-primary">Commande {order.id}</h1>
           <Badge className={`${getStatusColor(order.status)} text-white font-medium ml-auto`}>
             {order.status.replace("-", " ").toUpperCase()}
           </Badge>
@@ -110,7 +110,7 @@ export default function OrderDetailPage() {
                 <Users className="w-5 h-5" />
                 <span className="font-medium">Table {order.tableNumber}</span>
               </div>
-              <div className="text-sm text-muted-foreground">Customer table assignment</div>
+              <div className="text-sm text-muted-foreground">Table attribuée au client</div>
             </CardContent>
           </Card>
 
@@ -120,7 +120,7 @@ export default function OrderDetailPage() {
                 <Clock className="w-5 h-5" />
                 <span className="font-medium font-mono tabular-nums">{timeElapsed}</span>
               </div>
-              <div className="text-sm text-muted-foreground">Time elapsed</div>
+              <div className="text-sm text-muted-foreground">Temps écoulé</div>
             </CardContent>
           </Card>
 
@@ -135,7 +135,7 @@ export default function OrderDetailPage() {
                   })}
                 </span>
               </div>
-              <div className="text-sm text-muted-foreground">Est. completion</div>
+              <div className="text-sm text-muted-foreground">Fin estimée</div>
             </CardContent>
           </Card>
         </div>
@@ -143,16 +143,16 @@ export default function OrderDetailPage() {
 
       <Card className="bg-card border-border mb-6">
         <CardHeader>
-          <CardTitle className="text-xl text-card-foreground">Overall Progress</CardTitle>
+          <CardTitle className="text-xl text-card-foreground">Progression globale</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
             <Progress value={getOverallProgress()} className="h-3" />
             <div className="flex justify-between text-sm text-muted-foreground">
-              <span>Progress: {getOverallProgress()}%</span>
+              <span>Progression : {getOverallProgress()}%</span>
               <span>
-                {order.dishes.reduce((sum, dish) => sum + dish.currentStep, 0)} of{" "}
-                {order.dishes.reduce((sum, dish) => sum + dish.steps.length, 0)} steps completed
+                {order.dishes.reduce((sum, dish) => sum + dish.currentStep, 0)} /{" "}
+                {order.dishes.reduce((sum, dish) => sum + dish.steps.length, 0)} étapes terminées
               </span>
             </div>
           </div>
@@ -166,19 +166,19 @@ export default function OrderDetailPage() {
               <CardHeader>
                 <CardTitle className="text-destructive flex items-center gap-2">
                   <AlertTriangle className="w-5 h-5" />
-                  Important Notes
+                  Notes importantes
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 {order.specialRequests && (
                   <div>
-                    <div className="font-medium text-destructive mb-1">Allergies & Restrictions:</div>
+                    <div className="font-medium text-destructive mb-1">Allergies & Restrictions :</div>
                     <div className="text-destructive/80">{order.specialRequests}</div>
                   </div>
                 )}
                 {order.customerNotes && (
                   <div>
-                    <div className="font-medium text-destructive mb-1">Customer Notes:</div>
+                    <div className="font-medium text-destructive mb-1">Notes du client :</div>
                     <div className="text-destructive/80">{order.customerNotes}</div>
                   </div>
                 )}
@@ -210,9 +210,9 @@ export default function OrderDetailPage() {
                 <CardContent>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm text-muted-foreground">Preparation Steps</span>
+                      <span className="text-sm text-muted-foreground">Étapes de préparation</span>
                       <span className="text-sm text-muted-foreground">
-                        {dish.currentStep} of {dish.steps.length} completed
+                        {dish.currentStep} / {dish.steps.length} terminées
                       </span>
                     </div>
                     <Progress value={(dish.currentStep / dish.steps.length) * 100} className="h-2" />
@@ -253,7 +253,7 @@ export default function OrderDetailPage() {
                         disabled={dish.currentStep === 0}
                         className="border-border hover:bg-accent"
                       >
-                        Previous Step
+                        Étape précédente
                       </Button>
                       <Button
                         size="sm"
@@ -261,7 +261,7 @@ export default function OrderDetailPage() {
                         disabled={dish.currentStep === dish.steps.length}
                         className="bg-primary hover:bg-primary/90"
                       >
-                        Next Step
+                        Étape suivante
                       </Button>
                     </div>
                   </div>
@@ -278,7 +278,7 @@ export default function OrderDetailPage() {
 
           <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle className="text-card-foreground">Quick Actions</CardTitle>
+              <CardTitle className="text-card-foreground">Actions rapides</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               {order.status === "pending" && (
@@ -287,7 +287,7 @@ export default function OrderDetailPage() {
                   className="w-full bg-primary hover:bg-primary/90"
                 >
                   <Play className="w-4 h-4 mr-2" />
-                  Start Order
+                  Commencer la commande
                 </Button>
               )}
               {order.status === "in-progress" && (
@@ -296,12 +296,12 @@ export default function OrderDetailPage() {
                   className="w-full bg-gradient-to-r from-success to-success/80 hover:from-success/90 hover:to-success/70"
                 >
                   <CheckCircle className="w-4 h-4 mr-2" />
-                  Mark Ready
+                  Marquer prêt
                 </Button>
               )}
               <Button variant="outline" className="w-full border-border hover:bg-accent bg-transparent">
                 <Pause className="w-4 h-4 mr-2" />
-                Pause Order
+                Mettre en pause
               </Button>
             </CardContent>
           </Card>

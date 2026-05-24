@@ -20,8 +20,8 @@ export function BurgerMenu({ currentPage }: BurgerMenuProps) {
 
   const menuItems = [
     { href: "/menu", icon: UtensilsCrossed, label: "Menu", id: "menu" },
-    { href: "/orders", icon: Clock, label: "Orders", id: "orders" },
-    { href: "/cart", icon: ShoppingBag, label: "Cart", id: "cart" },
+    { href: "/orders", icon: Clock, label: "Commandes", id: "orders" },
+    { href: "/cart", icon: ShoppingBag, label: "Panier", id: "cart" },
   ]
 
   return (
@@ -33,7 +33,7 @@ export function BurgerMenu({ currentPage }: BurgerMenuProps) {
           className="md:hidden p-1.5 h-8 hover:scale-110 transition-transform duration-200"
         >
           <Menu className="w-4 h-4" aria-hidden />
-          <span className="sr-only">Open menu</span>
+          <span className="sr-only">Ouvrir le menu</span>
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="w-64 p-0">
@@ -79,7 +79,7 @@ export function BurgerMenu({ currentPage }: BurgerMenuProps) {
           {/* Footer */}
           <div className="p-4  mb-40 border-t">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Theme</span>
+              <span className="text-sm text-muted-foreground">Thème</span>
               <ThemeToggle />
             </div>
           </div>

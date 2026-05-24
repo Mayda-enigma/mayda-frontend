@@ -24,7 +24,7 @@ const sourceCodePro = Source_Code_Pro({
 export const metadata: Metadata = {
   title: "Mayda Manager",
   description:
-    "Comprehensive restaurant management platform with real-time analytics, staff oversight, and operational insights.",
+    "Plateforme complète de gestion de restaurant avec analyses en temps réel, supervision du personnel et informations opérationnelles.",
   generator: "v0.app",
 }
 
@@ -34,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="fr" suppressHydrationWarning>
       <body className={`${outfit.variable} ${sourceCodePro.variable} bg-background text-foreground antialiased`}>
         <QueryProvider>
           <Suspense fallback={null}>

@@ -45,23 +45,23 @@ export function MenuFilteredTable({
         </CardHeader>
         <CardContent>
           {isUserLoading || menuQuery.isLoading ? (
-            <p className="text-sm text-muted-foreground">Loading menu items...</p>
+            <p className="text-sm text-muted-foreground">Chargement des articles...</p>
           ) : null}
           {!isUserLoading && restaurantId === null ? (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Restaurant context missing</AlertTitle>
+              <AlertTitle>Contexte du restaurant manquant</AlertTitle>
               <AlertDescription>
-                The current manager account is not linked to a restaurant.
+                Ce compte gestionnaire n'est lié à aucun restaurant.
               </AlertDescription>
             </Alert>
           ) : null}
           {menuQuery.isError ? (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Could not load menu items</AlertTitle>
+              <AlertTitle>Impossible de charger les articles</AlertTitle>
               <AlertDescription>
-                The menu request failed. Refresh the page and try again.
+                La requête du menu a échoué. Actualisez la page et réessayez.
               </AlertDescription>
             </Alert>
           ) : null}
@@ -71,11 +71,11 @@ export function MenuFilteredTable({
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Item</TableHead>
-                      <TableHead>Category</TableHead>
-                      <TableHead>Price</TableHead>
-                      <TableHead>Prep Time</TableHead>
-                      <TableHead>Status</TableHead>
+                      <TableHead>Article</TableHead>
+                      <TableHead>Catégorie</TableHead>
+                      <TableHead>Prix</TableHead>
+                      <TableHead>Temps de prép.</TableHead>
+                      <TableHead>Statut</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -92,7 +92,7 @@ export function MenuFilteredTable({
                         <TableCell>
                           <Badge variant="outline">{item.category}</Badge>
                         </TableCell>
-                        <TableCell>${item.price.toFixed(2)}</TableCell>
+                        <TableCell>{item.price.toFixed(2)} DZD</TableCell>
                         <TableCell>
                           <div className="flex items-center gap-1 text-muted-foreground">
                             <Clock className="h-3 w-3" />
@@ -107,7 +107,7 @@ export function MenuFilteredTable({
                               <EyeOff className="h-3 w-3 text-muted-foreground" />
                             )}
                             <span>
-                              {item.isAvailable ? "Available" : "Unavailable"}
+                              {item.isAvailable ? "Disponible" : "Indisponible"}
                             </span>
                           </div>
                         </TableCell>
@@ -118,7 +118,7 @@ export function MenuFilteredTable({
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">
-                No menu items matched this category.
+                Aucun article ne correspond à cette catégorie.
               </p>
             )
           ) : null}

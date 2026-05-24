@@ -4,7 +4,6 @@ import { Outfit, Source_Code_Pro } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
 import { NotificationProvider } from "@/components/notification-system"
-import { I18nProvider } from "@/components/i18n-provider"
 import { QueryProvider } from "@/shared/lib/query-provider"
 import "./globals.css"
 
@@ -21,8 +20,8 @@ const sourceCodePro = Source_Code_Pro({
 })
 
 export const metadata: Metadata = {
-  title: "Mayda Chef - Kitchen Dashboard",
-  description: "Real-time order and stock management for kitchen staff",
+  title: "Mayda Chef - Tableau de Bord Cuisine",
+  description: "Gestion des commandes et des stocks en temps réel pour le personnel de cuisine",
 }
 
 export default function RootLayout({
@@ -31,15 +30,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="fr" suppressHydrationWarning>
       <body className={`font-sans ${outfit.variable} ${sourceCodePro.variable} antialiased`}>
         <QueryProvider>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange={false}>
-            <I18nProvider>
-              <NotificationProvider>
-                {children}
-              </NotificationProvider>
-            </I18nProvider>
+            <NotificationProvider>
+              {children}
+            </NotificationProvider>
           </ThemeProvider>
         </QueryProvider>
         <Analytics />

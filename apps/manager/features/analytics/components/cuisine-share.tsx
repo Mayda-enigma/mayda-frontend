@@ -22,8 +22,8 @@ export function CuisineShare({ range }: { range: RangePreset }) {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <Card className="hover:shadow-lg transition-shadow duration-300">
         <CardHeader>
-          <CardTitle>Cuisine Distribution</CardTitle>
-          <CardDescription>Breakdown of orders by cuisine type</CardDescription>
+          <CardTitle>Répartition par cuisine</CardTitle>
+          <CardDescription>Répartition des commandes par type de cuisine</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
@@ -56,42 +56,42 @@ export function CuisineShare({ range }: { range: RangePreset }) {
 
       <Card className="hover:shadow-lg transition-shadow duration-300">
         <CardHeader>
-          <CardTitle>Customer Segmentation</CardTitle>
-          <CardDescription>Detailed customer analytics</CardDescription>
+          <CardTitle>Segmentation client</CardTitle>
+          <CardDescription>Analyse détaillée des clients</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Returning Customers</span>
+              <span className="text-sm font-medium">Clients fidèles</span>
               <span className="text-sm text-muted-foreground">68%</span>
             </div>
             <Progress value={68} className="h-2" />
           </div>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">New Customers</span>
+              <span className="text-sm font-medium">Nouveaux clients</span>
               <span className="text-sm text-muted-foreground">32%</span>
             </div>
             <Progress value={32} className="h-2" />
           </div>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">VIP Customers</span>
+              <span className="text-sm font-medium">Clients VIP</span>
               <span className="text-sm text-muted-foreground">15%</span>
             </div>
             <Progress value={15} className="h-2" />
           </div>
           <div className="pt-4 space-y-2">
             <div className="flex items-center justify-between text-sm">
-              <span>Total Unique Customers</span>
+              <span>Total de clients uniques</span>
               <Badge variant="secondary">1,247</Badge>
             </div>
             <div className="flex items-center justify-between text-sm">
-              <span>Customer Retention Rate</span>
+              <span>Taux de fidélisation</span>
               <Badge variant="default">68%</Badge>
             </div>
             <div className="flex items-center justify-between text-sm">
-              <span>Average Visit Frequency</span>
+              <span>Fréquence de visite moyenne</span>
               <Badge variant="outline">2.3x/month</Badge>
             </div>
           </div>

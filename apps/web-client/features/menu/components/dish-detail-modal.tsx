@@ -83,7 +83,7 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
             </Button>
 
             {dish.popular && (
-              <Badge className="absolute top-4 left-4 bg-primary text-primary-foreground animate-bounce">Popular</Badge>
+              <Badge className="absolute top-4 left-4 bg-primary text-primary-foreground animate-bounce">Populaire</Badge>
             )}
 
             {arModel && (
@@ -119,7 +119,7 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
                 </p>
               </div>
               <span className="text-2xl font-bold text-primary ml-4 animate-in slide-in-from-right-4 duration-500 hover:scale-110 transition-transform">
-                ${dish.price.toFixed(2)}
+                {dish.price.toFixed(2)} DZD
               </span>
             </div>
 
@@ -162,7 +162,7 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
 
             <Card className="mb-4 hover:shadow-md transition-shadow duration-200 animate-in slide-in-from-bottom-4 duration-500 delay-200">
               <CardContent className="p-4">
-                <h3 className="font-semibold mb-2">Ingredients</h3>
+                <h3 className="font-semibold mb-2">Ingrédients</h3>
                 <p className="text-sm text-muted-foreground">{dish.ingredients.join(', ')}</p>
               </CardContent>
             </Card>
@@ -172,17 +172,17 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <AlertTriangle className="w-4 h-4 text-amber-600 animate-pulse" />
-                    <h3 className="font-semibold text-amber-800">Allergen Information</h3>
+                    <h3 className="font-semibold text-amber-800">Informations allergènes</h3>
                   </div>
-                  <p className="text-sm text-amber-700">Contains: {dish.allergens.join(', ')}</p>
+                  <p className="text-sm text-amber-700">Contient : {dish.allergens.join(', ')}</p>
                 </CardContent>
               </Card>
             )}
 
             <div className="mb-6 animate-in slide-in-from-bottom-4 duration-500 delay-400">
-              <label className="block text-sm font-medium mb-2">Special Instructions (Optional)</label>
+              <label className="block text-sm font-medium mb-2">Instructions spéciales (optionnel)</label>
               <Textarea
-                placeholder="Any dietary restrictions, cooking preferences, or special requests..."
+                placeholder="Régimes alimentaires, préférences de cuisson..."
                 value={specialInstructions}
                 onChange={(e) => setSpecialInstructions(e.target.value)}
                 className="resize-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 hover:shadow-sm"
@@ -195,7 +195,7 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
         <div className="border-t border-border p-6 bg-background animate-in slide-in-from-bottom-4 duration-500 delay-500">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <span className="font-medium">Quantity:</span>
+              <span className="font-medium">Quantité :</span>
               <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
@@ -219,7 +219,7 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
             <div className="text-right">
               <p className="text-sm text-muted-foreground">Total</p>
               <p className="text-xl font-bold text-primary hover:scale-110 transition-transform duration-200">
-                ${(dish.price * quantity).toFixed(2)}
+                {(dish.price * quantity).toFixed(2)} DZD
               </p>
             </div>
           </div>
@@ -230,7 +230,7 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
             onClick={addToCart}
           >
             <Plus className="w-4 h-4 mr-2" />
-            Add to Order
+            Ajouter à la commande
           </Button>
         </div>
       </div>

@@ -6,7 +6,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/sha
 import { Badge } from "@/shared/ui/badge"
 import { Mic, MicOff, Volume2, HelpCircle, Loader2 } from "lucide-react"
 import { useVoiceCommands, useVoiceRecording, useTranscribe } from "@/features/voice"
-import { useI18n } from "./i18n-provider"
 
 interface VoiceControlPanelProps {
   onOrderAction?: (orderId: string, action: string) => void
@@ -16,59 +15,58 @@ interface VoiceControlPanelProps {
 export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPanelProps) {
   const [showCommands, setShowCommands] = useState(false)
   const [backendTranscript, setBackendTranscript] = useState<string>("")
-  const { t } = useI18n()
 
   const voiceCommands = [
     {
-      command: "start order",
+      command: "commencer commande",
       action: () => onOrderAction?.("current", "start"),
-      description: "Start the current order",
+      description: "Commencer la commande en cours",
     },
     {
-      command: "mark ready",
+      command: "marquer prêt",
       action: () => onOrderAction?.("current", "ready"),
-      description: "Mark current order as ready",
+      description: "Marquer la commande comme prête",
     },
     {
-      command: "go to dashboard",
+      command: "aller au tableau de bord",
       action: () => onNavigate?.("/"),
-      description: "Navigate to dashboard",
+      description: "Naviguer vers le tableau de bord",
     },
     {
-      command: "go to stock",
+      command: "aller au stock",
       action: () => onNavigate?.("/stock"),
-      description: "Navigate to stock page",
+      description: "Naviguer vers la page de stock",
     },
     {
-      command: "go to analytics",
+      command: "aller aux analyses",
       action: () => onNavigate?.("/analytics"),
-      description: "Navigate to analytics page",
+      description: "Naviguer vers la page d'analyses",
     },
     {
-      command: "sort by time",
+      command: "trier par temps",
       action: () => {
         const sortButton = document.querySelector('[data-sort="time"]') as HTMLButtonElement
         sortButton?.click()
       },
-      description: "Sort orders by time",
+      description: "Trier les commandes par temps",
     },
     {
-      command: "sort by complexity",
+      command: "trier par complexité",
       action: () => {
         const sortButton = document.querySelector('[data-sort="complexity"]') as HTMLButtonElement
         sortButton?.click()
       },
-      description: "Sort orders by complexity",
+      description: "Trier les commandes par complexité",
     },
     {
-      command: "show help",
+      command: "afficher aide",
       action: () => setShowCommands(true),
-      description: "Show voice commands help",
+      description: "Afficher l'aide des commandes vocales",
     },
     {
-      command: "hide help",
+      command: "cacher aide",
       action: () => setShowCommands(false),
-      description: "Hide voice commands help",
+      description: "Cacher l'aide des commandes vocales",
     },
   ]
 
@@ -94,7 +92,7 @@ export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPan
     )
     if (matched) {
       matched.action()
-      speak(`Command executed: ${matched.description}`)
+            speak(`Commande exécutée : ${matched.description}`)
     }
     return matched?.command ?? null
   }
@@ -108,7 +106,7 @@ export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPan
           setBackendTranscript(result.text)
           matchCommand(result.text)
         } catch {
-          setBackendTranscript("Transcription failed — check backend connection")
+          setBackendTranscript("Échec de la transcription — vérifiez la connexion au serveur")
         }
       }
     } else {
@@ -122,7 +120,7 @@ export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPan
         <CardContent className="p-4">
           <div className="flex items-center gap-2 text-muted-foreground">
             <MicOff className="w-4 h-4" />
-            <span className="text-sm">Voice commands not supported in this browser</span>
+            <span className="text-sm">Commandes vocales non prises en charge dans ce navigateur</span>
           </div>
         </CardContent>
       </Card>
@@ -143,7 +141,7 @@ export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPan
                   className={isListening ? "bg-red-600 hover:bg-red-700" : "bg-orange-500 hover:bg-orange-600"}
                 >
                   {isListening ? <MicOff className="w-4 h-4 mr-2" /> : <Mic className="w-4 h-4 mr-2" />}
-                  {isListening ? "Stop Listening" : "Voice Control"}
+                  {isListening ? "Arrêter l'écoute" : "Contrôle vocal"}
                 </Button>
               )}
 
@@ -161,21 +159,21 @@ export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPan
                   ) : (
                     <Mic className="w-4 h-4 mr-2" />
                   )}
-                  {isTranscribing ? "Transcribing..." : isRecording ? "Stop & Transcribe" : "Record"}
+                  {isTranscribing ? "Transcription..." : isRecording ? "Arrêter & Transcrire" : "Enregistrer"}
                 </Button>
               )}
 
               {isListening && (
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-destructive rounded-full" />
-                  <span className="text-sm text-muted-foreground">Listening...</span>
+                  <span className="text-sm text-muted-foreground">Écoute...</span>
                 </div>
               )}
 
               {isRecording && (
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
-                  <span className="text-sm text-muted-foreground">Recording...</span>
+                  <span className="text-sm text-muted-foreground">Enregistrement...</span>
                 </div>
               )}
             </div>
@@ -184,7 +182,7 @@ export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPan
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => speak("Voice control is ready. Say a command to get started.")}
+                onClick={() => speak("Le contrôle vocal est prêt. Dites une commande pour commencer.")}
                 className="text-muted-foreground hover:text-foreground hover:bg-muted"
               >
                 <Volume2 className="w-4 h-4" />
@@ -203,7 +201,7 @@ export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPan
 
           {lastCommand && (
             <div className="p-2 bg-muted rounded text-sm">
-              <span className="text-muted-foreground">Web Speech: </span>
+              <span className="text-muted-foreground">Reconnaissance vocale : </span>
               <span className="text-orange-500">&quot;{lastCommand}&quot;</span>
 
             </div>
@@ -211,7 +209,7 @@ export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPan
 
           {backendTranscript && (
             <div className="p-2 bg-muted rounded text-sm">
-              <span className="text-muted-foreground">Backend transcript: </span>
+              <span className="text-muted-foreground">Transcription serveur : </span>
               <span className="text-blue-500">&quot;{backendTranscript}&quot;</span>
             </div>
           )}
@@ -227,8 +225,8 @@ export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPan
       {showCommands && (
         <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle className="text-primary text-lg">Voice Commands</CardTitle>
-            <CardDescription>Available voice commands for hands-free operation</CardDescription>
+            <CardTitle className="text-primary text-lg">Commandes Vocales</CardTitle>
+            <CardDescription>Commandes vocales disponibles pour une utilisation mains-libres</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -245,13 +243,13 @@ export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPan
             </div>
 
             <div className="mt-4 p-3 bg-primary/10 border border-primary/20 rounded">
-              <h4 className="text-primary font-medium mb-2">Tips for better recognition:</h4>
+              <h4 className="text-primary font-medium mb-2">Conseils pour une meilleure reconnaissance :</h4>
               <ul className="text-sm text-muted-foreground space-y-1">
-                <li>• Speak clearly and at normal pace</li>
-                <li>• Use exact command phrases</li>
-                <li>• Ensure microphone permissions are granted</li>
-                <li>• Minimize background noise</li>
-                <li>• Use &quot;Record&quot; for higher accuracy via backend transcription</li>
+                <li>• Parlez clairement et à un rythme normal</li>
+                <li>• Utilisez les phrases de commande exactes</li>
+                <li>• Assurez-vous que les autorisations du microphone sont accordées</li>
+                <li>• Minimisez le bruit de fond</li>
+                <li>• Utilisez &quot;Enregistrer&quot; pour une meilleure précision via la transcription serveur</li>
               </ul>
             </div>
           </CardContent>

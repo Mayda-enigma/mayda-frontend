@@ -42,11 +42,11 @@ export function ListView({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Customer</TableHead>
-            <TableHead>Phone</TableHead>
-            <TableHead>Time</TableHead>
+            <TableHead>Client</TableHead>
+            <TableHead>Téléphone</TableHead>
+            <TableHead>Heure</TableHead>
             <TableHead>Table</TableHead>
-            <TableHead>Status</TableHead>
+            <TableHead>Statut</TableHead>
             {onStatusChange ? (
               <TableHead className="text-right">Actions</TableHead>
             ) : null}
@@ -80,7 +80,7 @@ export function ListView({
                         disabled={isUpdating}
                         onClick={() => onStatusChange(reservation, "confirmed")}
                       >
-                        Confirm
+                        Confirmer
                       </Button>
                       <Button
                         variant="outline"
@@ -88,7 +88,7 @@ export function ListView({
                         disabled={isUpdating}
                         onClick={() => onStatusChange(reservation, "cancelled")}
                       >
-                        Cancel
+                        Annuler
                       </Button>
                       <Button
                         variant="outline"
@@ -96,7 +96,7 @@ export function ListView({
                         disabled={isUpdating}
                         onClick={() => onStatusChange(reservation, "no-show")}
                       >
-                        No-show
+                        Absent
                       </Button>
                     </div>
                   </TableCell>

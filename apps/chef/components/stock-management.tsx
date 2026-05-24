@@ -78,7 +78,7 @@ export function StockManagement() {
       <div className="flex items-center justify-center py-20">
         <div className="text-center">
           <Loader2 className="w-12 h-12 mx-auto text-primary mb-4 animate-spin" />
-          <p className="text-muted-foreground">Loading inventory...</p>
+          <p className="text-muted-foreground">Chargement de l'inventaire...</p>
         </div>
       </div>
     )
@@ -88,10 +88,10 @@ export function StockManagement() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-primary">Stock Management</h2>
+        <h2 className="text-2xl font-bold text-primary">Gestion des stocks</h2>
         <Button className="bg-primary hover:bg-primary/90">
           <ShoppingCart className="w-4 h-4 mr-2" />
-          Bulk Reorder
+          Réapprovisionnement
         </Button>
       </div>
 
@@ -100,7 +100,7 @@ export function StockManagement() {
         <div className="space-y-3">
           <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
             <AlertTriangle className="w-5 h-5 text-primary" />
-            Low Stock Alerts ({alerts.length})
+            Alertes de stock faible ({alerts.length})
           </h3>
           <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
             {alerts.map((alert) => (
@@ -118,7 +118,7 @@ export function StockManagement() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                 <Input
-                  placeholder="Search ingredients..."
+                  placeholder="Rechercher des ingrédients..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10 bg-background border-border text-foreground"
@@ -130,24 +130,24 @@ export function StockManagement() {
               onChange={(e) => setFilterCategory(e.target.value)}
               className="px-3 py-2 bg-background border border-border rounded-md text-foreground"
             >
-              <option value="all">All Categories</option>
-              <option value="protein">Protein</option>
-              <option value="vegetable">Vegetables</option>
-              <option value="dairy">Dairy</option>
-              <option value="grain">Grains</option>
-              <option value="spice">Spices</option>
-              <option value="other">Other</option>
+              <option value="all">Toutes les catégories</option>
+              <option value="protein">Protéines</option>
+              <option value="vegetable">Légumes</option>
+              <option value="dairy">Produits laitiers</option>
+              <option value="grain">Céréales</option>
+              <option value="spice">Épices</option>
+              <option value="other">Autre</option>
             </select>
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
               className="px-3 py-2 bg-background border border-border rounded-md text-foreground"
             >
-              <option value="all">All Status</option>
-              <option value="critical">Critical</option>
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="good">Good</option>
+              <option value="all">Tous les statuts</option>
+              <option value="critical">Critique</option>
+              <option value="low">Faible</option>
+              <option value="medium">Moyen</option>
+              <option value="good">Bon</option>
             </select>
           </div>
         </CardContent>
@@ -163,7 +163,7 @@ export function StockManagement() {
                   <div className="w-3 h-3 rounded-full bg-success/30" />
                   <div>
                     <div className="text-2xl font-bold tabular-nums text-foreground">{stats.totalItems}</div>
-                    <div className="text-sm text-muted-foreground">Total Items</div>
+                    <div className="text-sm text-muted-foreground">Total des articles</div>
                   </div>
                 </div>
               </CardContent>
@@ -174,7 +174,7 @@ export function StockManagement() {
                   <div className="w-3 h-3 rounded-full bg-accent-blue/30" />
                   <div>
                     <div className="text-2xl font-bold tabular-nums text-foreground">{stats.activeItems}</div>
-                    <div className="text-sm text-muted-foreground">Active Items</div>
+                    <div className="text-sm text-muted-foreground">Articles actifs</div>
                   </div>
                 </div>
               </CardContent>
@@ -185,7 +185,7 @@ export function StockManagement() {
                   <div className="w-3 h-3 rounded-full bg-destructive/30" />
                   <div>
                     <div className="text-2xl font-bold tabular-nums text-foreground">{stats.lowStockItems}</div>
-                    <div className="text-sm text-muted-foreground">Low Stock</div>
+                    <div className="text-sm text-muted-foreground">Stock faible</div>
                   </div>
                 </div>
               </CardContent>
@@ -196,7 +196,7 @@ export function StockManagement() {
                   <div className="w-3 h-3 rounded-full bg-warning/30" />
                   <div>
                     <div className="text-2xl font-bold tabular-nums text-foreground">{stats.expiringSoonItems}</div>
-                    <div className="text-sm text-muted-foreground">Expiring Soon</div>
+                    <div className="text-sm text-muted-foreground">Expire bientôt</div>
                   </div>
                 </div>
               </CardContent>
@@ -212,7 +212,7 @@ export function StockManagement() {
                     <div className={`w-3 h-3 rounded-full ${getStatusColor(status).split(" ")[1]}`} />
                     <div>
                       <div className="text-2xl font-bold text-foreground">{count}</div>
-                      <div className="text-sm text-muted-foreground capitalize">{status} Stock</div>
+                      <div className="text-sm text-muted-foreground capitalize">{status === "critical" ? "Critique" : status === "low" ? "Faible" : status === "medium" ? "Moyen" : "Bon"} Stock</div>
                     </div>
                   </div>
                 </CardContent>
@@ -265,7 +265,7 @@ export function StockManagement() {
                   </Badge>
                   {expiringSoon && (
                     <Badge variant="destructive" className="text-xs">
-                      Expires Soon
+                      Expire bientôt
                     </Badge>
                   )}
                 </div>
@@ -275,7 +275,7 @@ export function StockManagement() {
                 {/* Stock Level */}
                 <div>
                   <div className="flex justify-between text-sm mb-2">
-                    <span className="text-muted-foreground">Stock Level</span>
+                    <span className="text-muted-foreground">Niveau de stock</span>
                     <span className="tabular-nums text-foreground">
                       {item.currentStock} / {item.minimumStock} {item.unit}
                     </span>
@@ -286,22 +286,22 @@ export function StockManagement() {
                 {/* Key Metrics */}
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <div className="text-muted-foreground">Unit Price</div>
-                    <div className="tabular-nums text-foreground font-medium">${item.unitPrice.toFixed(2)}</div>
+                    <div className="text-muted-foreground">Prix unitaire</div>
+                    <div className="tabular-nums text-foreground font-medium">{item.unitPrice.toFixed(2)} DZD</div>
                   </div>
                   <div>
-                    <div className="text-muted-foreground">Total Value</div>
-                    <div className="tabular-nums text-foreground font-medium">${item.totalValue.toFixed(2)}</div>
+                    <div className="text-muted-foreground">Valeur totale</div>
+                    <div className="tabular-nums text-foreground font-medium">{item.totalValue.toFixed(2)} DZD</div>
                   </div>
                   {item.location && (
                     <div>
-                      <div className="text-muted-foreground">Location</div>
+                      <div className="text-muted-foreground">Emplacement</div>
                       <div className="text-foreground font-medium">{item.location}</div>
                     </div>
                   )}
                   {item.supplier && (
                     <div>
-                      <div className="text-muted-foreground">Supplier</div>
+                      <div className="text-muted-foreground">Fournisseur</div>
                       <div className="text-foreground font-medium">{item.supplier}</div>
                     </div>
                   )}
@@ -310,7 +310,7 @@ export function StockManagement() {
                 {/* Expiry */}
                 {item.expiryDate && (
                   <div className={`text-xs tabular-nums ${expiringSoon ? "text-destructive" : "text-muted-foreground"}`}>
-                    Expires: {item.expiryDate.toLocaleDateString()}
+                    Expire le : {item.expiryDate.toLocaleDateString()}
                   </div>
                 )}
 
@@ -321,7 +321,7 @@ export function StockManagement() {
                     className="flex-1 bg-primary hover:bg-primary/90"
                   >
                     <ShoppingCart className="w-4 h-4 mr-2" />
-                    Reorder
+                    Réapprovisionner
                   </Button>
                   {status === "critical" && (
                     <Button size="sm" variant="destructive" className="flex-1">
@@ -340,8 +340,8 @@ export function StockManagement() {
       {filteredItems.length === 0 && !isLoading && (
         <div className="text-center py-12">
           <Package className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
-          <h3 className="text-xl font-semibold text-muted-foreground mb-2">No Items Found</h3>
-          <p className="text-muted-foreground">Try adjusting your search or filters</p>
+          <h3 className="text-xl font-semibold text-muted-foreground mb-2">Aucun article trouvé</h3>
+          <p className="text-muted-foreground">Essayez d'ajuster votre recherche ou vos filtres</p>
         </div>
       )}
     </div>

@@ -35,7 +35,7 @@ import type { StockItem } from "../types"
 
 const today = new Date().toISOString().slice(0, 10)
 
-const metricFormatter = new Intl.NumberFormat("en-US", {
+const metricFormatter = new Intl.NumberFormat("fr-DZ", {
   maximumFractionDigits: 2,
 })
 
@@ -230,14 +230,14 @@ export function StockManagement() {
     <div className="space-y-6 animate-in fade-in-50 duration-500">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-1">
-          <h1 className="text-3xl font-semibold text-balance">Stock Management</h1>
+          <h1 className="text-3xl font-semibold text-balance">Gestion des stocks</h1>
           <p className="text-base text-muted-foreground">
-            Track current inventory, tune thresholds, and review AI forecast signals.
+            Suivez l'inventaire actuel, ajustez les seuils et consultez les prévisions IA.
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Label htmlFor="forecast-date" className="text-sm text-muted-foreground">
-            Forecast date
+            Date de prévision
           </Label>
           <Input
             id="forecast-date"
@@ -251,27 +251,27 @@ export function StockManagement() {
 
       {isUserLoading || stockQuery.isLoading ? (
         <Alert>
-          <AlertTitle>Loading stock</AlertTitle>
+          <AlertTitle>Chargement des stocks</AlertTitle>
           <AlertDescription>
-            Fetching inventory items for this restaurant.
+            Récupération des articles d'inventaire pour ce restaurant.
           </AlertDescription>
         </Alert>
       ) : null}
       {!isUserLoading && restaurantId === null ? (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Restaurant context missing</AlertTitle>
+          <AlertTitle>Contexte du restaurant manquant</AlertTitle>
           <AlertDescription>
-            This manager account is not linked to a restaurant, so stock actions are unavailable.
+            Ce compte gestionnaire n'est lié à aucun restaurant, les actions sur les stocks sont donc indisponibles.
           </AlertDescription>
         </Alert>
       ) : null}
       {stockQuery.isError ? (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Could not load stock</AlertTitle>
+          <AlertTitle>Impossible de charger les stocks</AlertTitle>
           <AlertDescription>
-            The inventory API request failed. Refresh the page and try again.
+            La requête API d'inventaire a échoué. Actualisez la page et réessayez.
           </AlertDescription>
         </Alert>
       ) : null}
@@ -284,7 +284,7 @@ export function StockManagement() {
                 <TriangleAlert className="size-5" />
               </span>
               <div>
-                <p className="text-xs font-medium text-muted-foreground">Critical</p>
+                <p className="text-xs font-medium text-muted-foreground">Critique</p>
                 <p className="text-2xl font-semibold tabular-nums">{criticalCount}</p>
               </div>
             </div>
@@ -297,7 +297,7 @@ export function StockManagement() {
                 <TrendingDown className="size-5" />
               </span>
               <div>
-                <p className="text-xs font-medium text-muted-foreground">Low Stock</p>
+                <p className="text-xs font-medium text-muted-foreground">Stock faible</p>
                 <p className="text-2xl font-semibold tabular-nums">{lowCount}</p>
               </div>
             </div>
@@ -310,7 +310,7 @@ export function StockManagement() {
                 <Package className="size-5" />
               </span>
               <div>
-                <p className="text-xs font-medium text-muted-foreground">Active Items</p>
+                <p className="text-xs font-medium text-muted-foreground">Articles actifs</p>
                 <p className="text-2xl font-semibold tabular-nums">{stockItems.length}</p>
               </div>
             </div>
@@ -323,7 +323,7 @@ export function StockManagement() {
                 <ShoppingCart className="size-5" />
               </span>
               <div>
-                <p className="text-xs font-medium text-muted-foreground">Inventory Value</p>
+                <p className="text-xs font-medium text-muted-foreground">Valeur de l'inventaire</p>
                 <p className="text-2xl font-semibold tabular-nums">
                   {metricFormatter.format(totalValue)}
                 </p>
@@ -338,9 +338,9 @@ export function StockManagement() {
           <CardHeader className="gap-4">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
               <div className="space-y-1">
-                <CardTitle>Current Inventory</CardTitle>
+                <CardTitle>Inventaire actuel</CardTitle>
                 <p className="text-sm text-muted-foreground">
-                  Use the threshold column for bulk edits, then save all pending changes together.
+                  Utilisez la colonne des seuils pour les modifications groupées, puis enregistrez toutes les modifications en attente ensemble.
                 </p>
               </div>
               <Button
@@ -351,22 +351,22 @@ export function StockManagement() {
               >
                 <Save className="h-4 w-4" />
                 {updateThreshold.isPending
-                  ? "Saving thresholds..."
-                  : `Save ${changedThresholds.length} change${changedThresholds.length === 1 ? "" : "s"}`}
+                    ? "Enregistrement des seuils..."
+                    : `Enregistrer ${changedThresholds.length} modification${changedThresholds.length === 1 ? "" : "s"}`}
               </Button>
             </div>
             <div className="grid gap-3 md:grid-cols-3">
               <Input
-                placeholder="Search stock items"
+                placeholder="Rechercher des articles"
                 value={searchTerm}
                 onChange={(event) => setSearchTerm(event.target.value)}
               />
               <Select value={categoryFilter} onValueChange={setCategoryFilter}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Category" />
+                  <SelectValue placeholder="Catégorie" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All categories</SelectItem>
+                  <SelectItem value="all">Toutes les catégories</SelectItem>
                   {categories.map((category) => (
                     <SelectItem key={category} value={category}>
                       {category}
@@ -376,13 +376,13 @@ export function StockManagement() {
               </Select>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Status" />
+                  <SelectValue placeholder="Statut" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All statuses</SelectItem>
-                  <SelectItem value="critical">Critical</SelectItem>
-                  <SelectItem value="low">Low</SelectItem>
-                  <SelectItem value="good">Good</SelectItem>
+                  <SelectItem value="all">Tous les statuts</SelectItem>
+                  <SelectItem value="critical">Critique</SelectItem>
+                  <SelectItem value="low">Faible</SelectItem>
+                  <SelectItem value="good">Bon</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -390,7 +390,7 @@ export function StockManagement() {
           <CardContent>
             <StockTable
               items={filteredItems}
-              emptyMessage="No stock items match the current filters."
+              emptyMessage="Aucun article ne correspond aux filtres actuels."
               thresholdDrafts={thresholdDrafts}
               onThresholdChange={handleThresholdDraftChange}
               onSelectItem={handleSelectItem}
@@ -405,7 +405,7 @@ export function StockManagement() {
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Selected Item</CardTitle>
+              <CardTitle>Article sélectionné</CardTitle>
             </CardHeader>
             <CardContent>
               {selectedItem ? (
@@ -418,19 +418,19 @@ export function StockManagement() {
                   </div>
                   <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
                     <div className="rounded-xl border bg-secondary/30 p-4">
-                      <p className="text-xs font-medium text-muted-foreground">Current stock</p>
+                      <p className="text-xs font-medium text-muted-foreground">Stock actuel</p>
                       <p className="text-xl font-semibold tabular-nums">
                         {metricFormatter.format(selectedItem.currentStock)} {selectedItem.unit}
                       </p>
                     </div>
                     <div className="rounded-xl border bg-secondary/30 p-4">
-                      <p className="text-xs font-medium text-muted-foreground">Minimum threshold</p>
+                      <p className="text-xs font-medium text-muted-foreground">Seuil minimum</p>
                       <p className="text-xl font-semibold tabular-nums">
                         {metricFormatter.format(selectedItem.minimumStock)} {selectedItem.unit}
                       </p>
                     </div>
                     <div className="rounded-xl border bg-secondary/30 p-4">
-                      <p className="text-xs font-medium text-muted-foreground">Current gap</p>
+                      <p className="text-xs font-medium text-muted-foreground">Écart actuel</p>
                       <p className="text-xl font-semibold tabular-nums">
                         {metricFormatter.format(selectedItem.shortage)} {selectedItem.unit}
                       </p>
@@ -439,7 +439,7 @@ export function StockManagement() {
                 </div>
               ) : (
                 <p className="text-sm text-muted-foreground">
-                  Select an inventory row to inspect forecast and restock details.
+                  Sélectionnez une ligne d'inventaire pour voir les prévisions et les détails de réapprovisionnement.
                 </p>
               )}
             </CardContent>
@@ -450,13 +450,13 @@ export function StockManagement() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <BrainCircuit className="h-4 w-4 text-primary" />
-                  AI Forecast
+                  Prévision IA
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 {forecastQuery.isLoading ? (
                   <p className="text-sm text-muted-foreground">
-                    Fetching AI guidance for {selectedItem.name}.
+                    Récupération des conseils IA pour {selectedItem.name}.
                   </p>
                 ) : forecastQuery.data ? (
                   <div className="space-y-4">
@@ -465,18 +465,18 @@ export function StockManagement() {
                     </p>
                     <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
                       <div className="rounded-xl border bg-secondary/30 p-4">
-                        <p className="text-xs font-medium text-muted-foreground">Predicted demand</p>
+                        <p className="text-xs font-medium text-muted-foreground">Demande prévue</p>
                         <p className="text-lg font-semibold tabular-nums">
                           {forecastQuery.data.predictedDemand === null
-                            ? "Unavailable"
+                            ? "Indisponible"
                             : `${metricFormatter.format(forecastQuery.data.predictedDemand)} ${selectedItem.unit}`}
                         </p>
                       </div>
                       <div className="rounded-xl border bg-secondary/30 p-4">
-                        <p className="text-xs font-medium text-muted-foreground">Suggested order</p>
+                        <p className="text-xs font-medium text-muted-foreground">Commande suggérée</p>
                         <p className="text-lg font-semibold tabular-nums">
                           {forecastQuery.data.recommendedOrderQuantity === null
-                            ? "Unavailable"
+                            ? "Indisponible"
                             : `${metricFormatter.format(forecastQuery.data.recommendedOrderQuantity)} ${selectedItem.unit}`}
                         </p>
                       </div>
@@ -500,7 +500,7 @@ export function StockManagement() {
                   </div>
                 ) : (
                   <p className="text-sm text-muted-foreground">
-                    No forecast returned for this item.
+                    Aucune prévision retournée pour cet article.
                   </p>
                 )}
               </CardContent>
@@ -508,11 +508,11 @@ export function StockManagement() {
           ) : selectedItem ? (
             <Card>
               <CardHeader>
-                <CardTitle>AI Forecast</CardTitle>
+                <CardTitle>Prévision IA</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  AI forecast is unavailable right now. Stock operations still work normally.
+                  La prévision IA est actuellement indisponible. Les opérations de stock fonctionnent normalement.
                 </p>
               </CardContent>
             </Card>
@@ -520,13 +520,13 @@ export function StockManagement() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Restock Update</CardTitle>
+              <CardTitle>Mise à jour du réapprovisionnement</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {selectedItem ? (
                 <>
                   <div className="space-y-2">
-                    <Label htmlFor="restock-quantity">Quantity to add</Label>
+                    <Label htmlFor="restock-quantity">Quantité à ajouter</Label>
                     <Input
                       id="restock-quantity"
                       type="number"
@@ -538,7 +538,7 @@ export function StockManagement() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="restock-reason">Reason</Label>
+                    <Label htmlFor="restock-reason">Motif</Label>
                     <Input
                       id="restock-reason"
                       value={restockReason}
@@ -551,7 +551,7 @@ export function StockManagement() {
                       id="restock-notes"
                       value={restockNotes}
                       onChange={(event) => setRestockNotes(event.target.value)}
-                      placeholder="Optional receiving notes"
+                      placeholder="Notes de réception optionnelles"
                       rows={4}
                     />
                   </div>
@@ -561,12 +561,12 @@ export function StockManagement() {
                     className="w-full"
                   >
                     <ShoppingCart className="h-4 w-4" />
-                    {createRestockOrder.isPending ? "Saving restock..." : "Record restock"}
+                    {createRestockOrder.isPending ? "Enregistrement du réapprovisionnement..." : "Enregistrer le réapprovisionnement"}
                   </Button>
                 </>
               ) : (
                 <p className="text-sm text-muted-foreground">
-                  Select an item first to add stock and log the replenishment reason.
+                  Sélectionnez d'abord un article pour ajouter du stock et enregistrer le motif de réapprovisionnement.
                 </p>
               )}
             </CardContent>

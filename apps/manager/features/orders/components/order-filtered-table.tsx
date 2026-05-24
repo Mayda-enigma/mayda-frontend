@@ -40,7 +40,7 @@ export function OrderFilteredTable({
         <CardContent className="p-0">
           {isUserLoading || ordersQuery.isLoading ? (
             <div className="p-6">
-              <p className="text-sm text-muted-foreground">Loading orders...</p>
+              <p className="text-sm text-muted-foreground">Chargement des commandes...</p>
             </div>
           ) : null}
           {!isUserLoading && restaurantId === null ? (
@@ -66,7 +66,7 @@ export function OrderFilteredTable({
               <OrderListTable orders={filteredOrders} />
             ) : (
               <p className="p-6 text-sm text-muted-foreground">
-                No orders match this status.
+                Aucune commande ne correspond à ce statut.
               </p>
             )
           ) : null}

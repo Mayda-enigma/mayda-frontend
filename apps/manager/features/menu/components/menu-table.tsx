@@ -29,12 +29,12 @@ export function MenuTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Item</TableHead>
-            <TableHead>Category</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>Prep Time</TableHead>
-            <TableHead>Popularity</TableHead>
-            <TableHead>Status</TableHead>
+            <TableHead>Article</TableHead>
+            <TableHead>Catégorie</TableHead>
+            <TableHead>Prix</TableHead>
+            <TableHead>Temps de prép.</TableHead>
+            <TableHead>Popularité</TableHead>
+            <TableHead>Statut</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -56,7 +56,7 @@ export function MenuTable({
                 <TableCell>
                   <Badge variant="outline">{item.category}</Badge>
                 </TableCell>
-                <TableCell>${item.price.toFixed(2)}</TableCell>
+                <TableCell>{item.price.toFixed(2)} DZD</TableCell>
                 <TableCell>
                   <div className="flex items-center gap-1 text-muted-foreground">
                     <Clock className="h-3 w-3" />
@@ -66,7 +66,7 @@ export function MenuTable({
                 <TableCell>{item.popularity}%</TableCell>
                 <TableCell>
                   <Badge variant={item.isAvailable ? "success" : "secondary"}>
-                    {item.isAvailable ? "Available" : "Unavailable"}
+                    {item.isAvailable ? "Disponible" : "Indisponible"}
                   </Badge>
                 </TableCell>
                 <TableCell>
@@ -77,7 +77,7 @@ export function MenuTable({
                       onClick={() => onEdit(item)}
                     >
                       <Edit className="h-3 w-3" />
-                      Edit
+                      Modifier
                     </Button>
                     <Button
                       variant="outline"
@@ -91,10 +91,10 @@ export function MenuTable({
                         <Eye className="h-3 w-3" />
                       )}
                       {isToggling
-                        ? "Saving..."
+                        ? "Enregistrement..."
                         : item.isAvailable
-                          ? "Disable"
-                          : "Enable"}
+                          ? "Désactiver"
+                          : "Activer"}
                     </Button>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
@@ -105,24 +105,24 @@ export function MenuTable({
                           disabled={isDeleting}
                         >
                           <Trash2 className="h-3 w-3" />
-                          Delete
+                          Supprimer
                         </Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
-                          <AlertDialogTitle>Delete Menu Item</AlertDialogTitle>
+                          <AlertDialogTitle>Supprimer l'article</AlertDialogTitle>
                           <AlertDialogDescription>
-                            Remove {item.name} from the menu. This action cannot be
-                            undone.
+                            Retirer {item.name} du menu. Cette action est
+                            irréversible.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogCancel>Annuler</AlertDialogCancel>
                           <AlertDialogAction
                             onClick={() => onDelete(item)}
                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                           >
-                            {isDeleting ? "Deleting..." : "Delete"}
+                            {isDeleting ? "Suppression..." : "Supprimer"}
                           </AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>

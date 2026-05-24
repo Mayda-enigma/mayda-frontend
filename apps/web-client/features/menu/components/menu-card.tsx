@@ -41,7 +41,7 @@ export function MenuCard({ item, index = 0, onViewDetails, onAddToCart }: MenuCa
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         {item.popular && (
-          <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground animate-bounce">Popular</Badge>
+          <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground animate-bounce">Populaire</Badge>
         )}
         {hasArModel && (
           <Badge className="absolute bottom-2 left-2 bg-background/90 text-foreground shadow-sm">
@@ -71,7 +71,7 @@ export function MenuCard({ item, index = 0, onViewDetails, onAddToCart }: MenuCa
             {item.name}
           </h3>
           <span className="text-sm sm:text-lg font-bold text-primary ml-2 group-hover:scale-110 transition-transform duration-200">
-            ${item.price.toFixed(2)}
+            {item.price.toFixed(2)} DZD
           </span>
         </div>
 
@@ -96,7 +96,7 @@ export function MenuCard({ item, index = 0, onViewDetails, onAddToCart }: MenuCa
             size="sm"
             onClick={onViewDetails}
           >
-            View Details
+            Voir détails
           </Button>
           <Button
             variant="outline"

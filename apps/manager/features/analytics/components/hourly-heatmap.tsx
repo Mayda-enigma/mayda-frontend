@@ -23,8 +23,8 @@ export function HourlyHeatmap({ range }: { range: RangePreset }) {
   return (
     <Card className="hover:shadow-lg transition-shadow duration-300">
       <CardHeader>
-        <CardTitle>Hourly Order Distribution</CardTitle>
-        <CardDescription>Busiest hours throughout the day with revenue correlation</CardDescription>
+        <CardTitle>Répartition horaire</CardTitle>
+        <CardDescription>Heures d'affluence avec corrélation des revenus</CardDescription>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={350}>
@@ -50,7 +50,7 @@ export function HourlyHeatmap({ range }: { range: RangePreset }) {
               stroke="hsl(var(--muted-foreground))"
               fontSize={12}
               domain={[0, "dataMax + 100"]}
-              tickFormatter={(value) => `$${value}`}
+              tickFormatter={(value) => `${value} DZD`}
             />
             <Tooltip
               contentStyle={{
@@ -59,21 +59,21 @@ export function HourlyHeatmap({ range }: { range: RangePreset }) {
                 borderRadius: "8px",
               }}
               formatter={(value, name) => {
-                if (name === "Revenue ($)") {
-                  return [`$${value}`, name]
+                if (name === "Revenu (DZD)") {
+                  return [`${value} DZD`, name]
                 }
                 return [value, name]
               }}
             />
             <Legend />
-            <Bar yAxisId="left" dataKey="orders" fill="#4ECDC4" name="Orders" radius={[4, 4, 0, 0]} />
+            <Bar yAxisId="left" dataKey="orders" fill="#4ECDC4" name="Commandes" radius={[4, 4, 0, 0]} />
             <Line
               yAxisId="right"
               type="monotone"
               dataKey="revenue"
               stroke="#FF6B35"
               strokeWidth={3}
-              name="Revenue ($)"
+              name="Revenu (DZD)"
               dot={{ fill: "#FF6B35", strokeWidth: 2, r: 4 }}
             />
           </BarChart>

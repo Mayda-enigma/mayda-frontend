@@ -106,18 +106,18 @@ export function OrderManagement() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-1">
           <h1 className="text-3xl font-semibold text-balance">
-            Orders
+            Commandes
           </h1>
           <p className="text-base text-muted-foreground">
-            Monitor live orders and manage order fulfillment from start to finish.
+            Suivez les commandes en direct et gérez leur exécution de bout en bout.
           </p>
         </div>
       </div>
 
       {isUserLoading || ordersQuery.isLoading ? (
         <Alert>
-          <AlertTitle>Loading orders</AlertTitle>
-          <AlertDescription>Fetching active orders for your restaurant.</AlertDescription>
+          <AlertTitle>Chargement des commandes</AlertTitle>
+          <AlertDescription>Récupération des commandes actives pour votre restaurant.</AlertDescription>
         </Alert>
       ) : null}
       {!isUserLoading && restaurantId === null ? (
@@ -147,7 +147,7 @@ export function OrderManagement() {
                 <ShoppingCart className="size-5" />
               </span>
               <div>
-                <p className="text-xs font-medium text-muted-foreground">Active Orders</p>
+                <p className="text-xs font-medium text-muted-foreground">Commandes actives</p>
                 <p className="text-2xl font-semibold tabular-nums">{activeOrderCount}</p>
               </div>
             </div>
@@ -160,7 +160,7 @@ export function OrderManagement() {
                 <DollarSign className="size-5" />
               </span>
               <div>
-                <p className="text-xs font-medium text-muted-foreground">Today&apos;s Revenue</p>
+                <p className="text-xs font-medium text-muted-foreground">Revenus du jour</p>
                 <p className="text-2xl font-semibold tabular-nums">
                   {todayRevenue.toFixed(2)} DZD
                 </p>
@@ -175,7 +175,7 @@ export function OrderManagement() {
                 <DollarSign className="size-5" />
               </span>
               <div>
-                <p className="text-xs font-medium text-muted-foreground">Avg Order</p>
+                <p className="text-xs font-medium text-muted-foreground">Panier moyen</p>
                 <p className="text-2xl font-semibold tabular-nums">
                   {avgOrderValue.toFixed(2)} DZD
                 </p>
@@ -190,7 +190,7 @@ export function OrderManagement() {
                 <Clock className="size-5" />
               </span>
               <div>
-                <p className="text-xs font-medium text-muted-foreground">Pending</p>
+                <p className="text-xs font-medium text-muted-foreground">En attente</p>
                 <p className="text-2xl font-semibold tabular-nums">{pendingCount}</p>
               </div>
             </div>
@@ -204,7 +204,7 @@ export function OrderManagement() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search orders by number, customer, or table..."
+                placeholder="Rechercher par numéro, client ou table..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
@@ -212,16 +212,16 @@ export function OrderManagement() {
             </div>
             <Select value={filterStatus} onValueChange={setFilterStatus}>
               <SelectTrigger className="w-full sm:w-44">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder="Statut" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="confirmed">Confirmed</SelectItem>
-                <SelectItem value="preparing">Preparing</SelectItem>
-                <SelectItem value="ready">Ready</SelectItem>
-                <SelectItem value="completed">Completed</SelectItem>
-                <SelectItem value="cancelled">Cancelled</SelectItem>
+                <SelectItem value="all">Tous les statuts</SelectItem>
+                <SelectItem value="pending">En attente</SelectItem>
+                <SelectItem value="confirmed">Confirmée</SelectItem>
+                <SelectItem value="preparing">En préparation</SelectItem>
+                <SelectItem value="ready">Prête</SelectItem>
+                <SelectItem value="completed">Terminée</SelectItem>
+                <SelectItem value="cancelled">Annulée</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -230,23 +230,23 @@ export function OrderManagement() {
 
       <Tabs defaultValue="all" className="space-y-6">
         <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value="pending">Pending</TabsTrigger>
-          <TabsTrigger value="preparing">Preparing</TabsTrigger>
-          <TabsTrigger value="ready">Ready</TabsTrigger>
-          <TabsTrigger value="completed">Completed</TabsTrigger>
+          <TabsTrigger value="all">Toutes</TabsTrigger>
+          <TabsTrigger value="pending">En attente</TabsTrigger>
+          <TabsTrigger value="preparing">En préparation</TabsTrigger>
+          <TabsTrigger value="ready">Prêtes</TabsTrigger>
+          <TabsTrigger value="completed">Terminées</TabsTrigger>
         </TabsList>
         <TabsContent value="all">
           <Card>
             <CardHeader>
-              <CardTitle>Order List</CardTitle>
+              <CardTitle>Liste des commandes</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               {filteredOrders.length > 0 ? (
                 <OrderListTable orders={filteredOrders} onViewOrder={handleViewOrder} />
               ) : (
                 <p className="p-6 text-sm text-muted-foreground">
-                  No orders found.
+                  Aucune commande trouvée.
                 </p>
               )}
             </CardContent>

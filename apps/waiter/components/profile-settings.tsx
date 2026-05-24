@@ -6,23 +6,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
 import { Badge } from "@/shared/ui/badge"
 import { Switch } from "@/shared/ui/switch"
 import { useTheme } from "next-themes"
-import { useLanguage } from "@/components/language-provider"
+
 import { useCurrentUser } from "@/features/auth"
 import { User, Settings, Bell, Palette, Globe, Volume2, Vibrate } from "lucide-react"
 
 export function ProfileSettings() {
   const { data: currentUser } = useCurrentUser()
   const { theme, setTheme } = useTheme()
-  const { language, setLanguage, t } = useLanguage()
+
   const [soundEnabled, setSoundEnabled] = useState(true)
   const [vibrationEnabled, setVibrationEnabled] = useState(true)
   const [autoAcknowledge, setAutoAcknowledge] = useState(false)
 
-  const languages = [
-    { code: "en" as const, name: "English", flag: "🇺🇸" },
-    { code: "fr" as const, name: "Français", flag: "🇫🇷" },
-    { code: "ar" as const, name: "العربية", flag: "🇸🇦" },
-  ]
+
 
   return (
     <div className="p-2 sm:p-3 space-y-3">
@@ -31,12 +27,12 @@ export function ProfileSettings() {
           <User className="h-6 w-6 sm:h-7 sm:w-7 text-primary" />
         </div>
         <div>
-          <h2 className="text-lg sm:text-xl font-semibold text-foreground">{t("profile")}</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-foreground">Profil</h2>
           <p className="text-xs text-muted-foreground">
             {currentUser?.role ? `${currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1)}` : ""}
             {currentUser?.restaurantId ? ` #${currentUser.restaurantId}` : ""}
             {" - "}
-            {currentUser?.name || "Loading..."}
+            {currentUser?.name || "Chargement..."}
           </p>
         </div>
       </div>
@@ -45,21 +41,21 @@ export function ProfileSettings() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
             <Palette className="h-4 w-4" />
-            Theme Settings
+            Paramètres d'affichage
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="flex items-center justify-between">
             <div>
-              <h4 className="text-sm font-medium">Dark Mode</h4>
+              <h4 className="text-sm font-medium">Mode sombre</h4>
               <p className="text-xs text-muted-foreground">
-                {theme === "dark" ? "Night service mode active" : "Bright restaurant mode active"}
+                {theme === "dark" ? "Mode nuit actif" : "Mode clair actif"}
               </p>
             </div>
             <Switch checked={theme === "dark"} onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")} />
           </div>
           <div className="text-xs text-muted-foreground">
-            Light mode is optimized for bright restaurant environments, while dark mode is perfect for night service.
+            Le mode clair est optimisé pour les environnements de restaurant lumineux, tandis que le mode sombre est parfait pour le service de nuit.
           </div>
         </CardContent>
       </Card>
@@ -68,27 +64,13 @@ export function ProfileSettings() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
             <Globe className="h-4 w-4" />
-            Language Settings
+            Paramètres de langue
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
-          <div className="grid gap-1.5">
-            {languages.map((lang) => (
-              <Button
-                key={lang.code}
-                variant={language === lang.code ? "default" : "outline"}
-                onClick={() => setLanguage(lang.code)}
-                className="justify-start gap-2 h-9 text-sm"
-              >
-                <span className="text-base">{lang.flag}</span>
-                <span>{lang.name}</span>
-                {language === lang.code && (
-                  <Badge variant="secondary" className="text-xs">
-                    Active
-                  </Badge>
-                )}
-              </Button>
-            ))}
+          <div className="flex items-center justify-between">
+            <span className="text-sm">Français</span>
+            <Badge variant="secondary" className="text-xs">Actif</Badge>
           </div>
         </CardContent>
       </Card>
@@ -97,7 +79,7 @@ export function ProfileSettings() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
             <Bell className="h-4 w-4" />
-            Notification Settings
+            Paramètres de notifications
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -105,8 +87,8 @@ export function ProfileSettings() {
             <div className="flex items-center gap-2">
               <Volume2 className="h-3 w-3" />
               <div>
-                <h4 className="text-sm font-medium">Sound Alerts</h4>
-                <p className="text-xs text-muted-foreground">Play sound for new notifications</p>
+                <h4 className="text-sm font-medium">Alertes sonores</h4>
+                <p className="text-xs text-muted-foreground">Jouer un son pour les nouvelles notifications</p>
               </div>
             </div>
             <Switch checked={soundEnabled} onCheckedChange={setSoundEnabled} />
@@ -117,7 +99,7 @@ export function ProfileSettings() {
               <Vibrate className="h-3 w-3" />
               <div>
                 <h4 className="text-sm font-medium">Vibration</h4>
-                <p className="text-xs text-muted-foreground">Vibrate device for urgent notifications</p>
+                <p className="text-xs text-muted-foreground">Vibrer pour les notifications urgentes</p>
               </div>
             </div>
             <Switch checked={vibrationEnabled} onCheckedChange={setVibrationEnabled} />
@@ -127,8 +109,8 @@ export function ProfileSettings() {
             <div className="flex items-center gap-2">
               <Settings className="h-3 w-3" />
               <div>
-                <h4 className="text-sm font-medium">Auto-acknowledge</h4>
-                <p className="text-xs text-muted-foreground">Automatically mark notifications as read after 30s</p>
+                <h4 className="text-sm font-medium">Confirmation auto</h4>
+                <p className="text-xs text-muted-foreground">Marquer automatiquement comme lu après 30s</p>
               </div>
             </div>
             <Switch checked={autoAcknowledge} onCheckedChange={setAutoAcknowledge} />
@@ -138,11 +120,11 @@ export function ProfileSettings() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">App Information</CardTitle>
+          <CardTitle className="text-base">Informations de l'application</CardTitle>
         </CardHeader>
         <CardContent className="space-y-1.5">
           <div className="flex justify-between text-xs">
-            <span className="text-muted-foreground">Name</span>
+            <span className="text-muted-foreground">Nom</span>
             <span>{currentUser?.name || "—"}</span>
           </div>
           <div className="flex justify-between text-xs">
@@ -150,11 +132,11 @@ export function ProfileSettings() {
             <span>{currentUser?.email || "—"}</span>
           </div>
           <div className="flex justify-between text-xs">
-            <span className="text-muted-foreground">Role</span>
+            <span className="text-muted-foreground">Rôle</span>
             <span className="capitalize">{currentUser?.role || "—"}</span>
           </div>
           <div className="flex justify-between text-xs">
-            <span className="text-muted-foreground">Restaurant ID</span>
+            <span className="text-muted-foreground">ID Restaurant</span>
             <span>{currentUser?.restaurantId ? `#${currentUser.restaurantId}` : "—"}</span>
           </div>
         </CardContent>
@@ -162,10 +144,10 @@ export function ProfileSettings() {
 
       <div className="grid grid-cols-2 gap-3 pt-2">
         <Button variant="outline" className="h-9 bg-transparent text-sm">
-          Sync Data
+          Synchroniser
         </Button>
         <Button variant="outline" className="h-9 bg-transparent text-sm">
-          Help & Support
+          Aide & Support
         </Button>
       </div>
     </div>

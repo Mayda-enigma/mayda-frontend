@@ -114,9 +114,9 @@ function getPerformanceColor(rating: number) {
 }
 
 function formatCurrency(amount: number) {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("fr-DZ", {
     style: "currency",
-    currency: "USD",
+    currency: "DZD",
     maximumFractionDigits: 0,
   }).format(amount)
 }
@@ -126,7 +126,7 @@ function getEstimatedShift(role: string, department: string) {
   if (department === "Service") return "16:00-23:00"
   if (department === "Bar") return "18:00-02:00"
   if (role === "Manager") return "08:00-18:00"
-  return "Not assigned"
+  return "Non attribué"
 }
 
 function toUpdatePayload(form: EditFormState, employee: Employee) {
@@ -252,16 +252,16 @@ export function EmployeeManagement() {
     <div className="space-y-6 animate-in fade-in-50 duration-500">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-1">
-          <h1 className="text-3xl font-semibold text-balance">Employee Management</h1>
+          <h1 className="text-3xl font-semibold text-balance">Gestion du personnel</h1>
           <p className="text-base text-muted-foreground">
-            Manage staff records, role assignments, and performance signals.
+            Gérez les fiches du personnel, les affectations et les indicateurs de performance.
           </p>
         </div>
         {restaurantId !== null ? (
           <>
             <Button onClick={() => setIsInviteOpen(true)}>
               <UserPlus className="h-4 w-4" />
-              Invite Employee
+              Inviter un employé
             </Button>
             <InviteModal
               open={isInviteOpen}
@@ -275,28 +275,27 @@ export function EmployeeManagement() {
 
       {isUserLoading || employeesQuery.isLoading ? (
         <Alert>
-          <AlertTitle>Loading staff roster</AlertTitle>
+          <AlertTitle>Chargement du personnel</AlertTitle>
           <AlertDescription>
-            Pulling the latest employee records for this restaurant.
+            Chargement des dernières fiches du personnel de ce restaurant.
           </AlertDescription>
         </Alert>
       ) : null}
       {!isUserLoading && restaurantId === null ? (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Restaurant context missing</AlertTitle>
+          <AlertTitle>Contexte du restaurant manquant</AlertTitle>
           <AlertDescription>
-            This manager account is not linked to a restaurant, so employee CRUD is
-            unavailable.
+            Ce compte manager n'est pas lié à un restaurant.
           </AlertDescription>
         </Alert>
       ) : null}
       {employeesQuery.isError ? (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Could not load employees</AlertTitle>
+          <AlertTitle>Impossible de charger les employés</AlertTitle>
           <AlertDescription>
-            The staff API request failed. Refresh the page and try again.
+            La requête a échoué. Actualisez la page et réessayez.
           </AlertDescription>
         </Alert>
       ) : null}
@@ -309,10 +308,10 @@ export function EmployeeManagement() {
                 <Users className="size-5" />
               </span>
               <div className="min-w-0 flex-1">
-                <p className="text-xs font-medium text-muted-foreground">Total Staff</p>
+                <p className="text-xs font-medium text-muted-foreground">Effectif total</p>
                 <div className="text-2xl font-semibold tabular-nums">{totalEmployees}</div>
                 <p className="text-xs text-muted-foreground">
-                  {activeEmployees} active employees
+                  {activeEmployees} employés actifs
                 </p>
               </div>
             </div>
@@ -325,11 +324,11 @@ export function EmployeeManagement() {
                 <Star className="size-5" />
               </span>
               <div className="min-w-0 flex-1">
-                <p className="text-xs font-medium text-muted-foreground">Avg Performance</p>
+                <p className="text-xs font-medium text-muted-foreground">Performance moy.</p>
                 <div className="text-2xl font-semibold text-success tabular-nums">
                   {averageRating.toFixed(1)}
                 </div>
-                <p className="text-xs text-muted-foreground">Across all staff</p>
+                <p className="text-xs text-muted-foreground">Moyenne générale</p>
               </div>
             </div>
           </CardContent>
@@ -341,11 +340,11 @@ export function EmployeeManagement() {
                 <CheckCircle className="size-5" />
               </span>
               <div className="min-w-0 flex-1">
-                <p className="text-xs font-medium text-muted-foreground">Attendance Rate</p>
+                <p className="text-xs font-medium text-muted-foreground">Taux de présence</p>
                 <div className="text-2xl font-semibold tabular-nums">
                   {averageAttendance.toFixed(0)}%
                 </div>
-                <p className="text-xs text-muted-foreground">Average attendance</p>
+                <p className="text-xs text-muted-foreground">Moyenne de présence</p>
               </div>
             </div>
           </CardContent>
@@ -357,11 +356,11 @@ export function EmployeeManagement() {
                 <DollarSign className="size-5" />
               </span>
               <div className="min-w-0 flex-1">
-                <p className="text-xs font-medium text-muted-foreground">Payroll</p>
+                <p className="text-xs font-medium text-muted-foreground">Masse salariale</p>
                 <div className="text-2xl font-semibold tabular-nums">
                   {formatCurrency(payroll)}
                 </div>
-                <p className="text-xs text-muted-foreground">Annual total</p>
+                <p className="text-xs text-muted-foreground">Total annuel</p>
               </div>
             </div>
           </CardContent>
@@ -370,10 +369,10 @@ export function EmployeeManagement() {
 
       <Tabs defaultValue="staff" className="space-y-6">
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="staff">Staff Directory</TabsTrigger>
+          <TabsTrigger value="staff">Annuaire du personnel</TabsTrigger>
           <TabsTrigger value="performance">Performance</TabsTrigger>
-          <TabsTrigger value="schedule">Schedule</TabsTrigger>
-          <TabsTrigger value="attendance">Attendance</TabsTrigger>
+          <TabsTrigger value="schedule">Planning</TabsTrigger>
+          <TabsTrigger value="attendance">Présence</TabsTrigger>
         </TabsList>
 
         <TabsContent value="staff" className="space-y-6">
@@ -382,17 +381,17 @@ export function EmployeeManagement() {
               <div className="flex flex-col gap-4 sm:flex-row">
                 <div className="flex-1">
                   <Input
-                    placeholder="Search employees by name or email"
+                    placeholder="Rechercher par nom ou email"
                     value={searchTerm}
                     onChange={(event) => setSearchTerm(event.target.value)}
                   />
                 </div>
                 <Select value={filterRole} onValueChange={setFilterRole}>
                   <SelectTrigger className="w-full sm:w-48">
-                    <SelectValue placeholder="Role" />
+                    <SelectValue placeholder="Rôle" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Roles</SelectItem>
+                    <SelectItem value="all">Tous les rôles</SelectItem>
                     {roles.map((role) => (
                       <SelectItem key={role} value={role}>
                         {role}
@@ -402,10 +401,10 @@ export function EmployeeManagement() {
                 </Select>
                 <Select value={filterDepartment} onValueChange={setFilterDepartment}>
                   <SelectTrigger className="w-full sm:w-48">
-                    <SelectValue placeholder="Department" />
+                    <SelectValue placeholder="Département" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Departments</SelectItem>
+                    <SelectItem value="all">Tous les départements</SelectItem>
                     {departments.map((department) => (
                       <SelectItem key={department} value={department}>
                         {department}
@@ -421,7 +420,7 @@ export function EmployeeManagement() {
             <Card>
               <CardContent className="p-6">
                 <p className="text-sm text-muted-foreground">
-                  No employees matched the current filters.
+                  Aucun employé ne correspond aux filtres.
                 </p>
               </CardContent>
             </Card>
@@ -470,13 +469,13 @@ export function EmployeeManagement() {
                       <div className="flex items-start gap-2">
                         <Phone className="mt-0.5 h-3 w-3 text-muted-foreground" />
                         <span className="text-muted-foreground">
-                          {employee.phone || "No phone on file"}
+                          {employee.phone || "Aucun téléphone"}
                         </span>
                       </div>
                       <div className="grid gap-3 sm:grid-cols-2">
                         <div className="space-y-2">
                           <Label className="text-xs text-muted-foreground">
-                            Department
+                            Département
                           </Label>
                           <div className="flex items-center gap-2 text-muted-foreground">
                             <MapPin className="h-3 w-3" />
@@ -484,7 +483,7 @@ export function EmployeeManagement() {
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <Label className="text-xs text-muted-foreground">Role</Label>
+                          <Label className="text-xs text-muted-foreground">Rôle</Label>
                           {isEditing ? (
                             <Select
                               value={editForm.role}
@@ -493,7 +492,7 @@ export function EmployeeManagement() {
                               }
                             >
                               <SelectTrigger>
-                                <SelectValue placeholder="Role" />
+                                <SelectValue placeholder="Rôle" />
                               </SelectTrigger>
                               <SelectContent>
                                 {roles.map((role) => (
@@ -510,14 +509,14 @@ export function EmployeeManagement() {
                       </div>
                       <div className="grid gap-3 sm:grid-cols-2">
                         <div className="space-y-2">
-                          <Label className="text-xs text-muted-foreground">Salary</Label>
+                          <Label className="text-xs text-muted-foreground">Salaire</Label>
                           <p className="text-muted-foreground">
                             {formatCurrency(employee.salary)}
                           </p>
                         </div>
                         <div className="space-y-2">
                           <Label className="text-xs text-muted-foreground">
-                            Joined
+                            Arrivée
                           </Label>
                           <div className="flex items-center gap-2 text-muted-foreground">
                             <Calendar className="h-3 w-3" />
@@ -528,7 +527,7 @@ export function EmployeeManagement() {
                       {isEditing ? (
                         <div className="space-y-2">
                           <Label className="text-xs text-muted-foreground">
-                            Active Status
+                            Statut
                           </Label>
                           <Select
                             value={editForm.isActive ? "active" : "inactive"}
@@ -543,8 +542,8 @@ export function EmployeeManagement() {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="active">Active</SelectItem>
-                              <SelectItem value="inactive">Inactive</SelectItem>
+                              <SelectItem value="active">Actif</SelectItem>
+                              <SelectItem value="inactive">Inactif</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -570,7 +569,7 @@ export function EmployeeManagement() {
                         </div>
                       </div>
                       <div className="mt-2 flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Attendance</span>
+                        <span className="text-muted-foreground">Présence</span>
                         <span className="tabular-nums">
                           {employee.performance.attendance}%
                         </span>
@@ -591,7 +590,7 @@ export function EmployeeManagement() {
                             disabled={isSaving}
                           >
                             <Save className="h-3 w-3" />
-                            {isSaving ? "Saving..." : "Save"}
+                            {isSaving ? "Enregistrement..." : "Enregistrer"}
                           </Button>
                           <Button
                             variant="outline"
@@ -610,7 +609,7 @@ export function EmployeeManagement() {
                             onClick={() => beginEditing(employee)}
                           >
                             <Edit className="h-3 w-3" />
-                            Edit
+                            Modifier
                           </Button>
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
@@ -625,19 +624,19 @@ export function EmployeeManagement() {
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                               <AlertDialogHeader>
-                                <AlertDialogTitle>Delete Employee</AlertDialogTitle>
+                                <AlertDialogTitle>Supprimer l'employé</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                  Remove {employee.name} from this restaurant. This
-                                  action cannot be undone.
+                                  Supprimer {employee.name} de ce restaurant. Cette
+                                  action est irréversible.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogCancel>Annuler</AlertDialogCancel>
                                 <AlertDialogAction
                                   onClick={() => deleteEmployee(employee)}
                                   className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                                 >
-                                  {isDeleting ? "Deleting..." : "Delete"}
+                                  {isDeleting ? "Suppression..." : "Supprimer"}
                                 </AlertDialogAction>
                               </AlertDialogFooter>
                             </AlertDialogContent>
@@ -655,20 +654,20 @@ export function EmployeeManagement() {
         <TabsContent value="performance" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Performance Metrics</CardTitle>
+              <CardTitle>Métriques de performance</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="min-w-[220px]">Employee</TableHead>
-                      <TableHead>Role</TableHead>
-                      <TableHead>Overall Rating</TableHead>
-                      <TableHead>Avg Service Time</TableHead>
-                      <TableHead>Customer Score</TableHead>
-                      <TableHead>Attendance</TableHead>
-                      <TableHead>Status</TableHead>
+                      <TableHead className="min-w-[220px]">Employé</TableHead>
+                      <TableHead>Rôle</TableHead>
+                      <TableHead>Note globale</TableHead>
+                      <TableHead>Temps de service moy.</TableHead>
+                      <TableHead>Score client</TableHead>
+                      <TableHead>Présence</TableHead>
+                      <TableHead>Statut</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -707,9 +706,9 @@ export function EmployeeManagement() {
                           {employee.performance.rating >= 4.5 ? (
                             <Badge variant="success">Excellent</Badge>
                           ) : employee.performance.rating >= 4.0 ? (
-                            <Badge variant="warning">Good</Badge>
+                            <Badge variant="warning">Bon</Badge>
                           ) : (
-                            <Badge variant="destructive">Needs Support</Badge>
+                            <Badge variant="destructive">Soutien nécessaire</Badge>
                           )}
                         </TableCell>
                       </TableRow>
@@ -724,24 +723,24 @@ export function EmployeeManagement() {
         <TabsContent value="schedule" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Shift Coverage</CardTitle>
+              <CardTitle>Couverture des quarts</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <Alert>
-                <AlertTitle>Schedule API not wired yet</AlertTitle>
+                <AlertTitle>API de planning non connectée</AlertTitle>
                 <AlertDescription>
-                  These shift windows are department-based placeholders until the
-                  dedicated scheduling endpoint is connected.
+                  Ces créneaux sont des placeholders basés sur le département en
+                  attendant la connexion de l'API dédiée.
                 </AlertDescription>
               </Alert>
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Employee</TableHead>
-                      <TableHead>Department</TableHead>
-                      <TableHead>Role</TableHead>
-                      <TableHead>Estimated Shift</TableHead>
+                      <TableHead>Employé</TableHead>
+                      <TableHead>Département</TableHead>
+                      <TableHead>Rôle</TableHead>
+                      <TableHead>Créneau estimé</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -765,7 +764,7 @@ export function EmployeeManagement() {
         <TabsContent value="attendance" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Attendance Tracking</CardTitle>
+              <CardTitle>Suivi des présences</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {employees.map((employee) => {
@@ -796,17 +795,17 @@ export function EmployeeManagement() {
                         <p className="text-2xl font-semibold text-success tabular-nums">
                           {daysPresent}
                         </p>
-                        <p className="text-xs text-muted-foreground">Days Present</p>
+                        <p className="text-xs text-muted-foreground">Jours présents</p>
                       </div>
                       <div className="text-center">
                         <p className="text-2xl font-semibold text-destructive tabular-nums">
                           {22 - daysPresent}
                         </p>
-                        <p className="text-xs text-muted-foreground">Days Absent</p>
+                        <p className="text-xs text-muted-foreground">Jours absents</p>
                       </div>
                       <div className="min-w-32 space-y-2">
                         <div className="flex items-center justify-between text-sm">
-                          <span>Attendance</span>
+                          <span>Présence</span>
                           <span className="tabular-nums">
                             {employee.performance.attendance}%
                           </span>

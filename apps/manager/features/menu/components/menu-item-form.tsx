@@ -86,16 +86,16 @@ export function MenuItemForm({
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>
-            {initialItem ? "Edit Menu Item" : "Add Menu Item"}
+            {initialItem ? "Modifier l'article" : "Ajouter un article"}
           </DialogTitle>
           <DialogDescription>
-            Manage pricing, imagery, and availability for the restaurant menu.
+            Gérez les prix, les images et la disponibilité du menu du restaurant.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="menu-name">Name</Label>
+              <Label htmlFor="menu-name">Nom</Label>
               <Input
                 id="menu-name"
                 value={form.name}
@@ -106,7 +106,7 @@ export function MenuItemForm({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="menu-category">Category</Label>
+              <Label htmlFor="menu-category">Catégorie</Label>
               <Select
                 value={String(form.categoryId)}
                 onValueChange={(categoryId) =>
@@ -117,7 +117,7 @@ export function MenuItemForm({
                 }
               >
                 <SelectTrigger id="menu-category">
-                  <SelectValue placeholder="Select category" />
+                  <SelectValue placeholder="Sélectionner une catégorie" />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((cat) => (
@@ -146,7 +146,7 @@ export function MenuItemForm({
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="space-y-2">
-              <Label htmlFor="menu-price">Price</Label>
+              <Label htmlFor="menu-price">Prix</Label>
               <Input
                 id="menu-price"
                 type="number"
@@ -163,7 +163,7 @@ export function MenuItemForm({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="menu-prep-time">Prep Time (min)</Label>
+              <Label htmlFor="menu-prep-time">Temps de prép. (min)</Label>
               <Input
                 id="menu-prep-time"
                 type="number"
@@ -179,7 +179,7 @@ export function MenuItemForm({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="menu-status">Availability</Label>
+              <Label htmlFor="menu-status">Disponibilité</Label>
               <Select
                 value={form.isAvailable ? "available" : "unavailable"}
                 onValueChange={(value) =>
@@ -190,17 +190,17 @@ export function MenuItemForm({
                 }
               >
                 <SelectTrigger id="menu-status">
-                  <SelectValue placeholder="Select status" />
+                  <SelectValue placeholder="Sélectionner un statut" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="available">Available</SelectItem>
-                  <SelectItem value="unavailable">Unavailable</SelectItem>
+                  <SelectItem value="available">Disponible</SelectItem>
+                  <SelectItem value="unavailable">Indisponible</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="menu-image-url">Image URL</Label>
+            <Label htmlFor="menu-image-url">URL de l'image</Label>
             <Input
               id="menu-image-url"
               type="url"
@@ -221,16 +221,16 @@ export function MenuItemForm({
               onClick={() => onOpenChange(false)}
               disabled={isPending}
             >
-              Cancel
+              Annuler
             </Button>
             <Button type="submit" disabled={isPending}>
               {isPending
                 ? initialItem
-                  ? "Saving..."
-                  : "Creating..."
+                  ? "Enregistrement..."
+                  : "Création..."
                 : initialItem
-                  ? "Save Changes"
-                  : "Create Item"}
+                  ? "Enregistrer"
+                  : "Créer"}
             </Button>
           </div>
         </form>

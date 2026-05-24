@@ -14,12 +14,12 @@ export default function CartError({
     <div className="min-h-dvh bg-background flex items-center justify-center p-4">
       <Card className="max-w-md w-full p-8 text-center space-y-4">
         <div className="text-4xl">🛒</div>
-        <h2 className="text-xl font-semibold">Cart unavailable</h2>
+        <h2 className="text-xl font-semibold">Panier indisponible</h2>
         <p className="text-muted-foreground text-sm">
-          We couldn&apos;t load your cart. Please try again.
+          Impossible de charger votre panier. Veuillez réessayer.
         </p>
         <Button onClick={() => reset()} className="bg-primary text-primary-foreground">
-          Try again
+          Réessayer
         </Button>
       </Card>
     </div>

@@ -16,12 +16,12 @@ type SortOption = "newest" | "longest" | "urgency"
 
 const statusConfig: Record<string, { label: string; color: string; cardColor: string }> = {
   AVAILABLE: {
-    label: "Free",
+    label: "Libre",
     color: "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400",
     cardColor: "border-green-200 dark:border-green-800",
   },
   OCCUPIED: {
-    label: "Occupied",
+    label: "Occupée",
     color: "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400",
     cardColor: "border-blue-200 dark:border-blue-800",
   },
@@ -102,7 +102,7 @@ export function TableOverview() {
             <h2 className="text-base sm:text-lg font-semibold text-foreground">Tables</h2>
           </div>
           <p className="text-xs text-muted-foreground">
-            {needsAttentionCount} need attention
+            {needsAttentionCount} nécessitent attention
           </p>
         </div>
 
@@ -115,21 +115,21 @@ export function TableOverview() {
                 className="gap-1 bg-transparent text-xs h-7 px-1.5 sm:h-8 sm:px-2"
               >
                 <Filter className="h-3 w-3" />
-                <span className="hidden sm:inline text-xs">Sort</span>
+                <span className="hidden sm:inline text-xs">Trier</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="text-xs animate-fade-in">
               <DropdownMenuItem onClick={() => setSortBy("urgency")} className="text-xs py-1.5">
                 <AlertTriangle className="h-3 w-3 mr-2" />
-                By Urgency
+                Par urgence
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setSortBy("newest")} className="text-xs py-1.5">
                 <Clock className="h-3 w-3 mr-2" />
-                Newest Orders
+                Commandes récentes
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setSortBy("longest")} className="text-xs py-1.5">
                 <Clock className="h-3 w-3 mr-2" />
-                Longest Waiting
+                Attente la plus longue
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -217,7 +217,7 @@ export function TableOverview() {
                       <Link href={`/table/${table.id}`}>
                         <Button size="sm" className="hover:-dark text-white text-xs h-6 px-2">
                           <Eye className="h-2.5 w-2.5 sm:mr-1" />
-                          <span className="hidden sm:inline">View</span>
+                          <span className="hidden sm:inline">Voir</span>
                         </Button>
                       </Link>
                     </div>
@@ -239,12 +239,12 @@ export function TableOverview() {
                         <>
                           <div className="flex items-center gap-1 text-xs text-muted-foreground">
                             <Users className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-                            <span>{table.capacity} seats</span>
+                            <span>{table.capacity} places</span>
                           </div>
                           {table.activeOrdersCount > 0 && (
                             <div className="flex items-center gap-1 text-xs text-muted-foreground">
                               <ChefHat className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-                              <span>{table.activeOrdersCount} orders</span>
+                              <span>{table.activeOrdersCount} commandes</span>
                             </div>
                           )}
                           <div className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -253,7 +253,7 @@ export function TableOverview() {
                           </div>
                         </>
                       ) : (
-                        <p className="text-xs text-muted-foreground">Available for seating</p>
+                        <p className="text-xs text-muted-foreground">Disponible pour placement</p>
                       )}
                     </div>
 
@@ -265,7 +265,7 @@ export function TableOverview() {
                             className="w-full hover:-dark text-white text-xs h-6 sm:h-7"
                           >
                             <Eye className="h-2.5 w-2.5 sm:h-3 sm:w-3 mr-1" />
-                            View Details
+                            Voir détails
                           </Button>
                         </Link>
                       </div>

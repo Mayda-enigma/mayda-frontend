@@ -18,22 +18,22 @@ export function OrderTimeline({ order }: OrderTimelineProps) {
   const timelineEvents = [
     {
       time: order.timeReceived,
-      title: "Order Received",
-      description: "Order placed by customer",
+      title: "Commande reçue",
+      description: "Commande passée par le client",
       icon: <Clock className="w-4 h-4" />,
       completed: true,
     },
     {
       time: new Date(order.timeReceived.getTime() + 2 * 60 * 1000),
-      title: "Preparation Started",
-      description: "Kitchen began preparation",
+      title: "Préparation commencée",
+      description: "La cuisine a commencé la préparation",
       icon: <Play className="w-4 h-4" />,
       completed: order.status !== "pending",
     },
     {
       time: order.estimatedCompletion ?? new Date(Date.now() + 15 * 60 * 1000),
-      title: "Ready for Service",
-      description: "Order completed and ready",
+      title: "Prêt pour le service",
+      description: "Commande terminée et prête",
       icon: <CheckCircle className="w-4 h-4" />,
       completed: order.status === "ready",
     },
@@ -41,8 +41,8 @@ export function OrderTimeline({ order }: OrderTimelineProps) {
       time: order.estimatedCompletion
         ? new Date(order.estimatedCompletion.getTime() + 2 * 60 * 1000)
         : new Date(Date.now() + 17 * 60 * 1000),
-      title: "Served",
-      description: "Delivered to customer",
+      title: "Servi",
+      description: "Livré au client",
       icon: <Utensils className="w-4 h-4" />,
       completed: false,
     },
@@ -51,7 +51,7 @@ export function OrderTimeline({ order }: OrderTimelineProps) {
   return (
     <Card className="bg-card border-border">
       <CardHeader>
-        <CardTitle className="text-card-foreground">Order Timeline</CardTitle>
+        <CardTitle className="text-card-foreground">Chronologie de la commande</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">

@@ -11,7 +11,6 @@ import {
 } from "recharts"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card"
 import { Skeleton } from "@/shared/ui/skeleton"
-import { useI18n } from "@/components/i18n-provider"
 import { useKitchenEfficiency } from "../api/queries"
 import type { RangePreset } from "../types"
 
@@ -20,7 +19,6 @@ interface PrepTimeChartProps {
 }
 
 export function PrepTimeChart({ range }: PrepTimeChartProps) {
-  const { t } = useI18n()
   const { data, isLoading } = useKitchenEfficiency(range)
 
   const chartData = (data ?? []).map((p) => ({
@@ -32,8 +30,8 @@ export function PrepTimeChart({ range }: PrepTimeChartProps) {
   return (
     <Card className="bg-card border-border">
       <CardHeader className="p-4 sm:p-6">
-        <CardTitle className="text-primary text-base sm:text-lg">{t.kitchenEfficiency}</CardTitle>
-        <CardDescription className="text-xs sm:text-sm">Average preparation time vs order volume</CardDescription>
+        <CardTitle className="text-primary text-base sm:text-lg">Efficacité de la cuisine</CardTitle>
+        <CardDescription className="text-xs sm:text-sm">Temps de préparation moyen vs volume de commandes</CardDescription>
       </CardHeader>
       <CardContent className="p-4 sm:p-6 pt-0">
         {isLoading ? (
@@ -52,7 +50,7 @@ export function PrepTimeChart({ range }: PrepTimeChartProps) {
                   color: "hsl(var(--popover-foreground))",
                 }}
               />
-              <Bar dataKey="avgTime" fill="#ef4444" name="Avg Time (min)" />
+              <Bar dataKey="avgTime" fill="#ef4444" name="Temps moy. (min)" />
             </BarChart>
           </ResponsiveContainer>
         )}

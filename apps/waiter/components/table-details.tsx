@@ -9,14 +9,12 @@ import { Textarea } from "@/shared/ui/textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/ui/dialog"
 import { Clock, Users, ChefHat, CheckCircle, AlertTriangle, Plus, MessageSquare } from "lucide-react"
 import { cn } from "@/shared/utils"
-import { useLanguage } from "@/components/language-provider"
 import { useTableCurrentOrders } from "@/features/tables"
 import { useUpdateOrderStatus, useCreateOrder } from "@/features/orders"
 import { useCurrentUser } from "@/features/auth"
 import { useRequestAssistance } from "@/features/tables/api/mutations"
 
 export function TableDetails({ tableId }: { tableId: string }) {
-  const { t } = useLanguage()
   const { data: currentUser } = useCurrentUser()
   const { data: ordersData, isLoading } = useTableCurrentOrders(Number(tableId))
   const updateOrderStatus = useUpdateOrderStatus()
@@ -56,18 +54,18 @@ export function TableDetails({ tableId }: { tableId: string }) {
     const date = new Date(dateStr)
     const diffMs = now.getTime() - date.getTime()
     const diffMins = Math.floor(diffMs / 60000)
-    if (diffMins < 60) return `${diffMins}m ${t("ago")}`
+    if (diffMins < 60) return `${diffMins}m`
     const diffHours = Math.floor(diffMins / 60)
-    return `${diffHours}h ${diffMins % 60}m ${t("ago")}`
+    return `${diffHours}h ${diffMins % 60}m`
   }
 
   const statusConfig: Record<string, { label: string; color: string; icon: typeof Clock }> = {
-    PENDING: { label: "Pending", color: "bg-primary/10 text-primary/80", icon: Clock },
-    CONFIRMED: { label: "Confirmed", color: "bg-blue-100 text-blue-800", icon: ChefHat },
-    PREPARING: { label: "Preparing", color: "bg-blue-100 text-blue-800", icon: ChefHat },
-    READY: { label: "Ready", color: "bg-green-100 text-green-800", icon: CheckCircle },
-    COMPLETED: { label: "Served", color: "bg-gray-100 text-gray-800", icon: CheckCircle },
-    CANCELLED: { label: "Cancelled", color: "bg-red-100 text-red-800", icon: AlertTriangle },
+    PENDING: { label: "En attente", color: "bg-primary/10 text-primary/80", icon: Clock },
+    CONFIRMED: { label: "Confirmée", color: "bg-blue-100 text-blue-800", icon: ChefHat },
+    PREPARING: { label: "En préparation", color: "bg-blue-100 text-blue-800", icon: ChefHat },
+    READY: { label: "Prête", color: "bg-green-100 text-green-800", icon: CheckCircle },
+    COMPLETED: { label: "Servie", color: "bg-gray-100 text-gray-800", icon: CheckCircle },
+    CANCELLED: { label: "Annulée", color: "bg-red-100 text-red-800", icon: AlertTriangle },
   }
 
   const itemsByStatus = {
@@ -92,17 +90,17 @@ export function TableDetails({ tableId }: { tableId: string }) {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg sm:text-xl font-semibold text-foreground">
-            {t("table")} {tableNumber.slice(1)}
+            Table {tableNumber.slice(1)}
           </h2>
           <div className="flex items-center gap-3 text-sm text-muted-foreground">
             <div className="flex items-center gap-1.5">
               <Users className="h-3 w-3 sm:h-4 sm:w-4" />
-              <span>{currentOrders.length > 0 ? `${currentOrders.length} orders` : `${t("guests")}`}</span>
+              <span>{currentOrders.length > 0 ? `${currentOrders.length} commandes` : `Convives`}</span>
             </div>
           </div>
         </div>
         <Badge variant="outline" className="text-sm px-3 py-1">
-          {currentOrders.length} active
+          {currentOrders.length} actif
         </Badge>
       </div>
 
@@ -111,18 +109,18 @@ export function TableDetails({ tableId }: { tableId: string }) {
           <DialogTrigger asChild>
             <Button size="lg" className="h-12 sm:h-14 hover:-dark text-white">
               <Plus className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
-              {t("addItem")}
+              Ajouter article
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-md">
             <DialogHeader>
-              <DialogTitle className="text-lg font-semibold">{t("addItem")}</DialogTitle>
+              <DialogTitle className="text-lg font-semibold">Ajouter article</DialogTitle>
             </DialogHeader>
             <div className="space-y-3">
               <div>
-                <label className="text-sm font-medium">Item Name</label>
+                <label className="text-sm font-medium">Nom de l'article</label>
                 <Input
-                  placeholder="Enter item name"
+                  placeholder="Saisir le nom"
                   value={newItemName}
                   onChange={(e) => setNewItemName(e.target.value)}
                   className="text-sm h-10"
@@ -130,14 +128,14 @@ export function TableDetails({ tableId }: { tableId: string }) {
               </div>
               <div className="flex gap-2">
                 <Button variant="outline" onClick={() => setShowAddItem(false)} className="flex-1 text-sm h-10">
-                  {t("cancel")}
+                  Annuler
                 </Button>
                 <Button
                   onClick={addNewItem}
                   disabled={!newItemName.trim()}
                   className="flex-1 hover:-dark text-white text-sm h-10"
                 >
-                  Add
+                  Ajouter
                 </Button>
               </div>
             </div>
@@ -148,16 +146,16 @@ export function TableDetails({ tableId }: { tableId: string }) {
           <DialogTrigger asChild>
             <Button variant="outline" size="lg" className="h-12 sm:h-14 bg-transparent text-sm">
               <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
-              {t("messageKitchen")}
+              Message cuisine
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-md">
             <DialogHeader>
-              <DialogTitle className="text-lg font-semibold">{t("messageKitchen")}</DialogTitle>
+              <DialogTitle className="text-lg font-semibold">Message cuisine</DialogTitle>
             </DialogHeader>
             <div className="space-y-3">
               <Textarea
-                placeholder="Type your message..."
+                placeholder="Tapez votre message..."
                 value={kitchenMessage}
                 onChange={(e) => setKitchenMessage(e.target.value)}
                 rows={4}
@@ -165,14 +163,14 @@ export function TableDetails({ tableId }: { tableId: string }) {
               />
               <div className="flex gap-2">
                 <Button variant="outline" onClick={() => setShowKitchenMessage(false)} className="flex-1 text-sm h-10">
-                  {t("cancel")}
+                  Annuler
                 </Button>
                 <Button
                   onClick={sendKitchenMessage}
                   disabled={!kitchenMessage.trim()}
                   className="flex-1 hover:-dark text-white text-sm h-10"
                 >
-                  Send
+                  Envoyer
                 </Button>
               </div>
             </div>
@@ -181,12 +179,12 @@ export function TableDetails({ tableId }: { tableId: string }) {
       </div>
 
       <div className="space-y-3">
-        <h3 className="text-lg font-semibold">{t("orderItems")}</h3>
+        <h3 className="text-lg font-semibold">Articles</h3>
         {currentOrders.length === 0 ? (
           <Card>
             <CardContent className="p-6 text-center">
               <ChefHat className="h-8 w-8 mx-auto mb-3 opacity-50" />
-              <p className="text-sm text-muted-foreground">No active orders for this table</p>
+              <p className="text-sm text-muted-foreground">Aucune commande active pour cette table</p>
             </CardContent>
           </Card>
         ) : (
@@ -205,7 +203,7 @@ export function TableDetails({ tableId }: { tableId: string }) {
                         {config.label}
                       </Badge>
                     </div>
-                    <div className="text-sm font-medium">${(order.totalAmount || 0).toFixed(2)}</div>
+                    <div className="text-sm font-medium">{(order.totalAmount || 0).toFixed(2)} DZD</div>
                   </div>
 
                   {(order.items || []).map((item: any) => (
@@ -213,7 +211,7 @@ export function TableDetails({ tableId }: { tableId: string }) {
                       <span>
                         {item.quantity}x {item.dishName || `Dish #${item.dishId}`}
                       </span>
-                      <span className="text-muted-foreground">${(item.totalPrice || 0).toFixed(2)}</span>
+                      <span className="text-muted-foreground">{(item.totalPrice || 0).toFixed(2)} DZD</span>
                     </div>
                   ))}
 
@@ -225,7 +223,7 @@ export function TableDetails({ tableId }: { tableId: string }) {
                           onClick={() => updateOrderStatus.mutate({ id: order.id, status: "CONFIRMED" })}
                           className="flex-1 hover:-dark text-white text-sm h-8"
                         >
-                          Confirm
+                          Confirmer
                         </Button>
                       )}
                       {order.status === "CONFIRMED" && (
@@ -234,7 +232,7 @@ export function TableDetails({ tableId }: { tableId: string }) {
                           onClick={() => updateOrderStatus.mutate({ id: order.id, status: "PREPARING" })}
                           className="flex-1 hover:-dark text-white text-sm h-8"
                         >
-                          Start Preparing
+                          Commencer la préparation
                         </Button>
                       )}
                       {order.status === "PREPARING" && (
@@ -243,7 +241,7 @@ export function TableDetails({ tableId }: { tableId: string }) {
                           onClick={() => updateOrderStatus.mutate({ id: order.id, status: "READY" })}
                           className="flex-1 hover:-dark text-white text-sm h-8"
                         >
-                          Mark Ready
+                          Marquer prêt
                         </Button>
                       )}
                       {order.status === "READY" && (
@@ -252,7 +250,7 @@ export function TableDetails({ tableId }: { tableId: string }) {
                           onClick={() => updateOrderStatus.mutate({ id: order.id, status: "COMPLETED" })}
                           className="flex-1 hover:-dark text-white text-sm h-8"
                         >
-                          Mark Served
+                          Marquer servi
                         </Button>
                       )}
                     </div>
@@ -266,25 +264,25 @@ export function TableDetails({ tableId }: { tableId: string }) {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg font-semibold">{t("orderSummary")}</CardTitle>
+          <CardTitle className="text-lg font-semibold">Résumé</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-4 gap-3 text-center">
             <div>
               <div className="text-lg sm:text-xl font-bold text-primary">{itemsByStatus.pending.length}</div>
-              <div className="text-xs text-muted-foreground">Pending</div>
+              <div className="text-xs text-muted-foreground">En attente</div>
             </div>
             <div>
               <div className="text-lg sm:text-xl font-bold text-blue-600">{itemsByStatus.preparing.length}</div>
-              <div className="text-xs text-muted-foreground">Preparing</div>
+              <div className="text-xs text-muted-foreground">En préparation</div>
             </div>
             <div>
               <div className="text-lg sm:text-xl font-bold text-green-600">{itemsByStatus.ready.length}</div>
-              <div className="text-xs text-muted-foreground">Ready</div>
+              <div className="text-xs text-muted-foreground">Prête</div>
             </div>
             <div>
               <div className="text-lg sm:text-xl font-bold text-gray-600">{itemsByStatus.served.length}</div>
-              <div className="text-xs text-muted-foreground">Served</div>
+              <div className="text-xs text-muted-foreground">Servie</div>
             </div>
           </div>
         </CardContent>

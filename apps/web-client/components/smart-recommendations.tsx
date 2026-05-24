@@ -64,8 +64,8 @@ export function SmartRecommendations({ menuItems, cartItems }: SmartRecommendati
           newRecommendations.push({
             id: "lunch-special",
             type: "time-based",
-            title: "Perfect for Lunch",
-            subtitle: "Light and satisfying midday meals",
+            title: "Parfait pour le déjeuner",
+            subtitle: "Repas légers et savoureux",
             items: lunchItems.slice(0, 2),
             icon: Clock,
             priority: 1,
@@ -78,8 +78,8 @@ export function SmartRecommendations({ menuItems, cartItems }: SmartRecommendati
           newRecommendations.push({
             id: "dinner-special",
             type: "time-based",
-            title: "Chef's Dinner Recommendations",
-            subtitle: "Premium dishes for your evening meal",
+            title: "Recommandations du chef",
+            subtitle: "Plats premium pour le dîner",
             items: dinnerItems.slice(0, 2),
             icon: Sparkles,
             priority: 1,
@@ -99,8 +99,8 @@ export function SmartRecommendations({ menuItems, cartItems }: SmartRecommendati
           newRecommendations.push({
             id: "friday-special",
             type: "day-based",
-            title: "It's Friday!",
-            subtitle: "Traditional Friday favorites",
+            title: "C'est vendredi !",
+            subtitle: "Classiques du vendredi",
             items: couscousItems.slice(0, 2),
             icon: Calendar,
             priority: 2,
@@ -114,8 +114,8 @@ export function SmartRecommendations({ menuItems, cartItems }: SmartRecommendati
         newRecommendations.push({
           id: "trending",
           type: "trending",
-          title: "Trending Now",
-          subtitle: "Most popular dishes today",
+          title: "Tendances",
+          subtitle: "Plats les plus populaires aujourd'hui",
           items: trendingItems.slice(0, 3),
           icon: TrendingUp,
           priority: 3,
@@ -138,8 +138,8 @@ export function SmartRecommendations({ menuItems, cartItems }: SmartRecommendati
             newRecommendations.push({
               id: "drink-pairing",
               type: "pairing",
-              title: "Perfect Pairings",
-              subtitle: "Drinks that complement your meal",
+              title: "Accords parfaits",
+              subtitle: "Boissons qui accompagnent votre repas",
               items: drinkItems.slice(0, 2),
               icon: Sparkles,
               priority: 1,
@@ -155,8 +155,8 @@ export function SmartRecommendations({ menuItems, cartItems }: SmartRecommendati
             newRecommendations.push({
               id: "dessert-pairing",
               type: "pairing",
-              title: "Sweet Endings",
-              subtitle: "Perfect desserts to complete your meal",
+              title: "Fins sucrées",
+              subtitle: "Desserts parfaits pour finir",
               items: dessertItems.slice(0, 2),
               icon: Sparkles,
               priority: 2,
@@ -173,8 +173,8 @@ export function SmartRecommendations({ menuItems, cartItems }: SmartRecommendati
         newRecommendations.push({
           id: "seasonal",
           type: "seasonal",
-          title: "Fresh & Seasonal",
-          subtitle: "Made with the finest seasonal ingredients",
+          title: "Frais & de saison",
+          subtitle: "Fait avec des ingrédients de saison",
           items: seasonalItems.slice(0, 2),
           icon: Sparkles,
           priority: 4,
@@ -253,14 +253,14 @@ export function SmartRecommendations({ menuItems, cartItems }: SmartRecommendati
                       <h4 className="font-medium text-sm leading-tight">{item.name}</h4>
                       <p className="text-xs text-muted-foreground line-clamp-1">{item.description}</p>
                       <div className="flex items-center justify-between mt-1">
-                        <span className="text-sm font-semibold text-primary">${item.price}</span>
+                        <span className="text-sm font-semibold text-primary">DZD{item.price}</span>
                         <Button
                           size="sm"
                           className="h-7 px-2 text-xs bg-primary text-primary-foreground hover:opacity-90"
                           onClick={() => addToCart(item)}
                         >
                           <Plus className="w-3 h-3 mr-1" />
-                          Add
+                          Ajouter
                         </Button>
                       </div>
                     </div>
@@ -272,7 +272,7 @@ export function SmartRecommendations({ menuItems, cartItems }: SmartRecommendati
                 <div className="mt-3 p-2 bg-amber-50 rounded-md border border-amber-200">
                   <p className="text-xs text-amber-800 text-center">
                     <Sparkles className="w-3 h-3 inline mr-1" />
-                    AI-powered recommendation based on your current order
+                    Recommandation IA basée sur votre commande
                   </p>
                 </div>
               )}

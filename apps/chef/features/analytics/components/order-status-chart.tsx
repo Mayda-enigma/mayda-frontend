@@ -9,14 +9,13 @@ import {
 } from "recharts"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card"
 import { Skeleton } from "@/shared/ui/skeleton"
-import { useI18n } from "@/components/i18n-provider"
 import { useOrderStatus } from "../api/queries"
 import type { RangePreset } from "../types"
 
 const ORDER_STATUS_COLORS: Record<string, string> = {
-  Completed: "#10b981",
-  "In Progress": "#f59e0b",
-  Delayed: "#ef4444",
+  Terminée: "#10b981",
+  "En cours": "#f59e0b",
+  Retardée: "#ef4444",
 }
 
 interface OrderStatusChartProps {
@@ -24,7 +23,6 @@ interface OrderStatusChartProps {
 }
 
 export function OrderStatusChart({ range }: OrderStatusChartProps) {
-  const { t } = useI18n()
   const { data, isLoading } = useOrderStatus(range)
 
   const chartData = (data ?? []).map((s) => ({
@@ -35,8 +33,8 @@ export function OrderStatusChart({ range }: OrderStatusChartProps) {
   return (
     <Card className="bg-card border-border">
       <CardHeader className="p-4 sm:p-6">
-        <CardTitle className="text-primary text-base sm:text-lg">{t.orderStatusDistribution}</CardTitle>
-        <CardDescription className="text-xs sm:text-sm">Current order completion rates</CardDescription>
+        <CardTitle className="text-primary text-base sm:text-lg">Répartition des statuts</CardTitle>
+        <CardDescription className="text-xs sm:text-sm">Taux d'achèvement des commandes en cours</CardDescription>
       </CardHeader>
       <CardContent className="p-4 sm:p-6 pt-0">
         {isLoading ? (

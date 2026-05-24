@@ -17,37 +17,37 @@ const orderStatusConfig: Record<string, {
   bgColor: string
 }> = {
   PENDING: {
-    label: "Pending",
+    label: "En attente",
     icon: Clock,
     color: "text-blue-600",
     bgColor: "bg-blue-100",
   },
   CONFIRMED: {
-    label: "Confirmed",
+    label: "Confirmée",
     icon: CheckCircle,
     color: "text-green-600",
     bgColor: "bg-green-100",
   },
   PREPARING: {
-    label: "In Kitchen",
+    label: "En cuisine",
     icon: ChefHat,
     color: "text-amber-600",
     bgColor: "bg-amber-100",
   },
   READY: {
-    label: "Ready",
+    label: "Prête",
     icon: Bell,
     color: "text-primary",
     bgColor: "bg-primary/10",
   },
   COMPLETED: {
-    label: "Completed",
+    label: "Terminée",
     icon: Utensils,
     color: "text-success",
     bgColor: "bg-success/10",
   },
   CANCELLED: {
-    label: "Cancelled",
+    label: "Annulée",
     icon: XCircle,
     color: "text-destructive",
     bgColor: "bg-destructive/10",
@@ -74,8 +74,8 @@ function OrderCard({ order }: { order: Order }) {
               <h3 className="font-semibold text-sm sm:text-base">{order.orderNumber}</h3>
               <p className="text-xs sm:text-sm text-muted-foreground">
                 {elapsed < 60
-                  ? `${elapsed}m ago`
-                  : `${Math.floor(elapsed / 60)}h ${elapsed % 60}m ago`}
+                  ? `${elapsed} min`
+                  : `${Math.floor(elapsed / 60)}h ${elapsed % 60}m`}
                 {" "}&middot; Table {order.tableNumber}
               </p>
             </div>
@@ -89,15 +89,15 @@ function OrderCard({ order }: { order: Order }) {
           <div className="flex items-center gap-3 text-xs sm:text-sm text-muted-foreground">
             <span>{order.type.replace('_', ' ')}</span>
             <span>&middot;</span>
-            <span>{order.itemCount} items</span>
+            <span>{order.itemCount} articles</span>
           </div>
           <div className="text-right">
-            <span className="font-semibold text-sm sm:text-base">${order.total.toFixed(2)}</span>
+            <span className="font-semibold text-sm sm:text-base">{order.total.toFixed(2)} DZD</span>
             <Badge
               variant="outline"
               className={`ml-2 text-xs ${order.paymentStatus === "PAID" ? "text-success border-success" : "text-amber-600 border-amber-600"}`}
             >
-              {order.paymentStatus}
+              {order.paymentStatus === "PAID" ? "PAYÉ" : order.paymentStatus}
             </Badge>
           </div>
         </div>
@@ -106,7 +106,7 @@ function OrderCard({ order }: { order: Order }) {
           <div className="mt-3 bg-primary/10 rounded-lg p-3">
             <div className="flex items-center gap-2">
               <Bell className="w-4 h-4 text-primary animate-pulse" />
-              <p className="font-medium text-primary text-sm">Your order is ready!</p>
+              <p className="font-medium text-primary text-sm">Votre commande est prête !</p>
             </div>
           </div>
         )}
@@ -134,9 +134,9 @@ export default function OrdersPage() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-lg sm:text-xl font-bold">Your Orders</h1>
+              <h1 className="text-lg sm:text-xl font-bold">Vos commandes</h1>
               <p className="text-xs sm:text-sm text-muted-foreground">
-                Table {tableId} &middot; {orders?.length ?? 0} orders
+                Table {tableId} &middot; {orders?.length ?? 0} commandes
               </p>
             </div>
           </div>
@@ -147,7 +147,7 @@ export default function OrdersPage() {
             <div className="text-right">
               <div className="flex items-center gap-1">
                 <div className="w-2 h-2 bg-success rounded-full animate-pulse" />
-                <span className="text-xs text-success">Live</span>
+                <span className="text-xs text-success">En direct</span>
               </div>
             </div>
           </div>
@@ -161,18 +161,18 @@ export default function OrdersPage() {
           </div>
         ) : isError ? (
           <div className="text-center py-12">
-            <p className="text-destructive mb-4">Failed to load orders.</p>
+            <p className="text-destructive mb-4">Échec du chargement des commandes.</p>
             <Button variant="outline" onClick={() => window.location.reload()}>
-              Try Again
+              Réessayer
             </Button>
           </div>
         ) : !orders || orders.length === 0 ? (
           <div className="text-center py-8 sm:py-12">
             <Utensils className="w-10 h-10 sm:w-12 sm:h-12 text-muted-foreground mx-auto mb-4" />
-            <p className="text-muted-foreground text-base sm:text-lg">No orders yet</p>
-            <p className="text-xs sm:text-sm text-muted-foreground mb-4">Start by adding some dishes to your cart</p>
+            <p className="text-muted-foreground text-base sm:text-lg">Aucune commande</p>
+            <p className="text-xs sm:text-sm text-muted-foreground mb-4">Ajoutez des plats à votre panier</p>
             <Link href="/menu">
-              <Button className="bg-primary text-primary-foreground">Browse Menu</Button>
+              <Button className="bg-primary text-primary-foreground">Voir le menu</Button>
             </Link>
           </div>
         ) : (

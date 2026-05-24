@@ -12,28 +12,28 @@ export function KpiCards({ range }: { range: RangePreset }) {
 
   const cards = [
     {
-      label: "Total Revenue",
-      value: `$${kpis.totalRevenue.toLocaleString()}`,
+      label: "Revenu total",
+      value: `${kpis.totalRevenue.toLocaleString()} DZD`,
       trend: kpis.revenueTrend,
       icon: <DollarSign className="size-5" />,
       iconClass: "bg-primary/15 text-primary",
     },
     {
-      label: "Total Orders",
+      label: "Commandes totales",
       value: kpis.totalOrders.toLocaleString(),
       trend: kpis.ordersTrend,
       icon: <ShoppingCart className="size-5" />,
       iconClass: "bg-accent-blue/15 text-accent-blue",
     },
     {
-      label: "Avg. Order Value",
-      value: `$${kpis.avgOrderValue.toFixed(2)}`,
+      label: "Panier moyen",
+      value: `${kpis.avgOrderValue.toFixed(2)} DZD`,
       trend: kpis.avgOrderValueTrend,
       icon: <DollarSign className="size-5" />,
       iconClass: "bg-accent-orange/15 text-accent-orange",
     },
     {
-      label: "Customer Rating",
+      label: "Note client",
       value: kpis.customerRating.toFixed(1),
       trend: kpis.ratingTrend,
       icon: <Star className="size-5" />,
@@ -59,7 +59,7 @@ export function KpiCards({ range }: { range: RangePreset }) {
                   ) : (
                     <TrendingDown className="size-3 text-destructive" />
                   )}
-                  {card.trend >= 0 ? "+" : ""}{card.trend}% from last week
+                  {card.trend >= 0 ? "+" : ""}{card.trend}% par rapport à la semaine dernière
                 </div>
               </div>
             </div>

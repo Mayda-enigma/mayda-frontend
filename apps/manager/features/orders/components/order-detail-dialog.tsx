@@ -36,11 +36,11 @@ interface OrderDetailDialogProps {
 }
 
 const transitionLabel: Record<string, { label: string; icon: typeof CheckCircle2 }> = {
-  confirmed: { label: "Confirm", icon: CheckCircle2 },
-  preparing: { label: "Start Preparing", icon: ChefHat },
-  ready: { label: "Mark Ready", icon: CheckCircle2 },
-  completed: { label: "Mark Completed", icon: Utensils },
-  cancelled: { label: "Cancel Order", icon: XCircle },
+  confirmed: { label: "Confirmer", icon: CheckCircle2 },
+  preparing: { label: "Commencer la préparation", icon: ChefHat },
+  ready: { label: "Marquer prête", icon: CheckCircle2 },
+  completed: { label: "Marquer terminée", icon: Utensils },
+  cancelled: { label: "Annuler la commande", icon: XCircle },
 }
 
 export function OrderDetailDialog({
@@ -65,7 +65,7 @@ export function OrderDetailDialog({
             Order #{order.orderNumber}
           </DialogTitle>
           <DialogDescription>
-            View and manage order details
+            Consulter et gérer les détails de la commande
           </DialogDescription>
         </DialogHeader>
 
@@ -106,15 +106,15 @@ export function OrderDetailDialog({
               <div className="space-y-3">
                 <h3 className="font-semibold flex items-center gap-2 text-sm">
                   <User className="h-4 w-4" />
-                  Customer
+                  Client
                 </h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Name:</span>
+                    <span className="text-muted-foreground">Nom :</span>
                     <span className="font-medium">{order.customerName}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Table:</span>
+                    <span className="text-muted-foreground">Table :</span>
                     <Badge variant="outline">{order.tableNumber}</Badge>
                   </div>
                 </div>
@@ -123,17 +123,17 @@ export function OrderDetailDialog({
               <div className="space-y-3">
                 <h3 className="font-semibold flex items-center gap-2 text-sm">
                   <Calendar className="h-4 w-4" />
-                  Timing
+                  Horaires
                 </h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Ordered at:</span>
+                    <span className="text-muted-foreground">Commandé à :</span>
                     <span className="font-medium tabular-nums">
                       {new Date(order.orderTime).toLocaleString()}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Payment:</span>
+                    <span className="text-muted-foreground">Paiement :</span>
                     <span className="flex items-center gap-1 font-medium">
                       <CreditCard className="h-3 w-3" />
                       {order.paymentStatus}
@@ -148,7 +148,7 @@ export function OrderDetailDialog({
             <div className="space-y-3">
               <h3 className="font-semibold flex items-center gap-2 text-sm">
                 <Package className="h-4 w-4" />
-                Items ({order.itemCount})
+                Articles ({order.itemCount})
               </h3>
               <div className="space-y-2">
                 {("items" in order ? (order as { items: { name: string; quantity: number; unitPrice: number; totalPrice: number; notes: string | null }[] }).items : []).map(
@@ -208,14 +208,14 @@ export function OrderDetailDialog({
                 <div className="space-y-3">
                   <h3 className="font-semibold flex items-center gap-2 text-sm">
                     <MapPin className="h-4 w-4" />
-                    Delivery
+                    Livraison
                   </h3>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Type:</span>
+                      <span className="text-muted-foreground">Type :</span>
                       <span className="font-medium">
                         {(order as { paymentMethod: string }).paymentMethod === "DELIVERY"
-                          ? "Delivery"
+                          ? "Livraison"
                           : (order as { paymentMethod: string }).paymentMethod}
                       </span>
                     </div>
@@ -227,7 +227,7 @@ export function OrderDetailDialog({
             <Separator />
 
             <div className="flex items-center justify-between text-lg font-semibold">
-              <span>Total:</span>
+              <span>Total :</span>
               <span className="text-success tabular-nums">
                 {order.totalAmount.toFixed(2)} DZD
               </span>

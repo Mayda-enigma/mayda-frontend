@@ -3,7 +3,6 @@
 import { TrendingUp, TrendingDown, Clock, ChefHat, DollarSign, Users } from "lucide-react"
 import { Card, CardContent } from "@/shared/ui/card"
 import { Skeleton } from "@/shared/ui/skeleton"
-import { useI18n } from "@/components/i18n-provider"
 import { useKitchenKpis } from "../api/queries"
 import type { RangePreset } from "../types"
 
@@ -12,9 +11,9 @@ interface KpiCardsProps {
 }
 
 const formatCurrency = (value: number) =>
-  new Intl.NumberFormat("en-US", {
+  new Intl.NumberFormat("fr-DZ", {
     style: "currency",
-    currency: "USD",
+    currency: "DZD",
     maximumFractionDigits: 0,
   }).format(value)
 
@@ -22,26 +21,25 @@ const formatTrend = (value: number) =>
   `${value >= 0 ? "+" : ""}${value.toFixed(1)}%`
 
 export function KpiCards({ range }: KpiCardsProps) {
-  const { t } = useI18n()
   const { data: kpis, isLoading } = useKitchenKpis(range)
 
   const metrics = [
     {
-      title: t.totalOrdersKpi,
+      title: "Commandes totales",
       value: kpis?.totalOrders != null ? kpis.totalOrders.toLocaleString() : "—",
       change: kpis?.ordersTrend != null ? formatTrend(kpis.ordersTrend) : "",
       trendUp: (kpis?.ordersTrend ?? 0) >= 0,
       Icon: ChefHat,
     },
     {
-      title: t.revenue,
+      title: "Revenu",
       value: kpis?.revenue != null ? formatCurrency(kpis.revenue) : "—",
       change: kpis?.revenueTrend != null ? formatTrend(kpis.revenueTrend) : "",
       trendUp: (kpis?.revenueTrend ?? 0) >= 0,
       Icon: DollarSign,
     },
     {
-      title: t.avgPrepTime,
+      title: "Temps de préparation moy.",
       value: kpis?.avgPrepTimeMinutes != null ? `${kpis.avgPrepTimeMinutes.toFixed(1)} min` : "—",
       change: kpis?.avgPrepTimeTrend != null ? formatTrend(kpis.avgPrepTimeTrend) : "",
       // lower prep time is better → negative trend is "up" for this KPI
@@ -49,7 +47,7 @@ export function KpiCards({ range }: KpiCardsProps) {
       Icon: Clock,
     },
     {
-      title: t.customerSatisfaction,
+      title: "Satisfaction client",
       value: kpis?.customerRating != null ? `${kpis.customerRating.toFixed(1)}/5` : "—",
       change: kpis?.customerRatingTrend != null ? formatTrend(kpis.customerRatingTrend) : "",
       trendUp: (kpis?.customerRatingTrend ?? 0) >= 0,

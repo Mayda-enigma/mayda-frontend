@@ -193,20 +193,20 @@ export function useKitchenNotifications() {
   const notifyNewOrder = (orderData: { id: string; tableNumber: number; priority: string }) => {
     addNotification({
       type: orderData.priority === "urgent" ? "urgent" : "info",
-      title: "New Order Received",
-      message: `Order ${orderData.id} for Table ${orderData.tableNumber}`,
+      title: "Nouvelle commande reçue",
+      message: `Commande ${orderData.id} — Table ${orderData.tableNumber}`,
       persistent: orderData.priority === "urgent",
       duration: orderData.priority === "urgent" ? undefined : 8000,
       actions: [
         {
-          label: "View Order",
+          label: "Voir la commande",
           action: () => {
             // Navigate to order detail
             window.location.href = `/order/${orderData.id}`
           },
         },
         {
-          label: "Acknowledge",
+          label: "Accuser réception",
           action: () => {
             // Mark as acknowledged
           },
@@ -219,12 +219,12 @@ export function useKitchenNotifications() {
   const notifyOrderReady = (orderData: { id: string; tableNumber: number }) => {
     addNotification({
       type: "success",
-      title: "Order Ready",
-      message: `Order ${orderData.id} for Table ${orderData.tableNumber} is ready for service`,
+      title: "Commande prête",
+      message: `Commande ${orderData.id} — Table ${orderData.tableNumber} est prête pour le service`,
       duration: 10000,
       actions: [
         {
-          label: "Mark Served",
+          label: "Marquer servi",
           action: () => {
             // Mark order as served
           },
@@ -237,18 +237,18 @@ export function useKitchenNotifications() {
     const { delay } = orderData // Declare the delay variable
     addNotification({
       type: "warning",
-      title: "Order Delayed",
-      message: `Order ${orderData.id} for Table ${orderData.tableNumber} is ${delay} minutes behind schedule`,
+      title: "Commande retardée",
+      message: `Commande ${orderData.id} — Table ${orderData.tableNumber} a ${delay} minutes de retard`,
       persistent: true,
       actions: [
         {
-          label: "Update Customer",
+          label: "Informer le client",
           action: () => {
             // Send update to customer
           },
         },
         {
-          label: "Prioritize",
+          label: "Prioritaire",
           action: () => {
             // Mark as high priority
           },
@@ -261,18 +261,18 @@ export function useKitchenNotifications() {
   const notifyStockLow = (ingredient: string, currentStock: number, threshold: number) => {
     addNotification({
       type: "warning",
-      title: "Low Stock Alert",
-      message: `${ingredient} is running low (${currentStock}/${threshold} remaining)`,
+      title: "Alerte stock faible",
+      message: `${ingredient} est presque épuisé (${currentStock}/${threshold} restant)`,
       persistent: true,
       actions: [
         {
-          label: "Reorder Now",
+          label: "Réapprovisionner",
           action: () => {
             // Trigger reorder process
           },
         },
         {
-          label: "Update Menu",
+          label: "Mettre à jour le menu",
           action: () => {
             // Mark items as unavailable
           },
