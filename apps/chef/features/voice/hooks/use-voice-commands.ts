@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { useI18n } from "@/components/i18n-provider"
 import type SpeechRecognition from "speech-recognition"
 
 interface VoiceCommand {
@@ -20,7 +19,6 @@ export function useVoiceCommands({ commands, enabled = true }: UseVoiceCommandsP
   const [isSupported, setIsSupported] = useState(false)
   const [lastCommand, setLastCommand] = useState<string>("")
   const recognitionRef = useRef<SpeechRecognition | null>(null)
-  const { language } = useI18n()
 
   useEffect(() => {
     // Check if speech recognition is supported
@@ -33,7 +31,7 @@ export function useVoiceCommands({ commands, enabled = true }: UseVoiceCommandsP
         const recognition = recognitionRef.current
         recognition.continuous = true
         recognition.interimResults = false
-        recognition.lang = getLanguageCode(language)
+        recognition.lang = "fr-FR"
 
         recognition.onstart = () => {
           setIsListening(true)
@@ -55,7 +53,7 @@ export function useVoiceCommands({ commands, enabled = true }: UseVoiceCommandsP
           if (matchedCommand) {
             matchedCommand.action()
             // Provide audio feedback
-            speak(`Command executed: ${matchedCommand.description}`)
+            speak(`Commande exécutée : ${matchedCommand.description}`)
           }
         }
 
@@ -71,7 +69,7 @@ export function useVoiceCommands({ commands, enabled = true }: UseVoiceCommandsP
         recognitionRef.current.stop()
       }
     }
-  }, [commands, language])
+  }, [commands])
 
   const startListening = () => {
     if (recognitionRef.current && enabled && !isListening) {
@@ -88,7 +86,7 @@ export function useVoiceCommands({ commands, enabled = true }: UseVoiceCommandsP
   const speak = (text: string) => {
     if (typeof window !== "undefined" && window.speechSynthesis) {
       const utterance = new SpeechSynthesisUtterance(text)
-      utterance.lang = getLanguageCode(language)
+      utterance.lang = "fr-FR"
       utterance.rate = 0.9
       utterance.pitch = 1
       window.speechSynthesis.speak(utterance)
@@ -103,17 +101,6 @@ export function useVoiceCommands({ commands, enabled = true }: UseVoiceCommandsP
     stopListening,
     speak,
   }
-}
-
-function getLanguageCode(language: string): string {
-  const languageMap: Record<string, string> = {
-    en: "en-US",
-    es: "es-ES",
-    fr: "fr-FR",
-    de: "de-DE",
-    it: "it-IT",
-  }
-  return languageMap[language] || "en-US"
 }
 
 // Extend Window interface for TypeScript

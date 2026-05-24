@@ -87,13 +87,13 @@ export function OrderCard({ order, onStatusUpdate }: OrderCardProps) {
   const getStatusText = (status: string) => {
     switch (status) {
       case "pending":
-        return "Start"
+        return "Commencer"
       case "in-progress":
-        return "Ready"
+        return "Prêt"
       case "ready":
-        return "Complete"
+        return "Terminé"
       default:
-        return "Start"
+        return "Commencer"
     }
   }
 
@@ -125,7 +125,7 @@ export function OrderCard({ order, onStatusUpdate }: OrderCardProps) {
 
       <CardContent className="space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-sm text-muted-foreground">Complexity:</span>
+          <span className="text-sm text-muted-foreground">Complexité :</span>
           <span className={`text-sm font-medium ${complexityStyles[order.complexity] || "text-muted-foreground"}`}>
             {order.complexity.toUpperCase()}
           </span>
@@ -170,7 +170,7 @@ export function OrderCard({ order, onStatusUpdate }: OrderCardProps) {
           <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-2 sm:p-3">
             <div className="flex items-center gap-2 mb-1">
               <AlertTriangle className="w-4 h-4 text-destructive shrink-0" />
-              <span className="text-xs font-medium text-destructive">Special Request</span>
+              <span className="text-xs font-medium text-destructive">Demande spéciale</span>
             </div>
             <div className="text-xs text-foreground">{order.specialRequests}</div>
           </div>

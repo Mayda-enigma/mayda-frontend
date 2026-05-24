@@ -6,28 +6,25 @@ import Image from "next/image"
 import { Button } from "@/shared/ui/button"
 import { ChefHat, Package, BarChart3 } from "lucide-react"
 import { ThemeToggle } from "./theme-toggle"
-import { LanguageSelector } from "./language-selector"
-import { useI18n } from "./i18n-provider"
 
 export function Navigation() {
   const pathname = usePathname()
-  const { language, setLanguage, t } = useI18n()
 
   const navItems = [
-    { href: "/", label: t.dashboard, icon: ChefHat },
-    { href: "/stock", label: t.stock, icon: Package },
-    { href: "/analytics", label: t.analytics, icon: BarChart3 },
+    { href: "/", label: "Tableau de bord", icon: ChefHat },
+    { href: "/stock", label: "Stock", icon: Package },
+    { href: "/analytics", label: "Analyses", icon: BarChart3 },
   ]
 
   return (
-    <nav className="flex flex-row justify-between bg-card border-b border-border p-4  mb-8">
+    <nav className="flex flex-row justify-between bg-card border-b border-border p-4 mb-8">
       <div className="flex items-center gap-2">
-         <Image
-         src="/LogoChef.svg"
-         alt="Kitchen Pro Logo"
-         width={200}
-         height={200}
-         />
+        <Image
+          src="/LogoAdmin.svg"
+          alt="Mayda Chef"
+          width={200}
+          height={200}
+        />
       </div>
       <div className="flex items-center gap-4">
         <div className="flex gap-2 ml-auto items-center">
@@ -51,7 +48,6 @@ export function Navigation() {
               </Link>
             )
           })}
-          <LanguageSelector currentLanguage={language} onLanguageChange={setLanguage} />
           <ThemeToggle />
         </div>
       </div>

@@ -5,7 +5,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useLogin } from '../api/mutations';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Card, CardContent } from '@/shared/ui/card';
+import Image from 'next/image';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
@@ -27,42 +28,55 @@ export function LoginForm() {
   };
 
   return (
-    <Card className="w-full max-w-sm mx-auto mt-20">
-      <CardHeader>
-        <CardTitle>Sign in</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="email" className="text-sm font-medium">Email</label>
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <Card className="w-full max-w-md">
+        <CardContent className="p-8">
+          <div className="flex flex-col items-center mb-8">
+            <div className="relative w-20 h-20 mb-4">
+              <Image
+                src="/LogoAdmin.svg"
+                alt="Mayda"
+                fill
+                className="object-contain"
+              />
+            </div>
+            <h1 className="text-2xl font-bold text-primary">Mayda Chef</h1>
+            <p className="text-sm text-muted-foreground mt-1">Connectez-vous à votre espace</p>
           </div>
-          <div>
-            <label htmlFor="password" className="text-sm font-medium">Password</label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          {login.error && (
-            <p className="text-sm text-destructive">
-              {login.error instanceof Error ? login.error.message : 'Login failed'}
-            </p>
-          )}
-          <Button type="submit" disabled={login.isPending} className="w-full">
-            {login.isPending ? 'Signing in...' : 'Sign in'}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-sm font-medium text-foreground">Email</label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="Entrez votre email"
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="password" className="text-sm font-medium text-foreground">Mot de passe</label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="Entrez votre mot de passe"
+              />
+            </div>
+            {login.error && (
+              <p className="text-sm text-destructive">
+                {login.error instanceof Error ? login.error.message : 'Échec de la connexion'}
+              </p>
+            )}
+            <Button type="submit" disabled={login.isPending} className="w-full bg-primary hover:bg-primary/90">
+              {login.isPending ? 'Connexion...' : 'Se connecter'}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

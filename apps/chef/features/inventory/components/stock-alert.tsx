@@ -55,7 +55,7 @@ export function StockAlertCard({ alert }: StockAlertCardProps) {
             <div>
               <div className="font-medium text-foreground">{alert.name}</div>
               <div className="text-sm text-muted-foreground">
-                {alert.currentStock} {alert.unit} remaining (min: {alert.minimumStock} {alert.unit})
+                {alert.currentStock} {alert.unit} restant (min: {alert.minimumStock} {alert.unit})
               </div>
             </div>
           </div>
@@ -63,7 +63,7 @@ export function StockAlertCard({ alert }: StockAlertCardProps) {
             <AlertTriangle className={`w-5 h-5 ${getUrgencyColor(urgencyLevel)}`} />
             <Button size="sm" className="bg-primary hover:bg-primary/90">
               <ShoppingCart className="w-4 h-4 mr-2" />
-              Reorder
+              Réapprovisionner
             </Button>
           </div>
         </div>

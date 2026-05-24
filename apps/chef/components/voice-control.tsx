@@ -19,7 +19,7 @@ export function VoiceControl({ isActive, onToggle, onStatusUpdate }: VoiceContro
   useEffect(() => {
     if (!isActive) return
 
-    const mockCommands = ["start order", "mark ready", "pause order", "next step"]
+    const mockCommands = ["commencer la commande", "marquer prêt", "mettre en pause", "étape suivante"]
     const interval = setInterval(() => {
       if (Math.random() > 0.9) {
         const command = mockCommands[Math.floor(Math.random() * mockCommands.length)]
@@ -34,16 +34,16 @@ export function VoiceControl({ isActive, onToggle, onStatusUpdate }: VoiceContro
 
   const handleVoiceCommand = (command: string) => {
     switch (command.toLowerCase()) {
-      case "start order":
+      case "commencer la commande":
         onStatusUpdate("in-progress")
         break
-      case "mark ready":
+      case "marquer prêt":
         onStatusUpdate("ready")
         break
-      case "pause order":
+      case "mettre en pause":
         // Handle pause logic
         break
-      case "next step":
+      case "étape suivante":
         // Handle next step logic
         break
     }
@@ -59,7 +59,7 @@ export function VoiceControl({ isActive, onToggle, onStatusUpdate }: VoiceContro
       <CardHeader>
         <CardTitle className="text-white flex items-center gap-2">
           <Volume2 className="w-5 h-5" />
-          Voice Control
+          Contrôle vocal
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -68,21 +68,21 @@ export function VoiceControl({ isActive, onToggle, onStatusUpdate }: VoiceContro
           className={`w-full ${isActive ? "bg-success hover:bg-success/90" : "bg-primary hover:bg-primary/90"}`}
         >
           {isActive ? <Mic className="w-4 h-4 mr-2" /> : <MicOff className="w-4 h-4 mr-2" />}
-          {isActive ? "Voice Active" : "Enable Voice"}
+          {isActive ? "Contrôle vocal actif" : "Activer le contrôle vocal"}
         </Button>
 
         {isActive && (
           <div className="space-y-2">
-            <div className="text-sm text-gray-400">Available Commands:</div>
+            <div className="text-sm text-gray-400">Commandes disponibles :</div>
             <div className="text-xs text-gray-500 space-y-1">
-              <div>&bull; &quot;Start order&quot; - Begin preparation</div>
-              <div>&bull; &quot;Mark ready&quot; - Complete order</div>
-              <div>&bull; &quot;Next step&quot; - Advance current dish</div>
-              <div>&bull; &quot;Pause order&quot; - Pause preparation</div>
+              <div>&bull; &quot;Commencer la commande&quot; - Démarrer la préparation</div>
+              <div>&bull; &quot;Marquer prêt&quot; - Terminer la commande</div>
+              <div>&bull; &quot;Étape suivante&quot; - Avancer le plat en cours</div>
+              <div>&bull; &quot;Mettre en pause&quot; - Mettre en pause la préparation</div>
             </div>
             {lastCommand && (
               <div className="mt-3 p-2 bg-accent-blue/10 border-accent-blue/30 rounded text-sm">
-                <div className="text-accent-blue font-medium">Last Command:</div>
+                <div className="text-accent-blue font-medium">Dernière commande :</div>
                 <div className="text-blue-200">&quot;{lastCommand}&quot;</div>
               </div>
             )}

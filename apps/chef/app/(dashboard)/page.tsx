@@ -7,7 +7,6 @@ import { Clock, ChefHat, Users } from "lucide-react"
 import { OrderCard } from "@/components/order-card"
 import { VoiceControlPanel } from "@/components/voice-control-panel"
 import { useKitchenNotifications } from "@/components/notification-system"
-import { useI18n } from "@/components/i18n-provider"
 import { useKitchenQueue } from "@/features/orders/api/queries"
 import { useCurrentUser } from "@/features/auth"
 import { orderService } from "@/features/orders/api/services"
@@ -18,7 +17,6 @@ export default function ChefDashboard() {
   const { data: orders = [], isLoading, refetch } = useKitchenQueue(restaurantId)
   const [sortBy, setSortBy] = useState<"time" | "complexity">("time")
   const { notifyNewOrder } = useKitchenNotifications()
-  const { t } = useI18n()
   const router = useRouter()
 
   const [knownOrderIds, setKnownOrderIds] = useState<Set<string>>(new Set())
@@ -94,7 +92,7 @@ export default function ChefDashboard() {
       <div className="flex items-center justify-center py-24">
         <div className="text-center">
           <ChefHat className="w-16 h-16 mx-auto text-muted-foreground mb-4 animate-mongodb-fade-in" />
-          <p className="text-base text-muted-foreground">Loading orders...</p>
+          <p className="text-base text-muted-foreground">Chargement des commandes...</p>
         </div>
       </div>
     )
@@ -111,7 +109,7 @@ export default function ChefDashboard() {
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
           <div className="space-y-1">
             <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">
-              {t.kitchenDashboard}
+              Tableau de Bord Cuisine
             </h1>
           </div>
         </div>
@@ -127,7 +125,7 @@ export default function ChefDashboard() {
           <div className="flex items-center gap-3 rounded-xl border bg-card p-4 shadow-depth-card">
             <ChefHat className="w-5 h-5 text-warning shrink-0" />
             <span className="text-base font-medium tabular-nums">
-              {activeCount} Active
+              {activeCount} Actif
             </span>
           </div>
           <div className="flex items-center gap-3 rounded-xl border bg-card p-4 shadow-depth-card">
@@ -143,14 +141,14 @@ export default function ChefDashboard() {
             size="sm"
             onClick={() => setSortBy("time")}
           >
-            {t.sortByTime}
+            Trier par Temps
           </Button>
           <Button
             variant={sortBy === "complexity" ? "default" : "outline"}
             size="sm"
             onClick={() => setSortBy("complexity")}
           >
-            {t.sortByComplexity}
+            Trier par Complexité
           </Button>
         </div>
 
@@ -164,8 +162,8 @@ export default function ChefDashboard() {
         {orders.length === 0 && (
           <div className="text-center py-12">
             <ChefHat className="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-muted-foreground mb-4 animate-mongodb-fade-in" />
-            <h3 className="text-lg font-semibold text-muted-foreground mb-2">No Active Orders</h3>
-            <p className="text-base text-muted-foreground">Kitchen is all caught up!</p>
+            <h3 className="text-lg font-semibold text-muted-foreground mb-2">Aucune commande active</h3>
+            <p className="text-base text-muted-foreground">La cuisine est à jour !</p>
           </div>
         )}
       </div>

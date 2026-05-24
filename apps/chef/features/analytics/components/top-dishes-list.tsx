@@ -4,7 +4,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/sha
 import { Badge } from "@/shared/ui/badge"
 import { Progress } from "@/shared/ui/progress"
 import { Skeleton } from "@/shared/ui/skeleton"
-import { useI18n } from "@/components/i18n-provider"
 import { useTopDishes } from "../api/queries"
 import type { RangePreset } from "../types"
 
@@ -13,7 +12,6 @@ interface TopDishesListProps {
 }
 
 export function TopDishesList({ range }: TopDishesListProps) {
-  const { t } = useI18n()
   const { data, isLoading } = useTopDishes(range)
 
   const maxOrders = data && data.length > 0 ? data[0].orders : 0
@@ -21,8 +19,8 @@ export function TopDishesList({ range }: TopDishesListProps) {
   return (
     <Card className="bg-card border-border">
       <CardHeader className="p-4 sm:p-6">
-        <CardTitle className="text-primary text-base sm:text-lg">{t.topPerformingDishes}</CardTitle>
-        <CardDescription className="text-xs sm:text-sm">Most ordered items this week</CardDescription>
+        <CardTitle className="text-primary text-base sm:text-lg">Plats les plus performants</CardTitle>
+        <CardDescription className="text-xs sm:text-sm">Articles les plus commandés cette semaine</CardDescription>
       </CardHeader>
       <CardContent className="p-4 sm:p-6 pt-0">
         {isLoading ? (
@@ -49,7 +47,7 @@ export function TopDishesList({ range }: TopDishesListProps) {
                 </div>
                 <div className="text-right ml-4">
                   <p className="font-semibold text-card-foreground text-sm sm:text-base">{dish.orders}</p>
-                  <p className="text-xs sm:text-sm text-muted-foreground">${dish.revenue}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">{dish.revenue} DZD</p>
                 </div>
               </div>
             ))}
