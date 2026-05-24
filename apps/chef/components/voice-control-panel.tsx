@@ -4,8 +4,8 @@ import { useState } from "react"
 import { Button } from "@/shared/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card"
 import { Badge } from "@/shared/ui/badge"
-import { Mic, MicOff, Volume2, HelpCircle } from "lucide-react"
-import { useVoiceCommands } from "@/features/voice"
+import { Mic, MicOff, Volume2, HelpCircle, Loader2 } from "lucide-react"
+import { useVoiceCommands, useVoiceRecording, useTranscribe } from "@/features/voice"
 import { useI18n } from "./i18n-provider"
 
 interface VoiceControlPanelProps {
@@ -15,6 +15,7 @@ interface VoiceControlPanelProps {
 
 export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPanelProps) {
   const [showCommands, setShowCommands] = useState(false)
+  const [backendTranscript, setBackendTranscript] = useState<string>("")
   const { t } = useI18n()
 
   const voiceCommands = [
@@ -76,7 +77,46 @@ export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPan
     enabled: true,
   })
 
-  if (!isSupported) {
+  const {
+    isRecording,
+    isSupported: isRecordingSupported,
+    error: recordingError,
+    startRecording,
+    stopRecording,
+  } = useVoiceRecording()
+
+  const { mutateAsync: transcribe, isPending: isTranscribing } = useTranscribe()
+
+  const matchCommand = (transcript: string) => {
+    const lower = transcript.toLowerCase().trim()
+    const matched = voiceCommands.find(
+      (cmd) => lower.includes(cmd.command.toLowerCase()) || cmd.command.toLowerCase().includes(lower),
+    )
+    if (matched) {
+      matched.action()
+      speak(`Command executed: ${matched.description}`)
+    }
+    return matched?.command ?? null
+  }
+
+  const handleRecordAndTranscribe = async () => {
+    if (isRecording) {
+      const blob = await stopRecording()
+      if (blob) {
+        try {
+          const result = await transcribe(blob)
+          setBackendTranscript(result.text)
+          matchCommand(result.text)
+        } catch {
+          setBackendTranscript("Transcription failed — check backend connection")
+        }
+      }
+    } else {
+      await startRecording()
+    }
+  }
+
+  if (!isSupported && !isRecordingSupported) {
     return (
       <Card className="bg-card border-border m-8">
         <CardContent className="p-4">
@@ -91,25 +131,51 @@ export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPan
 
   return (
     <div className="m-8 space-y-4">
-      {/* Voice Control Panel */}
       <Card className="bg-card border-border">
-        <CardContent className="p-4">
+        <CardContent className="p-4 space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Button
-                onClick={isListening ? stopListening : startListening}
-                variant={isListening ? "destructive" : "default"}
-                size="sm"
-                className={isListening ? "bg-red-600 hover:bg-red-700" : "bg-orange-500 hover:bg-orange-600"}
-              >
-                {isListening ? <MicOff className="w-4 h-4 mr-2" /> : <Mic className="w-4 h-4 mr-2" />}
-                {isListening ? "Stop Listening" : "Start Voice Control"}
-              </Button>
+              {isSupported && (
+                <Button
+                  onClick={isListening ? stopListening : startListening}
+                  variant={isListening ? "destructive" : "default"}
+                  size="sm"
+                  className={isListening ? "bg-red-600 hover:bg-red-700" : "bg-orange-500 hover:bg-orange-600"}
+                >
+                  {isListening ? <MicOff className="w-4 h-4 mr-2" /> : <Mic className="w-4 h-4 mr-2" />}
+                  {isListening ? "Stop Listening" : "Voice Control"}
+                </Button>
+              )}
+
+              {isRecordingSupported && (
+                <Button
+                  onClick={handleRecordAndTranscribe}
+                  variant={isRecording ? "destructive" : "outline"}
+                  size="sm"
+                  disabled={isTranscribing}
+                >
+                  {isTranscribing ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : isRecording ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-pulse" />
+                  ) : (
+                    <Mic className="w-4 h-4 mr-2" />
+                  )}
+                  {isTranscribing ? "Transcribing..." : isRecording ? "Stop & Transcribe" : "Record"}
+                </Button>
+              )}
 
               {isListening && (
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
                   <span className="text-sm text-muted-foreground">Listening...</span>
+                </div>
+              )}
+
+              {isRecording && (
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
+                  <span className="text-sm text-muted-foreground">Recording...</span>
                 </div>
               )}
             </div>
@@ -136,15 +202,27 @@ export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPan
           </div>
 
           {lastCommand && (
-            <div className="mt-3 p-2 bg-muted rounded text-sm">
-              <span className="text-muted-foreground">Last command: </span>
+            <div className="p-2 bg-muted rounded text-sm">
+              <span className="text-muted-foreground">Web Speech: </span>
               <span className="text-orange-500">&quot;{lastCommand}&quot;</span>
+            </div>
+          )}
+
+          {backendTranscript && (
+            <div className="p-2 bg-muted rounded text-sm">
+              <span className="text-muted-foreground">Backend transcript: </span>
+              <span className="text-blue-500">&quot;{backendTranscript}&quot;</span>
+            </div>
+          )}
+
+          {recordingError && (
+            <div className="p-2 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded text-sm text-red-600 dark:text-red-400">
+              {recordingError}
             </div>
           )}
         </CardContent>
       </Card>
 
-      {/* Voice Commands Help */}
       {showCommands && (
         <Card className="bg-card border-border">
           <CardHeader>
@@ -172,6 +250,7 @@ export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPan
                 <li>• Use exact command phrases</li>
                 <li>• Ensure microphone permissions are granted</li>
                 <li>• Minimize background noise</li>
+                <li>• Use &quot;Record&quot; for higher accuracy via backend transcription</li>
               </ul>
             </div>
           </CardContent>
