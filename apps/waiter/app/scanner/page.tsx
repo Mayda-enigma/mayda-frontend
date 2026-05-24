@@ -4,9 +4,9 @@ import { QRScanner } from "@/components/qr-scanner"
 
 export default function ScannerPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <TopBar />
-      <main className="py-28">
+      <main className="pt-14 pb-20">
         <QRScanner />
       </main>
       <BottomNavigation />
