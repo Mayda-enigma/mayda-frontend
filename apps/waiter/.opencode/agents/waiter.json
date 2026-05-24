@@ -1,0 +1,11 @@
+{
+  "name": "waiter",
+  "tools": ["*"],
+  "resources": [
+    "file://AGENTS.md",
+    "file://README.md",
+    "file://DESIGN.md",
+    "file://PRODUCT.md",
+    "skill://.agents/skills/**/SKILL.md"
+  ]
+}
