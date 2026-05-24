@@ -49,29 +49,3 @@ export interface RegisterPayloadDto {
   name: string;
 }
 
-export interface StaffLoginInput {
-  phone: number;
-  password: string;
-}
-
-export interface StaffLoginPayloadDto {
-  phone: number;
-  password: string;
-}
-
-export interface TempTokenResponseDto {
-  tempToken: string;
-  message: string;
-  requiresOtp: boolean;
-  expiresIn: number;
-}
-
-export interface OtpVerificationInput {
-  tempToken: string;
-  otpCode: string;
-}
-
-export interface OtpVerificationDto {
-  tempToken: string;
-  otpCode: string;
-}
