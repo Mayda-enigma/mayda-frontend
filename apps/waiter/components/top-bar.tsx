@@ -43,7 +43,27 @@ export function TopBar() {
  {/* Notifications */}
  <NotificationSystem onNotificationUpdate={handleNotificationUpdate} />
 
-
+ {/* Language Switcher */}
+ <DropdownMenu>
+ <DropdownMenuTrigger asChild>
+ <Button variant="ghost" size="sm" className="gap-1 h-7 px-1.5 sm:h-8 sm:px-2">
+ <Globe className="h-3 w-3" />
+ <span className="text-xs">{currentLang.flag}</span>
+ </Button>
+ </DropdownMenuTrigger>
+ <DropdownMenuContent align="end" className="animate-fade-in">
+ {languages.map((lang) => (
+ <DropdownMenuItem
+ key={lang.code}
+ onClick={() => setLanguage(lang.code)}
+ className="gap-2 text-xs py-1.5"
+ >
+ <span>{lang.flag}</span>
+ <span>{lang.name}</span>
+ </DropdownMenuItem>
+ ))}
+ </DropdownMenuContent>
+ </DropdownMenu>
 
  <Button
  variant="ghost"

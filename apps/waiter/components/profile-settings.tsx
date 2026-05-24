@@ -64,7 +64,34 @@ export function ProfileSettings() {
         </CardContent>
       </Card>
 
-
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base">
+            <Globe className="h-4 w-4" />
+            Language Settings
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          <div className="grid gap-1.5">
+            {languages.map((lang) => (
+              <Button
+                key={lang.code}
+                variant={language === lang.code ? "default" : "outline"}
+                onClick={() => setLanguage(lang.code)}
+                className="justify-start gap-2 h-9 text-sm"
+              >
+                <span className="text-base">{lang.flag}</span>
+                <span>{lang.name}</span>
+                {language === lang.code && (
+                  <Badge variant="secondary" className="text-xs">
+                    Active
+                  </Badge>
+                )}
+              </Button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>

@@ -101,7 +101,7 @@ export function RevenueChart({ range }: { range: RangePreset }) {
                   borderRadius: "8px",
                 }}
                 formatter={(value, name) => {
-                  if (name === "Revenue (DZD)" || name === "Profit (DZD)") {
+                  if (name === "Revenue ($)" || name === "Profit ($)") {
                     return [`$${value}`, name]
                   }
                   return [value, name]
@@ -114,7 +114,7 @@ export function RevenueChart({ range }: { range: RangePreset }) {
                 dataKey="revenue"
                 stroke="#FF6B35"
                 strokeWidth={3}
-                name="Revenue (DZD)"
+                name="Revenue ($)"
                 dot={{ fill: "#FF6B35", strokeWidth: 2, r: 5 }}
                 activeDot={{ r: 7, stroke: "#FF6B35", strokeWidth: 2 }}
               />
@@ -134,7 +134,7 @@ export function RevenueChart({ range }: { range: RangePreset }) {
                 dataKey="profit"
                 stroke="#FFD23F"
                 strokeWidth={2}
-                name="Profit (DZD)"
+                name="Profit ($)"
                 strokeDasharray="5 5"
                 dot={{ fill: "#FFD23F", strokeWidth: 2, r: 4 }}
                 activeDot={{ r: 6, stroke: "#FFD23F", strokeWidth: 2 }}

@@ -48,7 +48,7 @@ export function RevenueTrendChart({ range }: RevenueTrendChartProps) {
                   color: "hsl(var(--popover-foreground))",
                 }}
               />
-              <Line type="monotone" dataKey="revenue" stroke="#10b981" strokeWidth={3} name="Revenue (DZD)" />
+              <Line type="monotone" dataKey="revenue" stroke="#10b981" strokeWidth={3} name="Revenue ($)" />
               <Line type="monotone" dataKey="orders" stroke="#f59e0b" strokeWidth={3} name="Orders" />
             </LineChart>
           </ResponsiveContainer>
