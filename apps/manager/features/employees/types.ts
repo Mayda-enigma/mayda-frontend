@@ -21,19 +21,15 @@ export interface Employee {
 
 export interface EmployeeDto {
   id: number;
-  name: string;
-  email: string;
-  phone: string;
+  email: string | null;
+  phone: number;
+  firstName: string;
+  lastName: string;
   role: string;
-  department: string;
-  hireDate: string;
-  salary: number;
-  status: string;
-  avatar: string | null;
-  performance_rating: number;
-  performance_avg_service_time: string;
-  performance_customer_score: number;
-  performance_attendance: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  restaurantId: number | null;
 }
 
 export interface InviteDto {

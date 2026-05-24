@@ -3,7 +3,7 @@ import type { EmployeeDto, InviteDto, UpdateDto, EmployeesQueryParams } from '..
 
 export const employeesService = {
   list: ({ restaurantId }: EmployeesQueryParams) =>
-    apiClient<EmployeeDto[]>(`/restaurants/${restaurantId}/staff`),
+    apiClient<{ staff: EmployeeDto[] }>(`/restaurants/${restaurantId}/staff`),
 
   invite: (restaurantId: number, data: InviteDto) =>
     apiClient<{ message: string }>(`/restaurants/${restaurantId}/staff/invite`, {
@@ -12,7 +12,7 @@ export const employeesService = {
     }),
 
   update: (restaurantId: number, id: number, data: UpdateDto) =>
-    apiClient<EmployeeDto>(`/restaurants/${restaurantId}/staff/${id}`, {
+    apiClient<{ staff: EmployeeDto[] }>(`/restaurants/${restaurantId}/staff/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(data),
     }),

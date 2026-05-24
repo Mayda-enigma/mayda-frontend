@@ -8,6 +8,6 @@ export const useEmployees = (params: EmployeesQueryParams) =>
   useQuery({
     queryKey: employeeKeys.list(params.restaurantId ?? 0),
     queryFn: () => employeesService.list(params),
-    select: (data) => data.map(toEmployee),
+    select: (data) => data.staff.map(toEmployee),
     enabled: params.restaurantId !== null,
   });

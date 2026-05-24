@@ -36,3 +36,31 @@ export interface HourlyDataPoint {
 }
 
 export type RangePreset = '7d' | '30d' | '90d';
+
+export interface CuisineShareItem {
+  name: string;
+  value: number;
+  color: string;
+  orders: number;
+}
+
+export interface PerformanceMetricsData {
+  avgPrepTime: number;
+  orderAccuracy: number;
+  tableTurnoverRate: string;
+  staffEfficiency: number;
+  alerts: AlertItem[];
+}
+
+export interface AlertItem {
+  type: string;
+  title: string;
+  message: string;
+  color: string;
+}
+
+export interface MonthlyComparisonItem {
+  month: string;
+  thisYear: number;
+  lastYear: number;
+}

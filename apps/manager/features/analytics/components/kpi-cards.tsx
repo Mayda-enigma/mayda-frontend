@@ -5,48 +5,37 @@ import { DollarSign, ShoppingCart, Star, TrendingUp, TrendingDown } from "lucide
 import { useKpis } from "../api/queries"
 import type { RangePreset } from "../types"
 
-const MOCK_KPIS = {
-  totalRevenue: 38400,
-  totalOrders: 407,
-  avgOrderValue: 94.35,
-  customerRating: 4.8,
-  revenueTrend: 12.5,
-  ordersTrend: 8.2,
-  avgOrderValueTrend: 3.8,
-  ratingTrend: 0.2,
-}
-
 export function KpiCards({ range }: { range: RangePreset }) {
   const { data: kpis } = useKpis(range)
 
-  const d = kpis ?? MOCK_KPIS
+  if (!kpis) return null
 
   const cards = [
     {
       label: "Total Revenue",
-      value: `$${d.totalRevenue.toLocaleString()}`,
-      trend: d.revenueTrend,
+      value: `$${kpis.totalRevenue.toLocaleString()}`,
+      trend: kpis.revenueTrend,
       icon: <DollarSign className="size-5" />,
       iconClass: "bg-primary/15 text-primary",
     },
     {
       label: "Total Orders",
-      value: d.totalOrders.toLocaleString(),
-      trend: d.ordersTrend,
+      value: kpis.totalOrders.toLocaleString(),
+      trend: kpis.ordersTrend,
       icon: <ShoppingCart className="size-5" />,
       iconClass: "bg-accent-blue/15 text-accent-blue",
     },
     {
       label: "Avg. Order Value",
-      value: `$${d.avgOrderValue.toFixed(2)}`,
-      trend: d.avgOrderValueTrend,
+      value: `$${kpis.avgOrderValue.toFixed(2)}`,
+      trend: kpis.avgOrderValueTrend,
       icon: <DollarSign className="size-5" />,
       iconClass: "bg-accent-orange/15 text-accent-orange",
     },
     {
       label: "Customer Rating",
-      value: d.customerRating.toFixed(1),
-      trend: d.ratingTrend,
+      value: kpis.customerRating.toFixed(1),
+      trend: kpis.ratingTrend,
       icon: <Star className="size-5" />,
       iconClass: "bg-accent-pink/15 text-accent-pink",
     },

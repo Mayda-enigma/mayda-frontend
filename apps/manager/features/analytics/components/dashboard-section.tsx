@@ -1,94 +1,18 @@
 "use client"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card"
-import { Badge } from "@/shared/ui/badge"
-import { Progress } from "@/shared/ui/progress"
-import {
-  BarChart,
-  Bar,
-  LineChart,
-  Line,
-  PieChart,
-  Pie,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts"
-import { Star, TrendingUp, TrendingDown, Clock, DollarSign, ShoppingCart, Users } from "lucide-react"
-
-export const salesData = [
-  { name: "Mon", revenue: 4200, orders: 45, profit: 1260 },
-  { name: "Tue", revenue: 3800, orders: 38, profit: 1140 },
-  { name: "Wed", revenue: 5200, orders: 52, profit: 1560 },
-  { name: "Thu", revenue: 4800, orders: 48, profit: 1440 },
-  { name: "Fri", revenue: 6800, orders: 68, profit: 2040 },
-  { name: "Sat", revenue: 8200, orders: 82, profit: 2460 },
-  { name: "Sun", revenue: 7400, orders: 74, profit: 2220 },
-]
-
-export const popularDishes = [
-  { name: "Pizza Margherita", orders: 145, revenue: 2175, rating: 4.8, trend: "+12%" },
-  { name: "Chicken Alfredo", orders: 128, revenue: 2304, rating: 4.7, trend: "+8%" },
-  { name: "Caesar Salad", orders: 98, revenue: 1176, rating: 4.6, trend: "+15%" },
-  { name: "Beef Burger", orders: 87, revenue: 1392, rating: 4.9, trend: "+5%" },
-  { name: "Fish & Chips", orders: 76, revenue: 1368, rating: 4.5, trend: "+22%" },
-  { name: "Pasta Carbonara", orders: 65, revenue: 1170, rating: 4.7, trend: "+18%" },
-  { name: "Grilled Salmon", orders: 54, revenue: 1296, rating: 4.8, trend: "+10%" },
-  { name: "Mushroom Risotto", orders: 43, revenue: 817, rating: 4.6, trend: "+25%" },
-]
-
-export const cuisineShare = [
-  { name: "Italian", value: 35, color: "#FF6B35", orders: 342 },
-  { name: "American", value: 25, color: "#F7931E", orders: 245 },
-  { name: "Mediterranean", value: 20, color: "#FFD23F", orders: 196 },
-  { name: "Asian", value: 12, color: "#06FFA5", orders: 118 },
-  { name: "Other", value: 8, color: "#4ECDC4", orders: 78 },
-]
-
-export const hourlyData = [
-  { hour: "6AM", orders: 2, revenue: 45 },
-  { hour: "7AM", orders: 8, revenue: 180 },
-  { hour: "8AM", orders: 15, revenue: 340 },
-  { hour: "9AM", orders: 12, revenue: 275 },
-  { hour: "10AM", orders: 8, revenue: 185 },
-  { hour: "11AM", orders: 18, revenue: 420 },
-  { hour: "12PM", orders: 45, revenue: 1080 },
-  { hour: "1PM", orders: 52, revenue: 1248 },
-  { hour: "2PM", orders: 38, revenue: 912 },
-  { hour: "3PM", orders: 22, revenue: 528 },
-  { hour: "4PM", orders: 15, revenue: 360 },
-  { hour: "5PM", orders: 28, revenue: 672 },
-  { hour: "6PM", orders: 48, revenue: 1152 },
-  { hour: "7PM", orders: 65, revenue: 1560 },
-  { hour: "8PM", orders: 58, revenue: 1392 },
-  { hour: "9PM", orders: 42, revenue: 1008 },
-  { hour: "10PM", orders: 25, revenue: 600 },
-  { hour: "11PM", orders: 12, revenue: 288 },
-]
-
-export const monthlyComparison = [
-  { month: "Jan", thisYear: 45000, lastYear: 38000 },
-  { month: "Feb", thisYear: 48000, lastYear: 42000 },
-  { month: "Mar", thisYear: 52000, lastYear: 45000 },
-  { month: "Apr", thisYear: 58000, lastYear: 48000 },
-  { month: "May", thisYear: 62000, lastYear: 52000 },
-  { month: "Jun", thisYear: 68000, lastYear: 58000 },
-]
+import { useRange } from "../hooks/use-range"
+import { RevenueChart } from "./revenue-chart"
+import { TopDishes } from "./top-dishes"
+import { CuisineShare } from "./cuisine-share"
+import { HourlyHeatmap } from "./hourly-heatmap"
+import { MonthlySection } from "./monthly-section"
 
 interface DashboardSectionProps {
   section: "revenue" | "popular-dishes" | "cuisine-share" | "busy-hours" | "monthly"
 }
 
 export function DashboardSection({ section }: DashboardSectionProps) {
-  const tooltipStyle = {
-    backgroundColor: "hsl(var(--card))",
-    border: "1px solid hsl(var(--border))",
-    borderRadius: "8px",
-  }
+  const { range } = useRange()
 
   switch (section) {
     case "revenue":
@@ -98,79 +22,7 @@ export function DashboardSection({ section }: DashboardSectionProps) {
             <h1 className="text-3xl font-bold text-balance">Revenue</h1>
             <p className="text-muted-foreground text-pretty">Daily revenue and order trends</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4">
-                  <span className="grid size-10 shrink-0 place-items-center rounded-md bg-primary/15 text-primary">
-                    <DollarSign className="size-5" />
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-xs font-medium text-muted-foreground">Total Revenue</p>
-                    <div className="text-2xl font-bold">$38,400</div>
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <TrendingUp className="size-3 text-success" />
-                      +12.5% from last week
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4">
-                  <span className="grid size-10 shrink-0 place-items-center rounded-md bg-accent-blue/15 text-accent-blue">
-                    <ShoppingCart className="size-5" />
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-xs font-medium text-muted-foreground">Total Orders</p>
-                    <div className="text-2xl font-bold">407</div>
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <TrendingUp className="size-3 text-success" />
-                      +8.2% from last week
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4">
-                  <span className="grid size-10 shrink-0 place-items-center rounded-md bg-success/15 text-success">
-                    <TrendingUp className="size-5" />
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-xs font-medium text-muted-foreground">Avg. Order Value</p>
-                    <div className="text-2xl font-bold">$94.35</div>
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <TrendingUp className="size-3 text-success" />
-                      +3.8% from last week
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-          <Card>
-            <CardHeader>
-              <CardTitle>Daily Revenue & Orders</CardTitle>
-              <CardDescription>Revenue and order trends over the last 7 days</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
-                <LineChart data={salesData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tickMargin={10} />
-                  <YAxis yAxisId="left" stroke="hsl(var(--muted-foreground))" fontSize={12} tickFormatter={(v) => `$${v}`} />
-                  <YAxis yAxisId="right" orientation="right" stroke="hsl(var(--muted-foreground))" fontSize={12} />
-                  <Tooltip contentStyle={tooltipStyle} formatter={(value, name) => name === "Revenue ($)" ? [`$${value}`, name] : [value, name]} />
-                  <Legend />
-                  <Line yAxisId="left" type="monotone" dataKey="revenue" stroke="#FF6B35" strokeWidth={3} name="Revenue ($)" dot={{ fill: "#FF6B35", r: 5 }} />
-                  <Line yAxisId="right" type="monotone" dataKey="orders" stroke="#06FFA5" strokeWidth={3} name="Orders" dot={{ fill: "#06FFA5", r: 5 }} />
-                </LineChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
+          <RevenueChart range={range} />
         </div>
       )
 
@@ -181,55 +33,7 @@ export function DashboardSection({ section }: DashboardSectionProps) {
             <h1 className="text-3xl font-bold text-balance">Popular Dishes</h1>
             <p className="text-muted-foreground text-pretty">Top performing menu items by order count</p>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Most Popular Dishes</CardTitle>
-                <CardDescription>Top performing menu items by order count</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={400}>
-                  <BarChart data={popularDishes.slice(0, 6)} layout="horizontal">
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" stroke="hsl(var(--muted-foreground))" />
-                    <YAxis dataKey="name" type="category" width={120} stroke="hsl(var(--muted-foreground))" />
-                    <Tooltip contentStyle={tooltipStyle} />
-                    <Bar dataKey="orders" fill="#F7931E" radius={[0, 4, 4, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Dish Performance Details</CardTitle>
-                <CardDescription>Comprehensive metrics for top dishes</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4 max-h-96 overflow-y-auto">
-                  {popularDishes.slice(0, 8).map((dish, index) => (
-                    <div key={dish.name} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-sm font-bold">
-                          {index + 1}
-                        </div>
-                        <div>
-                          <p className="font-medium text-sm">{dish.name}</p>
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <Star className="h-3 w-3 fill-warning text-warning" />
-                            {dish.rating}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm font-medium">{dish.orders} orders</p>
-                        <p className="text-xs text-success">{dish.trend}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <TopDishes range={range} />
         </div>
       )
 
@@ -240,65 +44,7 @@ export function DashboardSection({ section }: DashboardSectionProps) {
             <h1 className="text-3xl font-bold text-balance">Cuisine Share</h1>
             <p className="text-muted-foreground text-pretty">Breakdown of orders by cuisine type</p>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Cuisine Distribution</CardTitle>
-                <CardDescription>Breakdown of orders by cuisine type</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie data={cuisineShare} cx="50%" cy="50%" labelLine={false} label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} outerRadius={80} dataKey="value">
-                      {cuisineShare.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip contentStyle={tooltipStyle} />
-                  </PieChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Customer Segmentation</CardTitle>
-                <CardDescription>Detailed customer analytics</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Returning Customers</span>
-                    <span className="text-sm text-muted-foreground">68%</span>
-                  </div>
-                  <Progress value={68} className="h-2" />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">New Customers</span>
-                    <span className="text-sm text-muted-foreground">32%</span>
-                  </div>
-                  <Progress value={32} className="h-2" />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">VIP Customers</span>
-                    <span className="text-sm text-muted-foreground">15%</span>
-                  </div>
-                  <Progress value={15} className="h-2" />
-                </div>
-                <div className="pt-4 space-y-2">
-                  <div className="flex items-center justify-between text-sm">
-                    <span>Total Unique Customers</span>
-                    <Badge variant="secondary">1,247</Badge>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span>Customer Retention Rate</span>
-                    <Badge variant="default">68%</Badge>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <CuisineShare range={range} />
         </div>
       )
 
@@ -309,26 +55,7 @@ export function DashboardSection({ section }: DashboardSectionProps) {
             <h1 className="text-3xl font-bold text-balance">Busy Hours</h1>
             <p className="text-muted-foreground text-pretty">Hourly order distribution and revenue correlation</p>
           </div>
-          <Card>
-            <CardHeader>
-              <CardTitle>Hourly Order Distribution</CardTitle>
-              <CardDescription>Busiest hours throughout the day with revenue correlation</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
-                <BarChart data={hourlyData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="hour" stroke="hsl(var(--muted-foreground))" fontSize={11} angle={-45} textAnchor="end" height={60} />
-                  <YAxis yAxisId="left" stroke="hsl(var(--muted-foreground))" fontSize={12} />
-                  <YAxis yAxisId="right" orientation="right" stroke="hsl(var(--muted-foreground))" fontSize={12} tickFormatter={(v) => `$${v}`} />
-                  <Tooltip contentStyle={tooltipStyle} formatter={(value, name) => name === "Revenue ($)" ? [`$${value}`, name] : [value, name]} />
-                  <Legend />
-                  <Bar yAxisId="left" dataKey="orders" fill="#4ECDC4" name="Orders" radius={[4, 4, 0, 0]} />
-                  <Line yAxisId="right" type="monotone" dataKey="revenue" stroke="#FF6B35" strokeWidth={3} name="Revenue ($)" dot={{ fill: "#FF6B35", r: 4 }} />
-                </BarChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
+          <HourlyHeatmap range={range} />
         </div>
       )
 
@@ -339,25 +66,7 @@ export function DashboardSection({ section }: DashboardSectionProps) {
             <h1 className="text-3xl font-bold text-balance">Monthly Comparison</h1>
             <p className="text-muted-foreground text-pretty">Year-over-year revenue comparison</p>
           </div>
-          <Card>
-            <CardHeader>
-              <CardTitle>Monthly Performance Comparison</CardTitle>
-              <CardDescription>Year-over-year revenue comparison</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
-                <BarChart data={monthlyComparison}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
-                  <YAxis stroke="hsl(var(--muted-foreground))" />
-                  <Tooltip contentStyle={tooltipStyle} />
-                  <Legend />
-                  <Bar dataKey="thisYear" fill="#06FFA5" name="2024" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="lastYear" fill="#FFD23F" name="2023" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
+          <MonthlySection range={range} />
         </div>
       )
   }
