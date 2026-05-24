@@ -14,19 +14,28 @@ export interface OrderTableDto {
   capacity: number
 }
 
+export interface OrderItemDto {
+  id: number
+  dishId: number
+  quantity: number
+  unitPrice: number
+  totalPrice: number
+}
+
 export interface OrderDto {
   id: number
   orderNumber: string
   restaurantId: number
-  tableId: number
+  tableId: number | null
   type: string
   status: OrderStatus
   totalAmount: number
   paymentStatus: string
   orderTime: string
-  user: OrderUserDto
-  table: OrderTableDto
-  itemCount: number
+  user: OrderUserDto | null
+  table: OrderTableDto | null
+  items?: OrderItemDto[]
+  itemCount?: number
 }
 
 export interface Order {
@@ -65,4 +74,16 @@ export interface CreateOrderDto {
   tableId: number
   type: string
   items: CreateOrderItemDto[]
+}
+
+export interface PublicOrderItemDto {
+  dishId: number
+  quantity: number
+}
+
+export interface PublicOrderDto {
+  restaurantId: number
+  tableId: number
+  type: 'DINE_IN'
+  items: PublicOrderItemDto[]
 }

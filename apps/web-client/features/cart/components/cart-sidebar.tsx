@@ -26,18 +26,23 @@ export function CartSidebar() {
     dispatch({ type: "REMOVE_ITEM", payload: id })
   }
 
+  const tableId = typeof window !== 'undefined'
+    ? Number(sessionStorage.getItem('mayda_table_id') ?? 1)
+    : 1
+  const restaurantId = typeof window !== 'undefined'
+    ? Number(sessionStorage.getItem('mayda_restaurant_id') ?? process.env.NEXT_PUBLIC_RESTAURANT_ID ?? 1)
+    : 1
+
   const handleCheckout = () => {
     setCheckoutError(null)
     createOrder.mutate(
       {
-        restaurantId: Number(process.env.NEXT_PUBLIC_RESTAURANT_ID ?? 1),
-        tableId: Number(process.env.NEXT_PUBLIC_TABLE_ID ?? 12),
+        restaurantId,
+        tableId,
         type: "DINE_IN",
         items: state.items.map((item) => ({
           dishId: Number(item.id),
           quantity: item.quantity,
-          unitPrice: item.price,
-          totalPrice: item.price * item.quantity,
         })),
       },
       {
@@ -215,7 +220,7 @@ export function CartSidebar() {
             </div>
 
             <p className="text-xs text-muted-foreground text-center animate-pulse">
-              Table 12 • Estimated time: 25-30 minutes
+              Table {tableId} • Estimated time: 25-30 minutes
             </p>
           </div>
         )}
