@@ -28,8 +28,8 @@ const categories = [
 ];
 
 const dietaryFilters = [
-  { id: 'vegetarian', name: 'Vegetarian', icon: Leaf, color: 'text-restaurant-green' },
-  { id: 'vegan', name: 'Vegan', icon: Heart, color: 'text-restaurant-green' },
+  { id: 'vegetarian', name: 'Vegetarian', icon: Leaf, color: 'text-success' },
+  { id: 'vegan', name: 'Vegan', icon: Heart, color: 'text-success' },
   { id: 'gluten-free', name: 'Gluten Free', icon: Wheat, color: 'text-amber-600' },
   { id: 'halal', name: 'Halal', icon: Heart, color: 'text-blue-600' },
 ];
@@ -110,7 +110,7 @@ export function MenuGrid() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
         <div className="flex items-center justify-between p-3 sm:p-4">
           <div className="flex items-center gap-2 sm:gap-3">
@@ -149,7 +149,7 @@ export function MenuGrid() {
               >
                 <ShoppingBag className="w-3 h-3 sm:w-4 sm:h-4" />
                 {state.items.length > 0 && (
-                  <Badge className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-4 h-4 sm:w-5 sm:h-5 p-0 flex items-center justify-center text-xs restaurant-gradient text-white animate-pulse">
+                  <Badge className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-4 h-4 sm:w-5 sm:h-5 p-0 flex items-center justify-center text-xs bg-primary text-primary-foreground animate-pulse">
                     {state.items.length}
                   </Badge>
                 )}
@@ -192,7 +192,7 @@ export function MenuGrid() {
               size="sm"
               onClick={() => setSelectedCategory(category.id)}
               className={`whitespace-nowrap hover:scale-105 transition-all duration-200 hover:shadow-md text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 ${
-                selectedCategory === category.id ? 'restaurant-gradient text-white' : 'bg-transparent hover:bg-accent'
+                selectedCategory === category.id ? 'bg-primary text-primary-foreground' : 'bg-transparent hover:bg-accent'
               }`}
             >
               <span className="mr-1 sm:mr-2 transition-transform duration-200 hover:scale-110 text-xs sm:text-sm">
@@ -216,7 +216,7 @@ export function MenuGrid() {
                 size="sm"
                 onClick={() => toggleDietaryFilter(filter.id)}
                 className={`whitespace-nowrap hover:scale-105 transition-all duration-200 hover:shadow-md text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 ${
-                  isSelected ? 'bg-restaurant-green text-white' : 'bg-transparent hover:bg-accent'
+                  isSelected ? 'bg-success text-white' : 'bg-transparent hover:bg-accent'
                 }`}
               >
                 <Icon className="w-2 h-2 sm:w-3 sm:h-3 mr-1 sm:mr-2 transition-transform duration-200 hover:rotate-12" />

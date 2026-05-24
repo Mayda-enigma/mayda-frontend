@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from "next/image"
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
@@ -16,8 +17,8 @@ interface DishDetailModalProps {
 }
 
 const dietaryIcons: Record<string, { icon: typeof Leaf; color: string }> = {
-  vegetarian: { icon: Leaf, color: 'text-restaurant-green' },
-  vegan: { icon: Heart, color: 'text-restaurant-green' },
+  vegetarian: { icon: Leaf, color: 'text-success' },
+  vegan: { icon: Heart, color: 'text-success' },
   'gluten-free': { icon: Wheat, color: 'text-amber-600' },
   halal: { icon: Heart, color: 'text-blue-600' },
 };
@@ -49,15 +50,15 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/50 z-50 animate-in fade-in-0 duration-300" onClick={onClose} />
+      <div className="fixed inset-0 bg-black/50 z-50 animate-in fade-in-0 duration-300" aria-label="Close" onClick={onClose} />
 
       <div className="fixed inset-4 md:inset-8 lg:inset-16 bg-background rounded-xl z-50 overflow-hidden flex flex-col max-w-2xl mx-auto animate-in zoom-in-95 slide-in-from-bottom-4 duration-300">
         <div className="flex-1 overflow-y-auto">
           <div className="relative overflow-hidden">
-            <img
+            <Image
               src={dish.image || '/placeholder.svg'}
               alt={dish.name}
-              className="w-full h-48 md:h-64 object-cover transition-transform duration-700 hover:scale-105"
+              width={800} height={400} className="w-full h-48 md:h-64 object-cover transition-transform duration-700 hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
@@ -65,13 +66,13 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
               variant="ghost"
               size="sm"
               className="absolute top-4 right-4 bg-white/90 hover:bg-white text-black hover:scale-110 transition-all duration-200 hover:shadow-lg"
-              onClick={onClose}
+              aria-label="Close" onClick={onClose}
             >
               <X className="w-5 h-5" />
             </Button>
 
             {dish.popular && (
-              <Badge className="absolute top-4 left-4 restaurant-gradient text-white animate-bounce">Popular</Badge>
+              <Badge className="absolute top-4 left-4 bg-primary text-primary-foreground animate-bounce">Popular</Badge>
             )}
 
             <div className="absolute bottom-4 right-4 flex gap-2">
@@ -159,7 +160,7 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
                   variant="outline"
                   size="sm"
                   className="w-10 h-10 p-0 bg-transparent hover:scale-110 hover:bg-primary hover:text-white transition-all duration-200"
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  aria-label="Decrease quantity" onClick={() => setQuantity(Math.max(1, quantity - 1))}
                 >
                   <Minus className="w-4 h-4" />
                 </Button>
@@ -168,7 +169,7 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
                   variant="outline"
                   size="sm"
                   className="w-10 h-10 p-0 bg-transparent hover:scale-110 hover:bg-primary hover:text-white transition-all duration-200"
-                  onClick={() => setQuantity(quantity + 1)}
+                  aria-label="Increase quantity" onClick={() => setQuantity(quantity + 1)}
                 >
                   <Plus className="w-4 h-4" />
                 </Button>
@@ -183,7 +184,7 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
           </div>
 
           <Button
-            className="w-full restaurant-gradient text-white hover:opacity-90 hover:scale-105 transition-all duration-200 hover:shadow-lg"
+            className="w-full bg-primary text-primary-foreground hover:opacity-90 hover:scale-105 transition-all duration-200 hover:shadow-lg"
             size="lg"
             onClick={addToCart}
           >

@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -10,10 +7,7 @@ const nextConfig = {
     unoptimized: true,
   },
   poweredByHeader: false,
-  webpack: (config) => {
-    config.infrastructureLogging = { level: 'error' };
-    return config;
-  },
+  turbopack: {},
 }
 
 export default nextConfig
