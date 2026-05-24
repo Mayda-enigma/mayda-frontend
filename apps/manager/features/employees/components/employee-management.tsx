@@ -116,7 +116,7 @@ function getPerformanceColor(rating: number) {
 function formatCurrency(amount: number) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "USD",
+    currency: "DZD",
     maximumFractionDigits: 0,
   }).format(amount)
 }

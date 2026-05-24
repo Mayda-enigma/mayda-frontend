@@ -11,7 +11,7 @@ import Link from "next/link"
 import { BurgerMenu } from "@/components/burger-menu"
 
 export default function RestaurantLanding() {
-  const [language, setLanguage] = useState("en")
+  const [language, setLanguage] = useState("fr")
   const [tableNumber] = useState("12") // Simulated table number from QR scan
 
   const languages = {
@@ -104,18 +104,7 @@ export default function RestaurantLanding() {
           <div className="hidden md:block">
             <ThemeToggle />
           </div>
-          <div className="flex items-center gap-1 sm:gap-2">
-            <Globe className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
-            <select
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-              className="bg-transparent border border-border rounded-md px-1 sm:px-2 py-1 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-            >
-              <option value="en">EN</option>
-              <option value="fr">FR</option>
-              <option value="ar">AR</option>
-            </select>
-          </div>
+          {/* Internalisation button removed */}
         </div>
       </header>
 

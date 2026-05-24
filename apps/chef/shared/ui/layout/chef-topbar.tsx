@@ -8,7 +8,7 @@ import { ChefHat, Package, BarChart3, Menu } from "lucide-react"
 import { Button } from "@/shared/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/shared/ui/sheet"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { LanguageSelector } from "@/components/language-selector"
+
 import { NotificationCenter } from "@/components/notification-center"
 import { useI18n } from "@/components/i18n-provider"
 
@@ -80,7 +80,7 @@ export function ChefTopbar() {
       {/* Right cluster */}
       <div className="ml-auto flex items-center gap-2">
         <NotificationCenter />
-        <LanguageSelector currentLanguage={language} onLanguageChange={setLanguage} />
+
         <ThemeToggle />
       </div>
     </header>

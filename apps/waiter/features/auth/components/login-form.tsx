@@ -6,6 +6,7 @@ import { useLogin } from '../api/mutations';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import Image from 'next/image';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
@@ -28,8 +29,9 @@ export function LoginForm() {
 
   return (
     <Card className="w-full max-w-sm mx-auto mt-20">
-      <CardHeader>
-        <CardTitle>Waiter Sign in</CardTitle>
+      <CardHeader className="flex flex-col items-center gap-4 text-center">
+        <Image src="/LogoAdmin.svg" alt="Mayda Logo" width={80} height={80} />
+        <CardTitle className="text-2xl font-semibold">Sign in</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">

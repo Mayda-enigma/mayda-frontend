@@ -6,7 +6,6 @@ import Image from "next/image"
 import { Button } from "@/shared/ui/button"
 import { ChefHat, Package, BarChart3 } from "lucide-react"
 import { ThemeToggle } from "./theme-toggle"
-import { LanguageSelector } from "./language-selector"
 import { useI18n } from "./i18n-provider"
 
 export function Navigation() {
@@ -51,7 +50,7 @@ export function Navigation() {
               </Link>
             )
           })}
-          <LanguageSelector currentLanguage={language} onLanguageChange={setLanguage} />
+
           <ThemeToggle />
         </div>
       </div>
