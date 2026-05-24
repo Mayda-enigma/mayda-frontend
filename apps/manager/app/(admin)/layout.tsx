@@ -47,7 +47,7 @@ export default function AdminLayout({
               variant="ghost"
               size="icon"
               onClick={() => setMobileNavOpen(true)}
-              aria-label="Open navigation"
+              aria-label="Ouvrir la navigation"
             >
               <Menu className="size-5" />
             </Button>
@@ -66,7 +66,7 @@ export default function AdminLayout({
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
-                  placeholder="Search restaurants, orders, staff..."
+                  placeholder="Rechercher restaurants, commandes, personnel..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="h-8 border-0 bg-muted/50 pl-9 text-sm shadow-none focus-visible:ring-0"

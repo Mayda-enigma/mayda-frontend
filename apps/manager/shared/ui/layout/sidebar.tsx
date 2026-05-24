@@ -118,7 +118,7 @@ export function Sidebar({ navigation, className, onNavigate }: SidebarProps) {
             <button
               type="button"
               onClick={toggleTheme}
-              aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+              aria-label={isDark ? "Passer en mode clair" : "Passer en mode sombre"}
               suppressHydrationWarning
               className="grid size-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
@@ -151,16 +151,16 @@ export function Sidebar({ navigation, className, onNavigate }: SidebarProps) {
             "shadow-depth-btn hover:bg-card/95",
             "outline-none focus-visible:ring-2 focus-visible:ring-ring",
           )}
-          aria-label="Switch workspace"
+          aria-label="Changer d'espace de travail"
         >
           <span className="grid size-7 shrink-0 place-items-center rounded-md bg-primary/15 text-xs font-bold leading-none text-primary">
             M
           </span>
           <span className="min-w-0 flex-1 truncate text-sm font-medium leading-none">
-            Main Restaurant
+            Restaurant Principal
           </span>
           <span className="inline-flex h-5 shrink-0 items-center rounded-md border bg-background px-1.5 text-[10px] font-semibold uppercase leading-none tracking-wider text-muted-foreground">
-            Free
+            Gratuit
           </span>
           <ChevronsUpDown
             className="size-3.5 shrink-0 text-muted-foreground"
@@ -172,7 +172,7 @@ export function Sidebar({ navigation, className, onNavigate }: SidebarProps) {
           className="w-[--radix-dropdown-menu-trigger-width] min-w-56"
         >
           <DropdownMenuLabel className="text-xs font-normal text-muted-foreground">
-            Workspaces wire up in AD-005.
+            Les espaces de travail seront configurés dans AD-005.
           </DropdownMenuLabel>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -269,14 +269,14 @@ export function Sidebar({ navigation, className, onNavigate }: SidebarProps) {
             "hover:bg-accent",
             "outline-none focus-visible:ring-2 focus-visible:ring-ring",
           )}
-          aria-label="Open profile menu"
+          aria-label="Ouvrir le profil"
         >
           <span className="grid size-8 shrink-0 place-items-center rounded-full bg-accent-purple text-sm font-semibold leading-none text-white">
             A
           </span>
           <span className="min-w-0 flex-1 leading-tight">
             <span className="block truncate text-sm font-medium">
-              Admin User
+              Utilisateur admin
             </span>
             <span className="block truncate text-xs text-muted-foreground">
               admin@mayda.app
@@ -289,12 +289,12 @@ export function Sidebar({ navigation, className, onNavigate }: SidebarProps) {
           className="w-[--radix-dropdown-menu-trigger-width] min-w-56"
         >
           <DropdownMenuLabel className="text-xs font-normal text-muted-foreground">
-            Account actions land in AD-004 (auth).
+            Les actions du compte seront dans AD-004 (auth).
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem variant="destructive" disabled>
             <LogOut className="size-4" aria-hidden />
-            Sign out
+            Déconnexion
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

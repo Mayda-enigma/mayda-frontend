@@ -32,27 +32,27 @@ export function StockFilteredTable({
     <div className="space-y-6 animate-in fade-in-50 duration-500">
       {isUserLoading || stockQuery.isLoading ? (
         <Alert>
-          <AlertTitle>Loading stock</AlertTitle>
+          <AlertTitle>Chargement des stocks</AlertTitle>
           <AlertDescription>
-            Fetching inventory items for this restaurant.
+            Récupération des articles d'inventaire pour ce restaurant.
           </AlertDescription>
         </Alert>
       ) : null}
       {!isUserLoading && restaurantId === null ? (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Restaurant context missing</AlertTitle>
+          <AlertTitle>Contexte du restaurant manquant</AlertTitle>
           <AlertDescription>
-            This manager account is not linked to a restaurant, so stock items cannot be shown.
+            Ce compte gestionnaire n'est lié à aucun restaurant, les articles de stock ne peuvent donc pas être affichés.
           </AlertDescription>
         </Alert>
       ) : null}
       {stockQuery.isError ? (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Could not load stock</AlertTitle>
+          <AlertTitle>Impossible de charger les stocks</AlertTitle>
           <AlertDescription>
-            The inventory API request failed. Refresh the page and try again.
+            La requête API d'inventaire a échoué. Actualisez la page et réessayez.
           </AlertDescription>
         </Alert>
       ) : null}
@@ -65,7 +65,7 @@ export function StockFilteredTable({
         <CardContent>
           <StockTable
             items={filteredItems}
-            emptyMessage="No stock items match this view."
+            emptyMessage="Aucun article de stock ne correspond à cette vue."
           />
         </CardContent>
       </Card>

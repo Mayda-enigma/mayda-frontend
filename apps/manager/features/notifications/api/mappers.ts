@@ -5,12 +5,12 @@ function timeAgo(dateStr: string): string {
   const then = new Date(dateStr).getTime()
   const diff = now - then
   const minutes = Math.floor(diff / 60000)
-  if (minutes < 1) return 'just now'
-  if (minutes < 60) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`
+  if (minutes < 1) return "à l'instant"
+  if (minutes < 60) return `il y a ${minutes} minute${minutes > 1 ? 's' : ''}`
   const hours = Math.floor(minutes / 60)
-  if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`
+  if (hours < 24) return `il y a ${hours} heure${hours > 1 ? 's' : ''}`
   const days = Math.floor(hours / 24)
-  return `${days} day${days > 1 ? 's' : ''} ago`
+  return `il y a ${days} jour${days > 1 ? 's' : ''}`
 }
 
 function inferPriority(notification: NotificationDto): string {

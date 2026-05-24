@@ -19,9 +19,9 @@ import { useRange } from "../hooks/use-range"
 import type { RangePreset } from "../types"
 
 const RANGES: { label: string; value: RangePreset }[] = [
-  { label: "7 Days", value: "7d" },
-  { label: "30 Days", value: "30d" },
-  { label: "90 Days", value: "90d" },
+  { label: "7 jours", value: "7d" },
+  { label: "30 jours", value: "30d" },
+  { label: "90 jours", value: "90d" },
 ]
 export function AnalyticsDashboard() {
   const { range, setRange } = useRange()
@@ -30,8 +30,8 @@ export function AnalyticsDashboard() {
     <div className="space-y-6 animate-in fade-in-50 duration-500">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-balance">Analytics Dashboard</h1>
-          <p className="text-muted-foreground text-pretty">Comprehensive insights and performance metrics for your restaurant</p>
+          <h1 className="text-3xl font-bold text-balance">Tableau de bord analytique</h1>
+          <p className="text-muted-foreground text-pretty">Aperçu complet et indicateurs de performance pour votre restaurant</p>
         </div>
         <div className="flex items-center gap-1 rounded-lg border p-0.5">
           {RANGES.map((r) => (
@@ -58,14 +58,14 @@ export function AnalyticsDashboard() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
             <Lightbulb className="h-5 w-5 text-primary" />
-            AI Predictive Insights
+            Insights prédictifs IA
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           {[
-            { icon: <TrendingUp className="h-5 w-5 text-success mt-0.5" />, title: "Pizza Margherita demand expected +25% this weekend", desc: "Based on historical data. Consider increasing inventory." },
-            { icon: <DollarSign className="h-5 w-5 text-primary mt-0.5" />, title: "Promoting Chicken Alfredo may increase revenue by 15%", desc: "High-margin dish with growing popularity." },
-            { icon: <Clock className="h-5 w-5 text-accent mt-0.5" />, title: "Peak hours: 7-8 PM shows 15% increase in wait times", desc: "Consider adding staff during peak hours." },
+            { icon: <TrendingUp className="h-5 w-5 text-success mt-0.5" />, title: "Demande de Pizza Margherita attendue +25% ce week-end", desc: "Basé sur les données historiques. Envisagez d'augmenter les stocks." },
+            { icon: <DollarSign className="h-5 w-5 text-primary mt-0.5" />, title: "Promouvoir le Chicken Alfredo peut augmenter les revenus de 15%", desc: "Plat à forte marge avec une popularité croissante." },
+            { icon: <Clock className="h-5 w-5 text-accent mt-0.5" />, title: "Heures de pointe : 19h-20h montre une augmentation de 15% des temps d'attente", desc: "Envisagez d'ajouter du personnel aux heures de pointe." },
           ].map((insight) => (
             <div key={insight.title} className="flex items-start gap-3 p-3 bg-background/50 rounded-lg">
               {insight.icon}
@@ -80,11 +80,11 @@ export function AnalyticsDashboard() {
 
       <Tabs defaultValue="revenue" className="space-y-6">
         <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5">
-          <TabsTrigger value="revenue">Revenue</TabsTrigger>
-          <TabsTrigger value="popular">Popular Dishes</TabsTrigger>
-          <TabsTrigger value="cuisine">Cuisine Share</TabsTrigger>
-          <TabsTrigger value="hours">Busy Hours</TabsTrigger>
-          <TabsTrigger value="monthly">Monthly</TabsTrigger>
+          <TabsTrigger value="revenue">Revenus</TabsTrigger>
+          <TabsTrigger value="popular">Plats populaires</TabsTrigger>
+          <TabsTrigger value="cuisine">Part par cuisine</TabsTrigger>
+          <TabsTrigger value="hours">Heures d'affluence</TabsTrigger>
+          <TabsTrigger value="monthly">Mensuel</TabsTrigger>
         </TabsList>
         <TabsContent value="revenue"><RevenueChart range={range} /></TabsContent>
         <TabsContent value="popular"><TopDishes range={range} /></TabsContent>
@@ -93,7 +93,7 @@ export function AnalyticsDashboard() {
         <TabsContent value="monthly">
           <Card>
             <CardHeader>
-              <CardTitle>Monthly Performance Comparison</CardTitle>
+              <CardTitle>Comparaison mensuelle des performances</CardTitle>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={400}>

@@ -20,7 +20,7 @@ export function SettingCard({
   description,
   control,
   showSave = false,
-  saveLabel = "Save",
+  saveLabel = "Enregistrer",
   saveDisabled = true,
   className,
 }: SettingCardProps) {

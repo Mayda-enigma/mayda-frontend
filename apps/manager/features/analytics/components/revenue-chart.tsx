@@ -28,23 +28,23 @@ export function RevenueChart({ range }: { range: RangePreset }) {
         <CardContent className="p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <p className="text-xs font-medium text-muted-foreground">Revenue Forecast</p>
+              <p className="text-xs font-medium text-muted-foreground">Prévision des revenus</p>
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-bold">${revenue.forecast.revenue.toLocaleString()}</span>
+                <span className="text-2xl font-bold">{revenue.forecast.revenue.toLocaleString()} DZD</span>
                 <span className="flex items-center gap-0.5 text-xs text-success font-medium">
                   <ArrowUpRight className="size-3" />
-                  +{revenue.forecast.change}% projected
+                  +{revenue.forecast.change}% projeté
                 </span>
               </div>
             </div>
             <div className="flex items-center gap-3 text-xs text-muted-foreground">
               <div className="flex items-center gap-1.5">
                 <span className="size-2 rounded-sm bg-primary" />
-                Actual
+                Réel
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="size-2 rounded-sm bg-primary/40" />
-                Forecast
+                Prévision
               </div>
             </div>
           </div>
@@ -72,8 +72,8 @@ export function RevenueChart({ range }: { range: RangePreset }) {
 
       <Card className="hover:shadow-lg transition-shadow duration-300">
         <CardHeader>
-          <CardTitle>Daily Revenue & Orders</CardTitle>
-          <CardDescription>Revenue and order trends over the selected period</CardDescription>
+          <CardTitle>Revenus & Commandes quotidiens</CardTitle>
+          <CardDescription>Tendances des revenus et commandes sur la période sélectionnée</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={350}>
@@ -85,7 +85,7 @@ export function RevenueChart({ range }: { range: RangePreset }) {
                 stroke="hsl(var(--muted-foreground))"
                 fontSize={12}
                 domain={[0, "auto"]}
-                tickFormatter={(value) => `$${value}`}
+                tickFormatter={(value) => `${value} DZD`}
               />
               <YAxis
                 yAxisId="right"
@@ -101,8 +101,8 @@ export function RevenueChart({ range }: { range: RangePreset }) {
                   borderRadius: "8px",
                 }}
                 formatter={(value, name) => {
-                  if (name === "Revenue ($)" || name === "Profit ($)") {
-                    return [`$${value}`, name]
+                  if (name === "Revenu (DZD)" || name === "Profit (DZD)") {
+                    return [`${value} DZD`, name]
                   }
                   return [value, name]
                 }}
@@ -114,7 +114,7 @@ export function RevenueChart({ range }: { range: RangePreset }) {
                 dataKey="revenue"
                 stroke="#FF6B35"
                 strokeWidth={3}
-                name="Revenue ($)"
+                name="Revenu (DZD)"
                 dot={{ fill: "#FF6B35", strokeWidth: 2, r: 5 }}
                 activeDot={{ r: 7, stroke: "#FF6B35", strokeWidth: 2 }}
               />
@@ -124,7 +124,7 @@ export function RevenueChart({ range }: { range: RangePreset }) {
                 dataKey="orders"
                 stroke="#06FFA5"
                 strokeWidth={3}
-                name="Orders"
+                name="Commandes"
                 dot={{ fill: "#06FFA5", strokeWidth: 2, r: 5 }}
                 activeDot={{ r: 7, stroke: "#06FFA5", strokeWidth: 2 }}
               />
@@ -134,7 +134,7 @@ export function RevenueChart({ range }: { range: RangePreset }) {
                 dataKey="profit"
                 stroke="#FFD23F"
                 strokeWidth={2}
-                name="Profit ($)"
+                name="Profit (DZD)"
                 strokeDasharray="5 5"
                 dot={{ fill: "#FFD23F", strokeWidth: 2, r: 4 }}
                 activeDot={{ r: 6, stroke: "#FFD23F", strokeWidth: 2 }}

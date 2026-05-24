@@ -56,13 +56,13 @@ export function StockTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="min-w-[180px]">Item</TableHead>
-            <TableHead className="min-w-[120px]">Category</TableHead>
-            <TableHead className="min-w-[170px]">Current Stock</TableHead>
-            <TableHead className="min-w-[140px]">Threshold</TableHead>
-            <TableHead className="min-w-[110px]">Status</TableHead>
-            <TableHead className="min-w-[160px]">Supplier</TableHead>
-            <TableHead className="min-w-[120px]">Location</TableHead>
+            <TableHead className="min-w-[180px]">Article</TableHead>
+            <TableHead className="min-w-[120px]">Catégorie</TableHead>
+            <TableHead className="min-w-[170px]">Stock actuel</TableHead>
+            <TableHead className="min-w-[140px]">Seuil</TableHead>
+            <TableHead className="min-w-[110px]">Statut</TableHead>
+            <TableHead className="min-w-[160px]">Fournisseur</TableHead>
+            <TableHead className="min-w-[120px]">Emplacement</TableHead>
             <TableHead className="min-w-[110px] text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
@@ -139,10 +139,10 @@ export function StockTable({
                     onClick={() => onRestock(item)}
                     disabled={restockingId === item.id}
                   >
-                    {restockingId === item.id ? "Saving..." : "Restock"}
+                    {restockingId === item.id ? "Enregistrement..." : "Réapprovisionner"}
                   </Button>
                 ) : (
-                  <span className="text-xs text-muted-foreground">View</span>
+                  <span className="text-xs text-muted-foreground">Voir</span>
                 )}
               </TableCell>
             </TableRow>

@@ -17,13 +17,13 @@ export function OrderListTable({ orders, onViewOrder }: OrderListTableProps) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Order #</TableHead>
-          <TableHead>Customer</TableHead>
+          <TableHead>N° commande</TableHead>
+          <TableHead>Client</TableHead>
           <TableHead>Table</TableHead>
-          <TableHead>Items</TableHead>
+          <TableHead>Articles</TableHead>
           <TableHead>Total</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Time</TableHead>
+          <TableHead>Statut</TableHead>
+          <TableHead>Heure</TableHead>
           <TableHead className="w-12" />
         </TableRow>
       </TableHeader>

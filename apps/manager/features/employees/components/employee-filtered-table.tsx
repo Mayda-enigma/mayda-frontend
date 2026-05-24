@@ -66,23 +66,23 @@ export function EmployeeFilteredTable({
         </CardHeader>
         <CardContent>
           {isUserLoading || employeesQuery.isLoading ? (
-            <p className="text-sm text-muted-foreground">Loading employees...</p>
+            <p className="text-sm text-muted-foreground">Chargement des employés...</p>
           ) : null}
           {!isUserLoading && restaurantId === null ? (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Restaurant context missing</AlertTitle>
+              <AlertTitle>Contexte du restaurant manquant</AlertTitle>
               <AlertDescription>
-                The current manager account is not linked to a restaurant.
+                Le compte manager actuel n'est pas lié à un restaurant.
               </AlertDescription>
             </Alert>
           ) : null}
           {employeesQuery.isError ? (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Could not load employees</AlertTitle>
+              <AlertTitle>Impossible de charger les employés</AlertTitle>
               <AlertDescription>
-                The staff list request failed. Refresh the page and try again.
+                La requête a échoué. Actualisez la page et réessayez.
               </AlertDescription>
             </Alert>
           ) : null}
@@ -93,12 +93,12 @@ export function EmployeeFilteredTable({
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Employee</TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead>Department</TableHead>
+                    <TableHead>Employé</TableHead>
+                    <TableHead>Rôle</TableHead>
+                    <TableHead>Département</TableHead>
                     <TableHead>Contact</TableHead>
-                    <TableHead>Rating</TableHead>
-                    <TableHead>Attendance</TableHead>
+                    <TableHead>Note</TableHead>
+                    <TableHead>Présence</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -131,7 +131,7 @@ export function EmployeeFilteredTable({
                           </div>
                           <div className="flex items-center gap-1 text-xs">
                             <Phone className="h-3 w-3 text-muted-foreground" />
-                            {employee.phone || "No phone on file"}
+                            {employee.phone || "Aucun téléphone"}
                           </div>
                         </div>
                       </TableCell>
@@ -168,7 +168,7 @@ export function EmployeeFilteredTable({
               </Table>
             ) : (
               <p className="text-sm text-muted-foreground">
-                No employees matched this department.
+                Aucun employé ne correspond à ce département.
               </p>
             )
           ) : null}

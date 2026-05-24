@@ -170,15 +170,15 @@ export function MenuManagement() {
     <div className="space-y-6 animate-in fade-in-50 duration-500">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-1">
-          <h1 className="text-3xl font-semibold text-balance">Menu Management</h1>
+          <h1 className="text-3xl font-semibold text-balance">Gestion du menu</h1>
           <p className="text-base text-muted-foreground">
-            Publish menu updates, control availability, and keep categories tidy.
+            Publiez les mises à jour du menu, contrôlez la disponibilité et gardez les catégories organisées.
           </p>
         </div>
         {restaurantId !== null ? (
           <Button onClick={() => setIsCreateOpen(true)}>
             <Plus className="h-4 w-4" />
-            Add Menu Item
+            Ajouter un article
           </Button>
         ) : null}
       </div>
@@ -205,28 +205,28 @@ export function MenuManagement() {
 
       {isUserLoading || menuQuery.isLoading ? (
         <Alert>
-          <AlertTitle>Loading menu</AlertTitle>
+          <AlertTitle>Chargement du menu</AlertTitle>
           <AlertDescription>
-            Fetching the latest dishes for this restaurant.
+            Récupération des derniers plats de ce restaurant.
           </AlertDescription>
         </Alert>
       ) : null}
       {!isUserLoading && restaurantId === null ? (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Restaurant context missing</AlertTitle>
+          <AlertTitle>Contexte du restaurant manquant</AlertTitle>
           <AlertDescription>
-            This manager account is not linked to a restaurant, so menu CRUD is
-            unavailable.
+            Ce compte gestionnaire n'est lié à aucun restaurant. La gestion du menu est
+            donc indisponible.
           </AlertDescription>
         </Alert>
       ) : null}
       {menuQuery.isError ? (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Could not load menu</AlertTitle>
+          <AlertTitle>Impossible de charger le menu</AlertTitle>
           <AlertDescription>
-            The menu API request failed. Refresh the page and try again.
+            La requête API du menu a échoué. Actualisez la page et réessayez.
           </AlertDescription>
         </Alert>
       ) : null}
@@ -239,7 +239,7 @@ export function MenuManagement() {
                 <ChefHat className="size-5" />
               </span>
               <div>
-                <p className="text-xs font-medium text-muted-foreground">Menu Items</p>
+                <p className="text-xs font-medium text-muted-foreground">Articles du menu</p>
                 <p className="text-2xl font-semibold tabular-nums">{menuItems.length}</p>
               </div>
             </div>
@@ -252,7 +252,7 @@ export function MenuManagement() {
                 <Tag className="size-5" />
               </span>
               <div>
-                <p className="text-xs font-medium text-muted-foreground">Available Now</p>
+                <p className="text-xs font-medium text-muted-foreground">Disponible maintenant</p>
                 <p className="text-2xl font-semibold tabular-nums">{availableCount}</p>
               </div>
             </div>
@@ -265,9 +265,9 @@ export function MenuManagement() {
                 <Clock3 className="size-5" />
               </span>
               <div>
-                <p className="text-xs font-medium text-muted-foreground">Avg Prep / Price</p>
+                <p className="text-xs font-medium text-muted-foreground">Prép. moy. / Prix</p>
                 <p className="text-2xl font-semibold tabular-nums">
-                  {averagePrepTime}m / ${averagePrice.toFixed(2)}
+                  {averagePrepTime}m / {averagePrice.toFixed(2)} DZD
                 </p>
               </div>
             </div>
@@ -277,7 +277,7 @@ export function MenuManagement() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Catalog</CardTitle>
+          <CardTitle>Catalogue</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-col gap-4 lg:flex-row">
@@ -286,16 +286,16 @@ export function MenuManagement() {
               <Input
                 value={searchTerm}
                 onChange={(event) => setSearchTerm(event.target.value)}
-                placeholder="Search menu items"
+                placeholder="Rechercher des articles"
                 className="pl-9"
               />
             </div>
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
               <SelectTrigger className="w-full lg:w-56">
-                <SelectValue placeholder="Category" />
+                <SelectValue placeholder="Catégorie" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
+                <SelectItem value="all">Toutes les catégories</SelectItem>
                 {categories.map((cat) => (
                   <SelectItem key={cat.id} value={cat.name}>
                     {cat.name}
@@ -305,19 +305,19 @@ export function MenuManagement() {
             </Select>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-full lg:w-56">
-                <SelectValue placeholder="Availability" />
+                <SelectValue placeholder="Disponibilité" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All States</SelectItem>
-                <SelectItem value="available">Available</SelectItem>
-                <SelectItem value="unavailable">Unavailable</SelectItem>
+                <SelectItem value="all">Tous les statuts</SelectItem>
+                <SelectItem value="available">Disponible</SelectItem>
+                <SelectItem value="unavailable">Indisponible</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           {!menuQuery.isLoading && filteredItems.length === 0 ? (
             <p className="text-sm text-muted-foreground">
-              No menu items matched the current filters.
+              Aucun article ne correspond aux filtres actuels.
             </p>
           ) : null}
 

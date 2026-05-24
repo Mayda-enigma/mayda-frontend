@@ -64,10 +64,10 @@ export function ReservationManagement() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-1">
           <h1 className="text-3xl font-semibold text-balance">
-            Reservation Desk
+            Gestion des réservations
           </h1>
           <p className="text-base text-muted-foreground">
-            Review today&apos;s bookings and update statuses in one place.
+            Consultez les réservations du jour et mettez à jour les statuts.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -83,28 +83,28 @@ export function ReservationManagement() {
 
       {isUserLoading || reservationsQuery.isLoading ? (
         <Alert>
-          <AlertTitle>Loading reservations</AlertTitle>
+          <AlertTitle>Chargement des réservations</AlertTitle>
           <AlertDescription>
-            Fetching reservations for {selectedDate}.
+            Récupération des réservations pour le {selectedDate}.
           </AlertDescription>
         </Alert>
       ) : null}
       {!isUserLoading && restaurantId === null ? (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Restaurant context missing</AlertTitle>
+          <AlertTitle>Contexte du restaurant manquant</AlertTitle>
           <AlertDescription>
-            This manager account is not linked to a restaurant, so reservation
-            actions are unavailable.
+            Ce compte gestionnaire n&apos;est pas lié à un restaurant, les actions
+            sur les réservations sont donc indisponibles.
           </AlertDescription>
         </Alert>
       ) : null}
       {reservationsQuery.isError ? (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Could not load reservations</AlertTitle>
+          <AlertTitle>Impossible de charger les réservations</AlertTitle>
           <AlertDescription>
-            The reservation API request failed. Refresh the page and try again.
+            La requête API a échoué. Actualisez la page et réessayez.
           </AlertDescription>
         </Alert>
       ) : null}
@@ -117,7 +117,7 @@ export function ReservationManagement() {
                 <Clock3 className="size-5" />
               </span>
               <div>
-                <p className="text-xs font-medium text-muted-foreground">Pending</p>
+                <p className="text-xs font-medium text-muted-foreground">En attente</p>
                 <p className="text-2xl font-semibold tabular-nums">
                   {pendingReservations.length}
                 </p>
@@ -132,7 +132,7 @@ export function ReservationManagement() {
                 <CheckCircle2 className="size-5" />
               </span>
               <div>
-                <p className="text-xs font-medium text-muted-foreground">Confirmed</p>
+                <p className="text-xs font-medium text-muted-foreground">Confirmées</p>
                 <p className="text-2xl font-semibold tabular-nums">
                   {confirmedReservations.length}
                 </p>
@@ -147,7 +147,7 @@ export function ReservationManagement() {
                 <Users className="size-5" />
               </span>
               <div>
-                <p className="text-xs font-medium text-muted-foreground">No-show</p>
+                <p className="text-xs font-medium text-muted-foreground">Absent</p>
                 <p className="text-2xl font-semibold tabular-nums">
                   {noShowReservations.length}
                 </p>
@@ -159,7 +159,7 @@ export function ReservationManagement() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Today&apos;s Floor View</CardTitle>
+          <CardTitle>Vue du jour</CardTitle>
         </CardHeader>
         <CardContent>
           {reservations.length > 0 ? (
@@ -174,7 +174,7 @@ export function ReservationManagement() {
             />
           ) : (
             <p className="text-sm text-muted-foreground">
-              No reservations scheduled for this date.
+              Aucune réservation prévue pour cette date.
             </p>
           )}
         </CardContent>
@@ -182,15 +182,15 @@ export function ReservationManagement() {
 
       <Tabs defaultValue="all" className="space-y-6">
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value="confirmed">Confirmed</TabsTrigger>
-          <TabsTrigger value="pending">Pending</TabsTrigger>
-          <TabsTrigger value="cancelled">Cancelled</TabsTrigger>
+          <TabsTrigger value="all">Toutes</TabsTrigger>
+          <TabsTrigger value="confirmed">Confirmées</TabsTrigger>
+          <TabsTrigger value="pending">En attente</TabsTrigger>
+          <TabsTrigger value="cancelled">Annulées</TabsTrigger>
         </TabsList>
         <TabsContent value="all">
           <Card>
             <CardHeader>
-              <CardTitle>Reservation List</CardTitle>
+              <CardTitle>Liste des réservations</CardTitle>
             </CardHeader>
             <CardContent>
               <ListView
@@ -208,7 +208,7 @@ export function ReservationManagement() {
         <TabsContent value="confirmed">
           <Card>
             <CardHeader>
-              <CardTitle>Confirmed Reservations</CardTitle>
+              <CardTitle>Réservations confirmées</CardTitle>
             </CardHeader>
             <CardContent>
               <ListView
@@ -226,7 +226,7 @@ export function ReservationManagement() {
         <TabsContent value="pending">
           <Card>
             <CardHeader>
-              <CardTitle>Pending Reservations</CardTitle>
+              <CardTitle>Réservations en attente</CardTitle>
             </CardHeader>
             <CardContent>
               <ListView
@@ -244,7 +244,7 @@ export function ReservationManagement() {
         <TabsContent value="cancelled">
           <Card>
             <CardHeader>
-              <CardTitle>Cancelled Reservations</CardTitle>
+              <CardTitle>Réservations annulées</CardTitle>
             </CardHeader>
             <CardContent>
               <ListView

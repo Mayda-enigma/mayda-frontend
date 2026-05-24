@@ -20,24 +20,24 @@ export function PerformanceMetrics() {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <Card>
         <CardHeader>
-          <CardTitle>Service Performance</CardTitle>
-          <CardDescription>Key operational metrics</CardDescription>
+          <CardTitle>Performance du service</CardTitle>
+          <CardDescription>Indicateurs opérationnels clés</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">Average Preparation Time</span>
+            <span className="text-sm font-medium">Temps de préparation moyen</span>
             <Badge variant="outline">{metrics.avgPrepTime} min</Badge>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">Order Accuracy</span>
+            <span className="text-sm font-medium">Précision des commandes</span>
             <Badge variant="default">{metrics.orderAccuracy}%</Badge>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">Table Turnover Rate</span>
+            <span className="text-sm font-medium">Taux de rotation des tables</span>
             <Badge variant="secondary">{metrics.tableTurnoverRate}</Badge>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">Staff Efficiency</span>
+            <span className="text-sm font-medium">Efficacité du personnel</span>
             <Badge variant="default">{metrics.staffEfficiency}%</Badge>
           </div>
         </CardContent>
@@ -45,8 +45,8 @@ export function PerformanceMetrics() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Alerts & Notifications</CardTitle>
-          <CardDescription>Important updates requiring attention</CardDescription>
+          <CardTitle>Alertes & Notifications</CardTitle>
+          <CardDescription>Mises à jour importantes nécessitant votre attention</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           {metrics.alerts.map((alert) => {

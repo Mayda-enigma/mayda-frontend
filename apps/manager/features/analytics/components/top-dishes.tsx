@@ -23,8 +23,8 @@ export function TopDishes({ range }: { range: RangePreset }) {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <Card className="hover:shadow-lg transition-shadow duration-300">
         <CardHeader>
-          <CardTitle>Most Popular Dishes</CardTitle>
-          <CardDescription>Top performing menu items by order count</CardDescription>
+          <CardTitle>Plats les plus populaires</CardTitle>
+          <CardDescription>Meilleurs articles du menu par nombre de commandes</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={400}>
@@ -47,8 +47,8 @@ export function TopDishes({ range }: { range: RangePreset }) {
 
       <Card className="hover:shadow-lg transition-shadow duration-300">
         <CardHeader>
-          <CardTitle>Dish Performance Details</CardTitle>
-          <CardDescription>Comprehensive metrics for top dishes</CardDescription>
+          <CardTitle>Détails de performance des plats</CardTitle>
+          <CardDescription>Indicateurs complets pour les plats les plus populaires</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4 max-h-96 overflow-y-auto">
@@ -70,7 +70,7 @@ export function TopDishes({ range }: { range: RangePreset }) {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-medium">{dish.orders} orders</p>
+                  <p className="text-sm font-medium">{dish.orders} commandes</p>
                   <p className="text-xs text-success">{dish.trend}</p>
                 </div>
               </div>

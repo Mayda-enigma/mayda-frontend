@@ -57,7 +57,7 @@ export function ReservationCard({
           disabled={isUpdating}
           onClick={() => onStatusChange(reservation, "confirmed")}
         >
-          Confirm
+          Confirmer
         </Button>
         <Button
           variant="outline"
@@ -65,7 +65,7 @@ export function ReservationCard({
           disabled={isUpdating}
           onClick={() => onStatusChange(reservation, "cancelled")}
         >
-          Cancel
+          Annuler
         </Button>
         <Button
           variant="outline"
@@ -74,7 +74,7 @@ export function ReservationCard({
           onClick={() => onStatusChange(reservation, "no-show")}
         >
           <TimerReset className="h-3 w-3" />
-          No-show
+          Absent
         </Button>
       </div>
     </div>

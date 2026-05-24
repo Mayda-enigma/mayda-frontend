@@ -16,32 +16,32 @@ export const statusConfig: Record<
   pending: {
     className: "bg-warning text-black",
     icon: Clock,
-    label: "Pending",
+    label: "En attente",
   },
   confirmed: {
     className: "bg-accent-blue text-white",
     icon: CheckCircle,
-    label: "Confirmed",
+    label: "Confirmée",
   },
   preparing: {
     className: "bg-accent-blue text-white",
     icon: ChefHat,
-    label: "Preparing",
+    label: "En préparation",
   },
   ready: {
     className: "bg-success text-white",
     icon: CheckCircle,
-    label: "Ready",
+    label: "Prête",
   },
   completed: {
     className: "bg-muted text-white",
     icon: Utensils,
-    label: "Completed",
+    label: "Terminée",
   },
   cancelled: {
     className: "bg-destructive text-destructive-foreground",
     icon: XCircle,
-    label: "Cancelled",
+    label: "Annulée",
   },
 }
 

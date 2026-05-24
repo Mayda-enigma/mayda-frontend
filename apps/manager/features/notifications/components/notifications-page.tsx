@@ -74,13 +74,13 @@ export function NotificationsPage() {
         <div>
           <h1 className="text-3xl font-bold text-balance">Notifications</h1>
           <p className="text-muted-foreground text-pretty">
-            Stay updated with real-time alerts and system notifications
+            Restez informé avec les alertes en temps réel et les notifications système
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm">
             <Settings className="h-4 w-4 mr-2" />
-            Settings
+            Paramètres
           </Button>
         </div>
       </div>
@@ -90,7 +90,7 @@ export function NotificationsPage() {
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search notifications..."
+            placeholder="Rechercher des notifications..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
@@ -101,17 +101,17 @@ export function NotificationsPage() {
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm">
               <Filter className="h-4 w-4 mr-2" />
-              Filter
+              Filtrer
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => setFilter("all")}>All Notifications</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setFilter("unread")}>Unread Only</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setFilter("priority")}>High Priority</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setFilter("inventory")}>Inventory</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setFilter("orders")}>Orders</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setFilter("staff")}>Staff</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setFilter("equipment")}>Equipment</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setFilter("all")}>Toutes les notifications</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setFilter("unread")}>Non lues uniquement</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setFilter("priority")}>Haute priorité</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setFilter("inventory")}>Stock</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setFilter("orders")}>Commandes</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setFilter("staff")}>Personnel</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setFilter("equipment")}>Équipement</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -125,9 +125,9 @@ export function NotificationsPage() {
                 <AlertTriangle className="size-5" />
               </span>
               <div className="min-w-0 flex-1">
-                <p className="text-xs font-medium text-muted-foreground">High Priority</p>
+                <p className="text-xs font-medium text-muted-foreground">Haute priorité</p>
                 <div className="text-2xl font-bold text-destructive">2</div>
-                <p className="text-xs text-muted-foreground">Requires immediate attention</p>
+                <p className="text-xs text-muted-foreground">Nécessite une attention immédiate</p>
               </div>
             </div>
           </CardContent>
@@ -140,9 +140,9 @@ export function NotificationsPage() {
                 <Bell className="size-5" />
               </span>
               <div className="min-w-0 flex-1">
-                <p className="text-xs font-medium text-muted-foreground">Unread</p>
+                <p className="text-xs font-medium text-muted-foreground">Non lues</p>
                 <div className="text-2xl font-bold">3</div>
-                <p className="text-xs text-muted-foreground">Notifications unseen</p>
+                <p className="text-xs text-muted-foreground">Notifications non vues</p>
               </div>
             </div>
           </CardContent>
@@ -155,9 +155,9 @@ export function NotificationsPage() {
                 <Clock className="size-5" />
               </span>
               <div className="min-w-0 flex-1">
-                <p className="text-xs font-medium text-muted-foreground">Today</p>
+                <p className="text-xs font-medium text-muted-foreground">Aujourd'hui</p>
                 <div className="text-2xl font-bold text-success">6</div>
-                <p className="text-xs text-muted-foreground">Notifications today</p>
+                <p className="text-xs text-muted-foreground">Notifications aujourd'hui</p>
               </div>
             </div>
           </CardContent>
@@ -172,7 +172,7 @@ export function NotificationsPage() {
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-medium text-muted-foreground">Total</p>
                 <div className="text-2xl font-bold">24</div>
-                <p className="text-xs text-muted-foreground">All time notifications</p>
+                <p className="text-xs text-muted-foreground">Toutes les notifications</p>
               </div>
             </div>
           </CardContent>
@@ -182,9 +182,9 @@ export function NotificationsPage() {
       {/* Notifications List */}
       <Card>
         <CardHeader>
-          <CardTitle>Recent Notifications</CardTitle>
+          <CardTitle>Notifications récentes</CardTitle>
           <CardDescription>
-            {filteredNotifications.length} notification{filteredNotifications.length !== 1 ? "s" : ""} found
+            {filteredNotifications.length} notification{filteredNotifications.length !== 1 ? "s" : ""} trouvée{filteredNotifications.length !== 1 ? "s" : ""}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -203,7 +203,7 @@ export function NotificationsPage() {
                       <h4 className="font-medium text-sm">{notification.title}</h4>
                       {!notification.read && (
                         <Badge variant="secondary" className="text-xs">
-                          New
+                          Nouveau
                         </Badge>
                       )}
                       <Badge variant="outline" className="text-xs capitalize">
@@ -232,11 +232,11 @@ export function NotificationsPage() {
                   <DropdownMenuContent>
                     <DropdownMenuItem>
                       <Eye className="h-4 w-4 mr-2" />
-                      Mark as Read
+                      Marquer comme lu
                     </DropdownMenuItem>
                     <DropdownMenuItem className="text-destructive">
                       <Trash2 className="h-4 w-4 mr-2" />
-                      Delete
+                      Supprimer
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -247,7 +247,7 @@ export function NotificationsPage() {
           {filteredNotifications.length === 0 && (
             <div className="text-center py-8">
               <Bell className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground">No notifications found</p>
+              <p className="text-muted-foreground">Aucune notification trouvée</p>
             </div>
           )}
         </CardContent>

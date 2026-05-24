@@ -46,22 +46,22 @@ export function ReservationFilteredTable({
         <CardContent>
           {isUserLoading || reservationsQuery.isLoading ? (
             <p className="text-sm text-muted-foreground">
-              Loading reservations...
+              Chargement des réservations...
             </p>
           ) : null}
           {!isUserLoading && restaurantId === null ? (
             <Alert variant="destructive">
-              <AlertTitle>Restaurant context missing</AlertTitle>
+              <AlertTitle>Contexte du restaurant manquant</AlertTitle>
               <AlertDescription>
-                The current manager account is not linked to a restaurant.
+                Le compte gestionnaire actuel n&apos;est pas lié à un restaurant.
               </AlertDescription>
             </Alert>
           ) : null}
           {reservationsQuery.isError ? (
             <Alert variant="destructive">
-              <AlertTitle>Could not load reservations</AlertTitle>
+              <AlertTitle>Impossible de charger les réservations</AlertTitle>
               <AlertDescription>
-                The reservation request failed. Refresh the page and try again.
+                La requête a échoué. Actualisez la page et réessayez.
               </AlertDescription>
             </Alert>
           ) : null}
@@ -72,7 +72,7 @@ export function ReservationFilteredTable({
               <ListView reservations={filteredReservations} />
             ) : (
               <p className="text-sm text-muted-foreground">
-                No reservations matched this status.
+                Aucune réservation ne correspond à ce statut.
               </p>
             )
           ) : null}

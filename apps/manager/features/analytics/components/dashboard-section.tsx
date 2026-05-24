@@ -19,8 +19,8 @@ export function DashboardSection({ section }: DashboardSectionProps) {
       return (
         <div className="space-y-6 animate-in fade-in-50 duration-500">
           <div>
-            <h1 className="text-3xl font-bold text-balance">Revenue</h1>
-            <p className="text-muted-foreground text-pretty">Daily revenue and order trends</p>
+            <h1 className="text-3xl font-bold text-balance">Revenus</h1>
+            <p className="text-muted-foreground text-pretty">Revenus quotidiens et tendances des commandes</p>
           </div>
           <RevenueChart range={range} />
         </div>
@@ -30,8 +30,8 @@ export function DashboardSection({ section }: DashboardSectionProps) {
       return (
         <div className="space-y-6 animate-in fade-in-50 duration-500">
           <div>
-            <h1 className="text-3xl font-bold text-balance">Popular Dishes</h1>
-            <p className="text-muted-foreground text-pretty">Top performing menu items by order count</p>
+            <h1 className="text-3xl font-bold text-balance">Plats populaires</h1>
+            <p className="text-muted-foreground text-pretty">Meilleurs articles du menu par nombre de commandes</p>
           </div>
           <TopDishes range={range} />
         </div>
@@ -41,8 +41,8 @@ export function DashboardSection({ section }: DashboardSectionProps) {
       return (
         <div className="space-y-6 animate-in fade-in-50 duration-500">
           <div>
-            <h1 className="text-3xl font-bold text-balance">Cuisine Share</h1>
-            <p className="text-muted-foreground text-pretty">Breakdown of orders by cuisine type</p>
+            <h1 className="text-3xl font-bold text-balance">Part par cuisine</h1>
+            <p className="text-muted-foreground text-pretty">Répartition des commandes par type de cuisine</p>
           </div>
           <CuisineShare range={range} />
         </div>
@@ -52,8 +52,8 @@ export function DashboardSection({ section }: DashboardSectionProps) {
       return (
         <div className="space-y-6 animate-in fade-in-50 duration-500">
           <div>
-            <h1 className="text-3xl font-bold text-balance">Busy Hours</h1>
-            <p className="text-muted-foreground text-pretty">Hourly order distribution and revenue correlation</p>
+            <h1 className="text-3xl font-bold text-balance">Heures d'affluence</h1>
+            <p className="text-muted-foreground text-pretty">Répartition horaire des commandes et corrélation des revenus</p>
           </div>
           <HourlyHeatmap range={range} />
         </div>
@@ -63,8 +63,8 @@ export function DashboardSection({ section }: DashboardSectionProps) {
       return (
         <div className="space-y-6 animate-in fade-in-50 duration-500">
           <div>
-            <h1 className="text-3xl font-bold text-balance">Monthly Comparison</h1>
-            <p className="text-muted-foreground text-pretty">Year-over-year revenue comparison</p>
+            <h1 className="text-3xl font-bold text-balance">Comparaison mensuelle</h1>
+            <p className="text-muted-foreground text-pretty">Comparaison des revenus d'une année sur l'autre</p>
           </div>
           <MonthlySection range={range} />
         </div>
