@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
 import { Badge } from '@/shared/ui/badge';
 import { Input } from '@/shared/ui/input';
@@ -13,7 +14,7 @@ import { SmartRecommendations } from '@/components/smart-recommendations';
 import { RamadanBanner } from '@/components/ramadan-banner';
 import { NotificationSystem } from '@/components/notification-system';
 import { FeedbackModal } from '@/components/feedback-modal';
-import { Search, Filter, Mic, MicOff, ArrowLeft, Leaf, Wheat, Heart, ShoppingBag } from 'lucide-react';
+import { Search, Filter, Mic, MicOff, Leaf, Wheat, Heart, ShoppingBag } from 'lucide-react';
 import Link from 'next/link';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { BurgerMenu } from '@/components/burger-menu';
@@ -36,7 +37,17 @@ const dietaryFilters = [
 
 export function MenuGrid() {
   const { state, dispatch } = useCart();
-  const { data: menuItems } = useMenu('1');
+  const searchParams = useSearchParams();
+
+  const restaurantId = searchParams.get('restaurentId') ?? sessionStorage.getItem('mayda_restaurant_id') ?? '1';
+  const tableId = searchParams.get('tableID') ?? sessionStorage.getItem('mayda_table_id') ?? '1';
+
+  useEffect(() => {
+    sessionStorage.setItem('mayda_table_id', tableId);
+    sessionStorage.setItem('mayda_restaurant_id', restaurantId);
+  }, [tableId, restaurantId]);
+
+  const { data: menuItems } = useMenu(restaurantId);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedDietary, setSelectedDietary] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -115,14 +126,9 @@ export function MenuGrid() {
         <div className="flex items-center justify-between p-3 sm:p-4">
           <div className="flex items-center gap-2 sm:gap-3">
             <BurgerMenu currentPage="menu" />
-            <Link href="/" className="hidden md:block">
-              <Button variant="ghost" size="sm" className="p-2 hover:scale-110 transition-transform duration-200">
-                <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-              </Button>
-            </Link>
             <div>
               <h1 className="text-lg sm:text-xl font-bold">Menu</h1>
-              <p className="text-xs sm:text-sm text-muted-foreground">Table 12</p>
+              <p className="text-xs sm:text-sm text-muted-foreground">Table {tableId}</p>
             </div>
           </div>
 

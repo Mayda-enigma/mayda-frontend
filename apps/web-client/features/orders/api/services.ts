@@ -1,16 +1,13 @@
 import { apiClient } from '@/shared/api/client'
-import type { OrderDto, CreateOrderDto } from '../types'
+import type { OrderDto, PublicOrderDto } from '../types'
 
 export const orderService = {
-  myOrders: (): Promise<OrderDto[]> =>
-    apiClient<OrderDto[]>('/orders/my-orders'),
-
-  create: (payload: CreateOrderDto): Promise<OrderDto> =>
-    apiClient<OrderDto>('/orders', {
+  createPublic: (payload: PublicOrderDto): Promise<OrderDto> =>
+    apiClient<OrderDto>('/orders/public', {
       method: 'POST',
       body: JSON.stringify(payload),
     }),
 
-  detail: (id: string): Promise<OrderDto> =>
-    apiClient<OrderDto>(`/orders/${id}`),
+  tableOrders: (tableId: string): Promise<OrderDto[]> =>
+    apiClient<OrderDto[]>(`/orders/public/table/${tableId}`),
 }

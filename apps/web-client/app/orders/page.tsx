@@ -118,6 +118,10 @@ function OrderCard({ order }: { order: Order }) {
 export default function OrdersPage() {
   const { data: orders, isLoading, isError } = useMyOrders()
 
+  const tableId = typeof window !== 'undefined'
+    ? sessionStorage.getItem('mayda_table_id') ?? ''
+    : ''
+
   return (
     <div className="min-h-dvh bg-background">
       <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
@@ -132,7 +136,7 @@ export default function OrdersPage() {
             <div>
               <h1 className="text-lg sm:text-xl font-bold">Your Orders</h1>
               <p className="text-xs sm:text-sm text-muted-foreground">
-                {orders?.length ?? 0} orders
+                Table {tableId} &middot; {orders?.length ?? 0} orders
               </p>
             </div>
           </div>

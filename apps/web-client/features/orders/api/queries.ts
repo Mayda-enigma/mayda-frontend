@@ -3,11 +3,20 @@ import { ordersKeys } from './queryKeys'
 import { orderService } from './services'
 import { toOrders } from './mappers'
 
-export const useMyOrders = () =>
-  useQuery({
+function getTableId(): string {
+  if (typeof window === 'undefined') return ''
+  return sessionStorage.getItem('mayda_table_id') ?? ''
+}
+
+export const useMyOrders = () => {
+  const tableId = getTableId()
+
+  return useQuery({
     queryKey: ordersKeys.mine(),
-    queryFn: () => orderService.myOrders(),
+    queryFn: () => orderService.tableOrders(tableId),
     select: toOrders,
-    refetchInterval: 30_000,
-    staleTime: 10_000,
+    enabled: Boolean(tableId),
+    refetchInterval: 15_000,
+    staleTime: 5_000,
   })
+}

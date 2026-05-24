@@ -8,15 +8,25 @@ import { Textarea } from "@/shared/ui/textarea"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { BurgerMenu } from "@/components/burger-menu"
 import { useCart } from "@/features/cart"
-import { ArrowLeft, Plus, Minus, Trash2, CreditCard, Clock, MapPin } from "lucide-react"
+import { useCreateOrder } from "@/features/orders"
+import { ArrowLeft, Plus, Minus, Trash2, CreditCard, Clock, MapPin, AlertCircle } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { ApiError } from "@/shared/api/client"
 
 export default function CartPage() {
   const { state, dispatch } = useCart()
   const router = useRouter()
   const [orderNotes, setOrderNotes] = useState("")
-  const [isProcessing, setIsProcessing] = useState(false)
+  const [checkoutError, setCheckoutError] = useState<string | null>(null)
+  const createOrder = useCreateOrder()
+
+  const tableId = typeof window !== 'undefined'
+    ? Number(sessionStorage.getItem('mayda_table_id') ?? 1)
+    : 1
+  const restaurantId = typeof window !== 'undefined'
+    ? Number(sessionStorage.getItem('mayda_restaurant_id') ?? process.env.NEXT_PUBLIC_RESTAURANT_ID ?? 1)
+    : 1
 
   const subtotal = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const serviceFee = subtotal * 0.1
@@ -30,15 +40,34 @@ export default function CartPage() {
     }
   }
 
-  const handleCheckout = async () => {
-    setIsProcessing(true)
-
-    // Simulate order processing
-    setTimeout(() => {
-      dispatch({ type: "CLEAR_CART" })
-      router.push("/orders")
-      setIsProcessing(false)
-    }, 2000)
+  const handleCheckout = () => {
+    setCheckoutError(null)
+    createOrder.mutate(
+      {
+        restaurantId,
+        tableId,
+        type: "DINE_IN",
+        items: state.items.map((item) => ({
+          dishId: Number(item.id),
+          quantity: item.quantity,
+        })),
+      },
+      {
+        onSuccess: () => {
+          router.push("/orders")
+        },
+        onError: (error) => {
+          if (error instanceof ApiError && error.status === 422) {
+            const detail = error.body && typeof error.body === 'object' && 'detail' in error.body
+              ? (error.body as { detail: string }).detail
+              : 'Please check your order and try again.'
+            setCheckoutError(detail)
+          } else {
+            setCheckoutError('Something went wrong. Please try again.')
+          }
+        },
+      },
+    )
   }
 
   if (state.items.length === 0) {
@@ -92,7 +121,7 @@ export default function CartPage() {
             </Link>
             <div>
               <h1 className="text-lg sm:text-xl font-bold">Cart & Checkout</h1>
-              <p className="text-xs sm:text-sm text-muted-foreground">Table 12</p>
+              <p className="text-xs sm:text-sm text-muted-foreground">Table {tableId}</p>
             </div>
           </div>
           <div className="hidden md:block">
@@ -208,7 +237,7 @@ export default function CartPage() {
           <CardContent className="pt-3 sm:pt-4 md:pt-6">
             <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground">
               <MapPin className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-              <span>Dine-in service • Table 12</span>
+              <span>Dine-in service • Table {tableId}</span>
             </div>
             <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground mt-2">
               <Clock className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
@@ -217,13 +246,20 @@ export default function CartPage() {
           </CardContent>
         </Card>
 
+        {checkoutError && (
+          <div className="flex items-start gap-2 text-destructive text-sm bg-destructive/10 p-3 rounded-md">
+            <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
+            <span>{checkoutError}</span>
+          </div>
+        )}
+
         {/* Checkout Button */}
         <Button
           onClick={handleCheckout}
-          disabled={isProcessing}
+          disabled={createOrder.isPending}
           className="w-full h-10 sm:h-12 md:h-14 text-sm sm:text-base md:text-lg bg-primary text-primary-foreground"
         >
-          {isProcessing ? "Processing Order..." : `Place Order • $${total.toFixed(2)}`}
+          {createOrder.isPending ? "Processing Order..." : `Place Order • $${total.toFixed(2)}`}
         </Button>
       </div>
 
