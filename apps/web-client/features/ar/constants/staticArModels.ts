@@ -3,7 +3,7 @@ import type { ArDishLookupInput, StaticArModel } from '../types'
 export const STATIC_AR_MODELS: (StaticArModel & { aliases?: string[] })[] = [
   {
     dishName: 'Chourba',
-    src: '/AR/Chourba Fixed 2.glb',
+    src: '/AR/chourba.glb',
     alt: 'Chourba Djedj',
   },
   {
