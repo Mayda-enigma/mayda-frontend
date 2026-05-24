@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Poppins } from "next/font/google"
+import { Poppins, Source_Code_Pro } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from "@/components/language-provider"
@@ -9,34 +9,41 @@ import { QueryProvider } from "@/shared/lib/query-provider"
 import "./globals.css"
 
 const poppins = Poppins({
+ subsets: ["latin"],
+ weight: ["300", "400", "500", "600", "700"],
+ variable: "--font-sans",
+})
+
+const sourceCodePro = Source_Code_Pro({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-poppins",
+  weight: ["400", "500", "600"],
+  variable: "--font-source-code",
+  display: "swap",
 })
 
 export const metadata: Metadata = {
-  title: "Waiter App - Smart Restaurant",
-  description: "Mobile waiter application for smart restaurant management",
-  generator: "v0.app",
+ title: "Waiter App - Smart Restaurant",
+ description: "Mobile waiter application for smart restaurant management",
+ generator: "v0.app",
 }
 
 export default function RootLayout({
-  children,
+ children,
 }: Readonly<{
-  children: React.ReactNode
+ children: React.ReactNode
 }>) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`font-sans ${poppins.variable} antialiased`}>
-        <QueryProvider>
-        <Suspense fallback={null}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem={true} disableTransitionOnChange={false}>
-            <LanguageProvider>{children}</LanguageProvider>
-          </ThemeProvider>
-          <Analytics />
-        </Suspense>
-        </QueryProvider>
-      </body>
-    </html>
-  )
+ return (
+ <html lang="en" suppressHydrationWarning>
+ <body className={`${poppins.variable} ${sourceCodePro.variable} bg-background text-foreground antialiased`}>
+ <QueryProvider>
+ <Suspense fallback={null}>
+ <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange={false}>
+ <LanguageProvider>{children}</LanguageProvider>
+ </ThemeProvider>
+ <Analytics />
+ </Suspense>
+ </QueryProvider>
+ </body>
+ </html>
+ )
 }

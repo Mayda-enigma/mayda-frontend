@@ -14,6 +14,7 @@ import { TopDishes } from "./top-dishes"
 import { HourlyHeatmap } from "./hourly-heatmap"
 import { CuisineShare } from "./cuisine-share"
 import { PerformanceMetrics } from "./performance-metrics"
+import { useMonthlyComparison } from "../api/queries"
 import { useRange } from "../hooks/use-range"
 import type { RangePreset } from "../types"
 
@@ -22,14 +23,9 @@ const RANGES: { label: string; value: RangePreset }[] = [
   { label: "30 Days", value: "30d" },
   { label: "90 Days", value: "90d" },
 ]
-
-const monthlyData = [
-  { month: "Jan", thisYear: 45000, lastYear: 38000 }, { month: "Feb", thisYear: 48000, lastYear: 42000 },
-  { month: "Mar", thisYear: 52000, lastYear: 45000 }, { month: "Apr", thisYear: 58000, lastYear: 48000 },
-  { month: "May", thisYear: 62000, lastYear: 52000 }, { month: "Jun", thisYear: 68000, lastYear: 58000 },
-]
 export function AnalyticsDashboard() {
   const { range, setRange } = useRange()
+  const { data: monthlyData } = useMonthlyComparison(range)
   return (
     <div className="space-y-6 animate-in fade-in-50 duration-500">
       <div className="flex items-center justify-between">
@@ -92,7 +88,7 @@ export function AnalyticsDashboard() {
         </TabsList>
         <TabsContent value="revenue"><RevenueChart range={range} /></TabsContent>
         <TabsContent value="popular"><TopDishes range={range} /></TabsContent>
-        <TabsContent value="cuisine"><CuisineShare /></TabsContent>
+        <TabsContent value="cuisine"><CuisineShare range={range} /></TabsContent>
         <TabsContent value="hours"><HourlyHeatmap range={range} /></TabsContent>
         <TabsContent value="monthly">
           <Card>
@@ -101,7 +97,7 @@ export function AnalyticsDashboard() {
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={400}>
-                <BarChart data={monthlyData}>
+                <BarChart data={monthlyData ?? []}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                   <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
                   <YAxis stroke="hsl(var(--muted-foreground))" />

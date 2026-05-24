@@ -3,10 +3,8 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/shared/ui/button"
-import { Clock, ChefHat, Users, AlertTriangle } from "lucide-react"
+import { Clock, ChefHat, Users } from "lucide-react"
 import { OrderCard } from "@/components/order-card"
-import { NotificationBanner } from "@/components/notification-banner"
-import { NotificationCenter } from "@/components/notification-center"
 import { VoiceControlPanel } from "@/components/voice-control-panel"
 import { useKitchenNotifications } from "@/components/notification-system"
 import { useI18n } from "@/components/i18n-provider"
@@ -19,11 +17,10 @@ export default function ChefDashboard() {
   const restaurantId = user?.restaurantId ?? 0
   const { data: orders = [], isLoading, refetch } = useKitchenQueue(restaurantId)
   const [sortBy, setSortBy] = useState<"time" | "complexity">("time")
-  const { notifyNewOrder, notifyOrderReady, notifyOrderDelayed, notifyStockLow } = useKitchenNotifications()
+  const { notifyNewOrder } = useKitchenNotifications()
   const { t } = useI18n()
   const router = useRouter()
 
-  // Poll for new orders and trigger notifications
   const [knownOrderIds, setKnownOrderIds] = useState<Set<string>>(new Set())
 
   useEffect(() => {
@@ -47,10 +44,9 @@ export default function ChefDashboard() {
   const sortedOrders = [...orders].sort((a, b) => {
     if (sortBy === "time") {
       return a.timeReceived.getTime() - b.timeReceived.getTime()
-    } else {
-      const complexityOrder = { high: 3, medium: 2, low: 1 }
-      return complexityOrder[b.complexity] - complexityOrder[a.complexity]
     }
+    const complexityOrder = { high: 3, medium: 2, low: 1 }
+    return complexityOrder[b.complexity] - complexityOrder[a.complexity]
   })
 
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
@@ -95,69 +91,70 @@ export default function ChefDashboard() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+      <div className="flex items-center justify-center py-24">
         <div className="text-center">
-          <ChefHat className="w-16 h-16 mx-auto text-muted-foreground mb-4 animate-bounce" />
-          <p className="text-lg text-muted-foreground">Loading orders...</p>
+          <ChefHat className="w-16 h-16 mx-auto text-muted-foreground mb-4 animate-mongodb-fade-in" />
+          <p className="text-base text-muted-foreground">Loading orders...</p>
         </div>
       </div>
     )
   }
 
+  const activeCount = orders.filter((o) => o.status === "in-progress").length
+
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <>
       <VoiceControlPanel onOrderAction={handleVoiceOrderAction} onNavigate={handleVoiceNavigation} />
 
       <div className="p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6">
-        <div className="space-y-3 sm:space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-500 leading-tight">
+        {/* Page header */}
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+          <div className="space-y-1">
+            <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">
               {t.kitchenDashboard}
             </h1>
-            <div className="flex justify-end">
-              <NotificationCenter />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-            <div className="flex items-center gap-2 text-amber-400 bg-card/50 rounded-lg p-3 backdrop-blur-sm">
-              <Clock className="w-5 h-5 flex-shrink-0" />
-              <span className="text-base sm:text-lg font-medium">
-                {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-              </span>
-            </div>
-            <div className="flex items-center gap-2 text-green-400 bg-card/50 rounded-lg p-3 backdrop-blur-sm">
-              <ChefHat className="w-5 h-5 flex-shrink-0" />
-              <span className="text-base sm:text-lg font-medium">
-                {orders.filter((o) => o.status === "in-progress").length} Active Orders
-              </span>
-            </div>
-            <div className="flex items-center gap-2 text-blue-400 bg-card/50 rounded-lg p-3 backdrop-blur-sm">
-              <Users className="w-5 h-5 flex-shrink-0" />
-              <span className="text-base sm:text-lg font-medium">{orders.length} Total Orders</span>
-            </div>
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+        {/* Stats row */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+          <div className="flex items-center gap-3 rounded-xl border bg-card p-4 shadow-depth-card">
+            <Clock className="w-5 h-5 text-muted-foreground shrink-0" />
+            <span className="text-base font-medium tabular-nums">
+              {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+            </span>
+          </div>
+          <div className="flex items-center gap-3 rounded-xl border bg-card p-4 shadow-depth-card">
+            <ChefHat className="w-5 h-5 text-warning shrink-0" />
+            <span className="text-base font-medium tabular-nums">
+              {activeCount} Active
+            </span>
+          </div>
+          <div className="flex items-center gap-3 rounded-xl border bg-card p-4 shadow-depth-card">
+            <Users className="w-5 h-5 text-muted-foreground shrink-0" />
+            <span className="text-base font-medium tabular-nums">{orders.length} Total</span>
+          </div>
+        </div>
+
+        {/* Sort controls */}
+        <div className="flex gap-2">
           <Button
-            data-sort="time"
             variant={sortBy === "time" ? "default" : "outline"}
+            size="sm"
             onClick={() => setSortBy("time")}
-            className="bg-orange-500 hover:bg-orange-600 transition-all duration-200 transform hover:scale-105 min-h-[44px]"
           >
             {t.sortByTime}
           </Button>
           <Button
-            data-sort="complexity"
             variant={sortBy === "complexity" ? "default" : "outline"}
+            size="sm"
             onClick={() => setSortBy("complexity")}
-            className="bg-orange-500 hover:bg-orange-600 transition-all duration-200 transform hover:scale-105 min-h-[44px]"
           >
             {t.sortByComplexity}
           </Button>
         </div>
 
+        {/* Order grid */}
         <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {sortedOrders.map((order) => (
             <OrderCard key={order.id} order={order} onStatusUpdate={updateOrderStatus} />
@@ -165,13 +162,13 @@ export default function ChefDashboard() {
         </div>
 
         {orders.length === 0 && (
-          <div className="text-center py-8 sm:py-12">
-            <ChefHat className="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-muted-foreground mb-4 animate-bounce" />
-            <h3 className="text-lg sm:text-xl font-semibold text-muted-foreground mb-2">No Active Orders</h3>
-            <p className="text-muted-foreground">Kitchen is all caught up!</p>
+          <div className="text-center py-12">
+            <ChefHat className="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-muted-foreground mb-4 animate-mongodb-fade-in" />
+            <h3 className="text-lg font-semibold text-muted-foreground mb-2">No Active Orders</h3>
+            <p className="text-base text-muted-foreground">Kitchen is all caught up!</p>
           </div>
         )}
       </div>
-    </div>
+    </>
   )
 }

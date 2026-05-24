@@ -2,20 +2,26 @@ import { apiClient } from '@/shared/api/client';
 import type { OrderDto } from '../types';
 
 export const orderService = {
-  list: () => apiClient<OrderDto[]>('/orders'),
+  restaurantOrders: (restaurantId: number, status?: string) =>
+    apiClient<OrderDto[]>(`/orders/restaurant/${restaurantId}${status ? `?status=${status}` : ''}`),
 
-  mine: () => apiClient<OrderDto[]>('/orders?waiterId=me'),
-
-  byTable: (tableId: number) => apiClient<OrderDto[]>(`/orders?tableId=${tableId}`),
+  byTable: (tableId: number) =>
+    apiClient<OrderDto[]>(`/orders/table/${tableId}/current`),
 
   markDelivered: (id: number) =>
-    apiClient<OrderDto>(`/orders/${id}`, {
+    apiClient<OrderDto>(`/orders/${id}/status`, {
       method: 'PATCH',
-      body: JSON.stringify({ status: 'served' }),
+      body: JSON.stringify({ status: 'COMPLETED' }),
     }),
 
-  create: (payload: { tableId: number; items: { name: string; quantity: number; price: number }[] }) =>
-    apiClient<OrderDto>('/orders', {
+  updateStatus: (id: number, status: string) =>
+    apiClient<OrderDto>(`/orders/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    }),
+
+  create: (payload: { restaurantId: number; tableId: number; items: { dishId: number; quantity: number }[] }) =>
+    apiClient<OrderDto>('/orders/public', {
       method: 'POST',
       body: JSON.stringify(payload),
     }),

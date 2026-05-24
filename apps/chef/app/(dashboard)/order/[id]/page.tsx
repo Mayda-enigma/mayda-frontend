@@ -41,7 +41,7 @@ export default function OrderDetailPage() {
       <div className="min-h-screen bg-background text-foreground p-6 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">Loading order...</h1>
-          <Button onClick={() => router.push("/")} className="bg-orange-500 hover:bg-orange-600">
+          <Button onClick={() => router.push("/")} className="bg-primary hover:bg-primary/90">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Dashboard
           </Button>
@@ -53,13 +53,13 @@ export default function OrderDetailPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "pending":
-        return "bg-yellow-500"
+        return "bg-warning"
       case "in-progress":
-        return "bg-blue-500"
+        return "bg-accent-blue"
       case "ready":
-        return "bg-green-500"
+        return "bg-success"
       default:
-        return "bg-gray-500"
+        return "bg-muted"
     }
   }
 
@@ -97,7 +97,7 @@ export default function OrderDetailPage() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back
           </Button>
-          <h1 className="text-3xl font-bold text-orange-500">Order {order.id}</h1>
+          <h1 className="text-3xl font-bold text-primary">Order {order.id}</h1>
           <Badge className={`${getStatusColor(order.status)} text-white font-medium ml-auto`}>
             {order.status.replace("-", " ").toUpperCase()}
           </Badge>
@@ -106,7 +106,7 @@ export default function OrderDetailPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <Card className="bg-card border-border">
             <CardContent className="p-4">
-              <div className="flex items-center gap-2 text-amber-400 mb-2">
+              <div className="flex items-center gap-2 text-warning mb-2">
                 <Users className="w-5 h-5" />
                 <span className="font-medium">Table {order.tableNumber}</span>
               </div>
@@ -116,9 +116,9 @@ export default function OrderDetailPage() {
 
           <Card className="bg-card border-border">
             <CardContent className="p-4">
-              <div className="flex items-center gap-2 text-blue-400 mb-2">
+              <div className="flex items-center gap-2 text-accent-blue mb-2">
                 <Clock className="w-5 h-5" />
-                <span className="font-medium font-mono">{timeElapsed}</span>
+                <span className="font-medium font-mono tabular-nums">{timeElapsed}</span>
               </div>
               <div className="text-sm text-muted-foreground">Time elapsed</div>
             </CardContent>
@@ -126,9 +126,9 @@ export default function OrderDetailPage() {
 
           <Card className="bg-card border-border">
             <CardContent className="p-4">
-              <div className="flex items-center gap-2 text-green-400 mb-2">
+              <div className="flex items-center gap-2 text-success mb-2">
                 <Timer className="w-5 h-5" />
-                <span className="font-medium">
+                <span className="font-medium tabular-nums">
                   {(order.estimatedCompletion ?? new Date(Date.now() + 15 * 60 * 1000)).toLocaleTimeString([], {
                     hour: "2-digit",
                     minute: "2-digit",
@@ -192,7 +192,7 @@ export default function OrderDetailPage() {
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-xl text-card-foreground">{dish.name}</CardTitle>
-                    <Badge variant="outline" className="text-amber-400 border-amber-400">
+                    <Badge variant="outline" className="text-warning border-warning">
                       {dish.prepTime} min
                     </Badge>
                   </div>
@@ -222,9 +222,9 @@ export default function OrderDetailPage() {
                           key={stepIndex}
                           className={`p-3 rounded-lg border ${
                             stepIndex < dish.currentStep
-                              ? "bg-green-900/30 border-green-500/50 text-green-200"
+                              ? "bg-success/30 border-success/50 text-success"
                               : stepIndex === dish.currentStep
-                                ? "bg-blue-900/30 border-blue-500/50 text-blue-200"
+                                ? "bg-accent-blue/30 border-accent-blue/50 text-accent-blue"
                                 : "bg-muted border-border text-muted-foreground"
                           }`}
                         >
@@ -232,10 +232,10 @@ export default function OrderDetailPage() {
                             <div
                               className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
                                 stepIndex < dish.currentStep
-                                  ? "bg-green-500 text-white"
+                                  ? "bg-success text-white"
                                   : stepIndex === dish.currentStep
-                                    ? "bg-blue-500 text-white"
-                                    : "bg-muted-foreground/30 text-muted-foreground"
+                                    ? "bg-accent-blue text-white"
+                                    : "bg-muted text-muted-foreground"
                               }`}
                             >
                               {stepIndex < dish.currentStep ? "✓" : stepIndex + 1}
@@ -259,7 +259,7 @@ export default function OrderDetailPage() {
                         size="sm"
                         onClick={() => updateDishStep(index, Math.min(dish.steps.length, dish.currentStep + 1))}
                         disabled={dish.currentStep === dish.steps.length}
-                        className="bg-orange-500 hover:bg-orange-600"
+                        className="bg-primary hover:bg-primary/90"
                       >
                         Next Step
                       </Button>
@@ -284,7 +284,7 @@ export default function OrderDetailPage() {
               {order.status === "pending" && (
                 <Button
                   onClick={() => updateOrderStatus("in-progress")}
-                  className="w-full bg-orange-500 hover:bg-orange-600"
+                  className="w-full bg-primary hover:bg-primary/90"
                 >
                   <Play className="w-4 h-4 mr-2" />
                   Start Order
@@ -293,7 +293,7 @@ export default function OrderDetailPage() {
               {order.status === "in-progress" && (
                 <Button
                   onClick={() => updateOrderStatus("ready")}
-                  className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
+                  className="w-full bg-gradient-to-r from-success to-success/80 hover:from-success/90 hover:to-success/70"
                 >
                   <CheckCircle className="w-4 h-4 mr-2" />
                   Mark Ready

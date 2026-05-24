@@ -2,20 +2,26 @@ import { useQuery } from '@tanstack/react-query';
 import { orderKeys } from './queryKeys';
 import { orderService } from './services';
 import { toOrder } from './mappers';
+import type { Order } from '../types';
 
-export const useMyOrders = () =>
-  useQuery({
-    queryKey: orderKeys.mine(),
-    queryFn: orderService.mine,
-    select: (dtos) => dtos.map(toOrder),
+export const useRestaurantOrders = (restaurantId: number, status?: string) =>
+  useQuery<Order[]>({
+    queryKey: orderKeys.restaurant(restaurantId, status),
+    queryFn: async () => {
+      const dtos = await orderService.restaurantOrders(restaurantId, status);
+      return dtos.map(toOrder);
+    },
+    enabled: !!restaurantId,
     refetchInterval: 15_000,
   });
 
 export const useTableOrders = (tableId: number) =>
-  useQuery({
+  useQuery<Order[]>({
     queryKey: orderKeys.byTable(tableId),
-    queryFn: () => orderService.byTable(tableId),
-    select: (dtos) => dtos.map(toOrder),
+    queryFn: async () => {
+      const dtos = await orderService.byTable(tableId);
+      return dtos.map(toOrder);
+    },
     enabled: !!tableId,
     refetchInterval: 10_000,
   });

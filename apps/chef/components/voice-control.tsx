@@ -65,7 +65,7 @@ export function VoiceControl({ isActive, onToggle, onStatusUpdate }: VoiceContro
       <CardContent className="space-y-4">
         <Button 
           onClick={toggleVoiceControl}
-          className={`w-full ${isActive ? "bg-green-500 hover:bg-green-600" : "bg-orange-500 hover:bg-orange-600"}`}
+          className={`w-full ${isActive ? "bg-success hover:bg-success/90" : "bg-primary hover:bg-primary/90"}`}
         >
           {isActive ? <Mic className="w-4 h-4 mr-2" /> : <MicOff className="w-4 h-4 mr-2" />}
           {isActive ? "Voice Active" : "Enable Voice"}
@@ -81,8 +81,8 @@ export function VoiceControl({ isActive, onToggle, onStatusUpdate }: VoiceContro
               <div>&bull; &quot;Pause order&quot; - Pause preparation</div>
             </div>
             {lastCommand && (
-              <div className="mt-3 p-2 bg-blue-900/30 border border-blue-500/50 rounded text-sm">
-                <div className="text-blue-400 font-medium">Last Command:</div>
+              <div className="mt-3 p-2 bg-accent-blue/10 border-accent-blue/30 rounded text-sm">
+                <div className="text-accent-blue font-medium">Last Command:</div>
                 <div className="text-blue-200">&quot;{lastCommand}&quot;</div>
               </div>
             )}

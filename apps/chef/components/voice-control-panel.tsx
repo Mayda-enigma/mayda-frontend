@@ -167,7 +167,7 @@ export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPan
 
               {isListening && (
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                  <div className="w-2 h-2 bg-destructive rounded-full" />
                   <span className="text-sm text-muted-foreground">Listening...</span>
                 </div>
               )}
@@ -205,6 +205,7 @@ export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPan
             <div className="p-2 bg-muted rounded text-sm">
               <span className="text-muted-foreground">Web Speech: </span>
               <span className="text-orange-500">&quot;{lastCommand}&quot;</span>
+
             </div>
           )}
 
@@ -226,7 +227,7 @@ export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPan
       {showCommands && (
         <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle className="text-orange-500 text-lg">Voice Commands</CardTitle>
+            <CardTitle className="text-primary text-lg">Voice Commands</CardTitle>
             <CardDescription>Available voice commands for hands-free operation</CardDescription>
           </CardHeader>
           <CardContent>
@@ -243,8 +244,8 @@ export function VoiceControlPanel({ onOrderAction, onNavigate }: VoiceControlPan
               ))}
             </div>
 
-            <div className="mt-4 p-3 bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-800 rounded">
-              <h4 className="text-orange-600 dark:text-orange-400 font-medium mb-2">Tips for better recognition:</h4>
+            <div className="mt-4 p-3 bg-primary/10 border border-primary/20 rounded">
+              <h4 className="text-primary font-medium mb-2">Tips for better recognition:</h4>
               <ul className="text-sm text-muted-foreground space-y-1">
                 <li>• Speak clearly and at normal pace</li>
                 <li>• Use exact command phrases</li>

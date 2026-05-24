@@ -107,13 +107,13 @@ function NotificationCard({
   const getTypeStyles = (type: string) => {
     switch (type) {
       case "urgent":
-        return "bg-orange-50 dark:bg-orange-900/95 border-orange-500 text-orange-900 dark:text-orange-100 animate-pulse shadow-orange-500/20"
+        return "bg-destructive/10 border-destructive text-destructive"
       case "warning":
-        return "bg-amber-50 dark:bg-amber-900/95 border-amber-500 text-amber-900 dark:text-amber-100 shadow-amber-500/20"
+        return "bg-warning/10 border-warning text-warning"
       case "success":
-        return "bg-emerald-50 dark:bg-emerald-900/95 border-emerald-500 text-emerald-900 dark:text-emerald-100 shadow-emerald-500/20"
+        return "bg-success/10 border-success text-success"
       default:
-        return "bg-blue-50 dark:bg-blue-900/95 border-blue-500 text-blue-900 dark:text-blue-100 shadow-blue-500/20"
+        return "bg-accent-blue/10 border-accent-blue text-accent-blue"
     }
   }
 
@@ -141,7 +141,7 @@ function NotificationCard({
         isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full"
       }`}
     >
-      <Card className={`${getTypeStyles(notification.type)} border-2 shadow-lg backdrop-blur-sm`}>
+      <Card className={`${getTypeStyles(notification.type)} border-2 shadow-lg`}>
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
             <div className="flex-shrink-0 mt-0.5">{getIcon(notification.type)}</div>

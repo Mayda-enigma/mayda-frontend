@@ -68,7 +68,7 @@ export function FeedbackModal({ isOpen, onClose, orderId }: FeedbackModalProps) 
   return (
     <>
       {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/50 z-50" onClick={onClose} />
+      <div className="fixed inset-0 bg-black/50 z-50" aria-label="Close" onClick={onClose} />
 
       {/* Modal */}
       <div className="fixed inset-2 bg-background rounded-xl z-50 overflow-hidden flex flex-col max-w-2xl mx-auto sm:inset-4 md:inset-8 lg:inset-16">
@@ -78,7 +78,7 @@ export function FeedbackModal({ isOpen, onClose, orderId }: FeedbackModalProps) 
             <h2 className="text-lg font-bold sm:text-xl">Rate Your Experience</h2>
             <p className="text-xs text-muted-foreground sm:text-sm">Order #{orderId}</p>
           </div>
-          <Button variant="ghost" size="sm" onClick={onClose}>
+          <Button variant="ghost" size="sm" aria-label="Close" onClick={onClose}>
             <X className="w-4 h-4 sm:w-5 sm:h-5" />
           </Button>
         </div>
@@ -130,7 +130,7 @@ export function FeedbackModal({ isOpen, onClose, orderId }: FeedbackModalProps) 
                     variant={selectedAspects.includes(aspect.id) ? "default" : "outline"}
                     size="sm"
                     className={`justify-start h-auto p-2 text-xs sm:p-3 sm:text-sm ${
-                      selectedAspects.includes(aspect.id) ? "restaurant-gradient text-white" : "bg-transparent"
+                      selectedAspects.includes(aspect.id) ? "bg-primary text-primary-foreground" : "bg-transparent"
                     }`}
                     onClick={() => toggleAspect(aspect.id)}
                   >
@@ -179,14 +179,14 @@ export function FeedbackModal({ isOpen, onClose, orderId }: FeedbackModalProps) 
 
           {/* Thank You Message */}
           {rating >= 4 && (
-            <Card className="border-restaurant-green/20 bg-restaurant-green/5">
+            <Card className="border-success/20 bg-success/5">
               <CardContent className="p-4">
-                <div className="flex items-center gap-2 text-restaurant-green">
+                <div className="flex items-center gap-2 text-success">
                   <Heart className="w-4 h-4" />
                   <span className="font-medium">Thank you for the great feedback!</span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-1">
-                  We're thrilled you enjoyed your experience. Your review helps us maintain our high standards.
+                  We&apos;re thrilled you enjoyed your experience. Your review helps us maintain our high standards.
                 </p>
               </CardContent>
             </Card>
@@ -198,13 +198,13 @@ export function FeedbackModal({ isOpen, onClose, orderId }: FeedbackModalProps) 
           <div className="flex gap-2 sm:gap-3">
             <Button
               variant="outline"
-              onClick={onClose}
+              aria-label="Close" onClick={onClose}
               className="flex-1 bg-transparent text-sm h-9 sm:text-base sm:h-10"
             >
               Maybe Later
             </Button>
             <Button
-              className="flex-1 restaurant-gradient text-white hover:opacity-90 transition-opacity text-sm h-9 sm:text-base sm:h-10"
+              className="flex-1 bg-primary text-primary-foreground hover:opacity-90 transition-opacity text-sm h-9 sm:text-base sm:h-10"
               onClick={handleSubmit}
               disabled={rating === 0 || isSubmitting}
             >

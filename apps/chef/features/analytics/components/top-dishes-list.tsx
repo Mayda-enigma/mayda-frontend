@@ -21,7 +21,7 @@ export function TopDishesList({ range }: TopDishesListProps) {
   return (
     <Card className="bg-card border-border">
       <CardHeader className="p-4 sm:p-6">
-        <CardTitle className="text-orange-500 text-base sm:text-lg">{t.topPerformingDishes}</CardTitle>
+        <CardTitle className="text-primary text-base sm:text-lg">{t.topPerformingDishes}</CardTitle>
         <CardDescription className="text-xs sm:text-sm">Most ordered items this week</CardDescription>
       </CardHeader>
       <CardContent className="p-4 sm:p-6 pt-0">

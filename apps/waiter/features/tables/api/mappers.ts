@@ -1,19 +1,12 @@
 import type { Table, TableDto } from '../types';
 
-const statusMap: Record<string, Table['status']> = {
-  free: 'free',
-  occupied: 'occupied',
-  waiting: 'waiting',
-  served: 'served',
-};
-
 export const toTable = (dto: TableDto): Table => ({
   id: dto.id,
   number: dto.number,
-  status: statusMap[dto.status] || 'free',
-  guests: dto.guests,
-  pendingOrders: dto.pendingOrders,
-  elapsedTime: dto.elapsedTime,
-  needsAttention: dto.needsAttention,
-  lastOrderTime: dto.lastOrderTime,
+  capacity: dto.capacity,
+  isActive: dto.isActive,
+  status: dto.status === 'OCCUPIED' ? 'OCCUPIED' : 'AVAILABLE',
+  qrCode: dto.qrCode,
+  currentSession: dto.currentSession,
+  activeOrdersCount: dto.activeOrdersCount,
 });

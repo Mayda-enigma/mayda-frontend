@@ -1,3 +1,3 @@
-export { useMyOrders, useTableOrders } from './api/queries';
-export { useMarkDelivered, useCreateOrder } from './api/mutations';
-export type { Order, OrderItem, OrderStatus } from './types';
+export { useRestaurantOrders, useTableOrders } from './api/queries';
+export { useUpdateOrderStatus, useCreateOrder } from './api/mutations';
+export type { Order, OrderItem } from './types';

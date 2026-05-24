@@ -21,11 +21,11 @@ export function NotificationBanner({ message, type, onDismiss }: NotificationBan
   const getTypeStyles = (type: string) => {
     switch (type) {
       case "urgent":
-        return "bg-red-900/90 border-red-500 text-red-100 animate-pulse"
+        return "bg-destructive/90 border-destructive text-destructive"
       case "warning":
-        return "bg-yellow-900/90 border-yellow-500 text-yellow-100"
+        return "bg-warning/90 border-warning text-warning"
       default:
-        return "bg-blue-900/90 border-blue-500 text-blue-100"
+        return "bg-accent-blue/90 border-accent-blue text-accent-blue"
     }
   }
 

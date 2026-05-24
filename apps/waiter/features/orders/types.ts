@@ -1,35 +1,55 @@
-export type OrderStatus = 'pending' | 'preparing' | 'ready' | 'served' | 'cancelled';
-export type OrderPriority = 'normal' | 'high';
-
 export interface Order {
   id: number;
-  tableId: number;
-  tableNumber: string;
-  waiterId: number;
+  orderNumber: string;
+  restaurantId: number;
+  tableId: number | null;
+  userId: number | null;
+  status: string;
+  totalAmount: number;
+  subtotal: number;
+  orderTime: string;
+  confirmedAt: string | null;
+  preparedAt: string | null;
+  readyAt: string | null;
+  completedAt: string | null;
+  type: string;
+  paymentStatus: string;
   items: OrderItem[];
-  status: OrderStatus;
-  priority: OrderPriority;
-  createdAt: string;
-  notes?: string;
 }
 
 export interface OrderItem {
   id: number;
-  name: string;
+  dishId: number;
+  dishName: string;
   quantity: number;
-  price: number;
-  status: OrderStatus;
-  specialInstructions?: string;
+  unitPrice: number;
+  totalPrice: number;
 }
 
 export interface OrderDto {
   id: number;
-  tableId: number;
-  tableNumber: string;
-  waiterId: number;
-  items: OrderItem[];
+  orderNumber: string;
+  restaurantId: number;
+  tableId: number | null;
+  userId: number | null;
   status: string;
-  priority: string;
-  createdAt: string;
-  notes?: string;
+  totalAmount: number;
+  subtotal: number;
+  orderTime: string;
+  confirmedAt: string | null;
+  preparedAt: string | null;
+  readyAt: string | null;
+  completedAt: string | null;
+  type: string;
+  paymentStatus: string;
+  items: OrderItemDto[];
+}
+
+export interface OrderItemDto {
+  id: number;
+  dishId: number;
+  dishName: string;
+  quantity: number;
+  unitPrice: number;
+  totalPrice: number;
 }

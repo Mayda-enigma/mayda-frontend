@@ -11,6 +11,7 @@ Tracking the full design system transformation, from initial MUI removal to the 
 | 2026-05-23 (pm) | DaisyUI-inspired component depth, Bento grid dashboard |
 | 2026-05-23 (pm) | MongoDB Compass dark palette, syntax tokens, dark default |
 | 2026-05-23 (pm) | Skills configuration (`mayda` agent), 4-phase skill-driven audit + remediation |
+| 2026-05-24 | Chef app: Next.js 14→16, React 18→19, design system migration (Compass palette, Outfit font, daisy-depth shadows, token-only colors, simplified top-bar floating-card shell) |
 
 ## 1. Original migration: MUI → shadcn-ui
 

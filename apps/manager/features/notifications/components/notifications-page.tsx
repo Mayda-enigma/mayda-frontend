@@ -19,73 +19,12 @@ import {
   Eye,
   Settings,
 } from "lucide-react"
-
-const notifications = [
-  {
-    id: 1,
-    type: "alert",
-    title: "Low Stock Alert",
-    message: "Tomatoes running critically low - only 2 days remaining",
-    time: "2 minutes ago",
-    read: false,
-    priority: "high",
-    category: "inventory",
-  },
-  {
-    id: 2,
-    type: "info",
-    title: "New Order Received",
-    message: "Table 12 - Pizza Margherita x2, Caesar Salad x1",
-    time: "5 minutes ago",
-    read: false,
-    priority: "medium",
-    category: "orders",
-  },
-  {
-    id: 3,
-    type: "success",
-    title: "Staff Check-in",
-    message: "Maria Rodriguez checked in for evening shift",
-    time: "15 minutes ago",
-    read: true,
-    priority: "low",
-    category: "staff",
-  },
-  {
-    id: 4,
-    type: "alert",
-    title: "Kitchen Equipment Alert",
-    message: "Oven #2 temperature sensor needs calibration",
-    time: "1 hour ago",
-    read: false,
-    priority: "high",
-    category: "equipment",
-  },
-  {
-    id: 5,
-    type: "info",
-    title: "Reservation Update",
-    message: "Party of 8 confirmed for 7:30 PM tonight",
-    time: "2 hours ago",
-    read: true,
-    priority: "medium",
-    category: "reservations",
-  },
-  {
-    id: 6,
-    type: "success",
-    title: "Daily Sales Target",
-    message: "Congratulations! Today's sales target achieved (102%)",
-    time: "3 hours ago",
-    read: true,
-    priority: "low",
-    category: "sales",
-  },
-]
+import { useNotifications } from "../api/queries"
 
 export function NotificationsPage() {
   const [filter, setFilter] = useState("all")
   const [searchTerm, setSearchTerm] = useState("")
+  const { data: notifications } = useNotifications()
 
   const getIcon = (type: string) => {
     switch (type) {
@@ -113,7 +52,8 @@ export function NotificationsPage() {
     }
   }
 
-  const filteredNotifications = notifications.filter((notification) => {
+  const items = notifications ?? []
+  const filteredNotifications = items.filter((notification) => {
     const matchesFilter =
       filter === "all" ||
       (filter === "unread" && !notification.read) ||

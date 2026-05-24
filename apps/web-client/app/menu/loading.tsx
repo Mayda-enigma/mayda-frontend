@@ -2,7 +2,7 @@ import { Skeleton } from '@/shared/ui/skeleton';
 
 export default function MenuLoading() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
         <div className="flex items-center justify-between p-3 sm:p-4">
           <div className="flex items-center gap-2 sm:gap-3">

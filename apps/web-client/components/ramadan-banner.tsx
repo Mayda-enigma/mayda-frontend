@@ -55,7 +55,7 @@ export function RamadanBanner({ onPreOrder }: RamadanBannerProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-blue-600" />
-              <span className="text-sm font-medium text-blue-900">Today's Iftar</span>
+              <span className="text-sm font-medium text-blue-900">Today&apos;s Iftar</span>
             </div>
             <Badge variant="outline" className="text-blue-700 border-blue-300">
               {iftarTime}

@@ -35,7 +35,7 @@ export function OrderStatusChart({ range }: OrderStatusChartProps) {
   return (
     <Card className="bg-card border-border">
       <CardHeader className="p-4 sm:p-6">
-        <CardTitle className="text-orange-500 text-base sm:text-lg">{t.orderStatusDistribution}</CardTitle>
+        <CardTitle className="text-primary text-base sm:text-lg">{t.orderStatusDistribution}</CardTitle>
         <CardDescription className="text-xs sm:text-sm">Current order completion rates</CardDescription>
       </CardHeader>
       <CardContent className="p-4 sm:p-6 pt-0">

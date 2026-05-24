@@ -1,23 +1,30 @@
-export type TableStatus = 'free' | 'occupied' | 'waiting' | 'served';
+export type TableStatus = 'AVAILABLE' | 'OCCUPIED';
+
+export interface CurrentSession {
+  sessionId: number;
+  waiterId: number;
+  waiterName: string;
+  startedAt: string;
+}
 
 export interface Table {
   id: number;
   number: string;
+  capacity: number;
+  isActive: boolean;
   status: TableStatus;
-  guests: number;
-  pendingOrders: number;
-  elapsedTime: number;
-  needsAttention: boolean;
-  lastOrderTime?: string;
+  qrCode: string | null;
+  currentSession: CurrentSession | null;
+  activeOrdersCount: number;
 }
 
 export interface TableDto {
   id: number;
   number: string;
+  capacity: number;
+  isActive: boolean;
   status: string;
-  guests: number;
-  pendingOrders: number;
-  elapsedTime: number;
-  needsAttention: boolean;
-  lastOrderTime?: string;
+  qrCode: string | null;
+  currentSession: CurrentSession | null;
+  activeOrdersCount: number;
 }

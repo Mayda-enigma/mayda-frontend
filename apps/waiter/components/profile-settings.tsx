@@ -7,9 +7,11 @@ import { Badge } from "@/shared/ui/badge"
 import { Switch } from "@/shared/ui/switch"
 import { useTheme } from "next-themes"
 import { useLanguage } from "@/components/language-provider"
+import { useCurrentUser } from "@/features/auth"
 import { User, Settings, Bell, Palette, Globe, Volume2, Vibrate } from "lucide-react"
 
 export function ProfileSettings() {
+  const { data: currentUser } = useCurrentUser()
   const { theme, setTheme } = useTheme()
   const { language, setLanguage, t } = useLanguage()
   const [soundEnabled, setSoundEnabled] = useState(true)
@@ -24,18 +26,21 @@ export function ProfileSettings() {
 
   return (
     <div className="p-2 sm:p-3 space-y-3">
-      {/* Header */}
       <div className="flex items-center gap-2 mb-4">
         <div className="w-12 h-12 sm:w-14 sm:h-14 bg-primary/10 rounded-full flex items-center justify-center">
           <User className="h-6 w-6 sm:h-7 sm:w-7 text-primary" />
         </div>
         <div>
-          <h2 className="text-lg sm:text-xl font-heading text-foreground">{t("profile")}</h2>
-          <p className="text-xs text-muted-foreground">Waiter #001 - John Doe</p>
+          <h2 className="text-lg sm:text-xl font-semibold text-foreground">{t("profile")}</h2>
+          <p className="text-xs text-muted-foreground">
+            {currentUser?.role ? `${currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1)}` : ""}
+            {currentUser?.restaurantId ? ` #${currentUser.restaurantId}` : ""}
+            {" - "}
+            {currentUser?.name || "Loading..."}
+          </p>
         </div>
       </div>
 
-      {/* Theme Settings */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
@@ -59,7 +64,6 @@ export function ProfileSettings() {
         </CardContent>
       </Card>
 
-      {/* Language Settings */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
@@ -89,7 +93,6 @@ export function ProfileSettings() {
         </CardContent>
       </Card>
 
-      {/* Notification Settings */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
@@ -133,28 +136,30 @@ export function ProfileSettings() {
         </CardContent>
       </Card>
 
-      {/* App Info */}
       <Card>
         <CardHeader>
           <CardTitle className="text-base">App Information</CardTitle>
         </CardHeader>
         <CardContent className="space-y-1.5">
           <div className="flex justify-between text-xs">
-            <span className="text-muted-foreground">Version</span>
-            <span>1.0.0</span>
+            <span className="text-muted-foreground">Name</span>
+            <span>{currentUser?.name || "—"}</span>
           </div>
           <div className="flex justify-between text-xs">
-            <span className="text-muted-foreground">Last Updated</span>
-            <span>Today</span>
+            <span className="text-muted-foreground">Email</span>
+            <span>{currentUser?.email || "—"}</span>
           </div>
           <div className="flex justify-between text-xs">
-            <span className="text-muted-foreground">Restaurant</span>
-            <span>Smart Restaurant Demo</span>
+            <span className="text-muted-foreground">Role</span>
+            <span className="capitalize">{currentUser?.role || "—"}</span>
+          </div>
+          <div className="flex justify-between text-xs">
+            <span className="text-muted-foreground">Restaurant ID</span>
+            <span>{currentUser?.restaurantId ? `#${currentUser.restaurantId}` : "—"}</span>
           </div>
         </CardContent>
       </Card>
 
-      {/* Quick Actions */}
       <div className="grid grid-cols-2 gap-3 pt-2">
         <Button variant="outline" className="h-9 bg-transparent text-sm">
           Sync Data

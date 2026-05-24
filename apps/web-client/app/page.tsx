@@ -86,7 +86,7 @@ export default function RestaurantLanding() {
   const currentLang = languages[language as keyof typeof languages]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-card to-muted">
+    <div className="min-h-dvh bg-gradient-to-br from-background via-card to-muted">
       {/* Header with Language Selector */}
       <header className="flex flex-row justify-between items-center h-30 p-2 px-6">
         <div className="flex items-center gap-2">
@@ -148,7 +148,7 @@ export default function RestaurantLanding() {
           <Link href="/menu" className="flex-1">
             <Button
               size="lg"
-              className="w-full restaurant-gradient text-white font-semibold py-3 sm:py-4 md:py-6 text-sm sm:text-base md:text-lg hover:opacity-90 transition-opacity"
+              className="w-full bg-primary text-primary-foreground font-semibold py-3 sm:py-4 md:py-6 text-sm sm:text-base md:text-lg hover:opacity-90 transition-opacity"
             >
               {currentLang.viewMenu}
             </Button>
@@ -167,12 +167,12 @@ export default function RestaurantLanding() {
 
       {/* Hero Image - Full Width */}
       <div className="mb-4 sm:m-6 md:m-8 relative">
-        <img
+        <Image
           src="/elegant-restaurant-interior-with-warm-lighting-and.jpg"
           alt="Restaurant Interior"
-          className="w-full h-32 sm:h-48 md:h-64 lg:h-80 object-cover object-center rounded-lg mt-0"
+          width={1200} height={600} className="w-full h-32 sm:h-48 md:h-64 lg:h-80 object-cover object-center rounded-lg mt-0" priority
         />
-        <div className="absolute inset-0 restaurant-gradient opacity-20"></div>
+        <div className="absolute inset-0 bg-primary opacity-20"></div>
       </div>
 
       <main className="px-2 sm:px-3 md:px-4 lg:px-6 pb-4 sm:pb-6 md:pb-8 flex flex-col items-center">
@@ -205,8 +205,8 @@ export default function RestaurantLanding() {
                 </div>
 
                 <div className="relative h-48 sm:h-64 md:h-auto m-4 sm:m-6 md:m-8 bg-gradient-to-br from-background via-card to-muted rounded-lg">
-                  <img src="/chef-cooking-restaurant.jpg" alt="Chef cooking" className="rounded-lg w-full h-full object-cover object-center mix-blend-multiply opacity-80" />
-                  <div className="absolute inset-0 restaurant-gradient opacity-10 rounded-lg"></div>
+                  <Image src="/chef-cooking-restaurant.jpg" alt="Chef cooking" width={600} height={400} className="rounded-lg w-full h-full object-cover object-center mix-blend-multiply opacity-80" />
+                  <div className="absolute inset-0 bg-primary opacity-10 rounded-lg"></div>
                 </div>
               </div>
             </CardContent>
@@ -217,7 +217,7 @@ export default function RestaurantLanding() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 max-sm:w-[90%] sm:gap-3 md:gap-4 mb-20 sm:mb-20 md:mb-20 ">
           <Card className="text-center p-3 sm:p-4 md:p-6 hover:shadow-lg transition-all duration-300 hover:scale-105">
             <CardContent className="p-0">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 restaurant-gradient rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-primary rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
                 <Utensils className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white" />
               </div>
               <h3 className="font-semibold mb-1 sm:mb-2 text-xs sm:text-sm md:text-base">
@@ -229,7 +229,7 @@ export default function RestaurantLanding() {
 
           <Card className="text-center p-3 sm:p-4 md:p-6 hover:shadow-lg transition-all duration-300 hover:scale-105">
             <CardContent className="p-0">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 restaurant-gradient rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-primary rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
                 <Clock className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white" />
               </div>
               <h3 className="font-semibold mb-1 sm:mb-2 text-xs sm:text-sm md:text-base">
@@ -241,7 +241,7 @@ export default function RestaurantLanding() {
 
           <Card className="text-center p-3 sm:p-4 md:p-6 hover:shadow-lg transition-all duration-300 hover:scale-105 sm:col-span-2 md:col-span-1">
             <CardContent className="p-0">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 restaurant-gradient rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-primary rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
                 <Star className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white" />
               </div>
               <h3 className="font-semibold mb-1 sm:mb-2 text-xs sm:text-sm md:text-base">

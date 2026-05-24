@@ -1,21 +1,43 @@
 import type { Employee, EmployeeDto, InviteDto, UpdateDto } from '../types';
 
+function roleToDepartment(role: string): string {
+  if (role === "CHEF") return "Kitchen"
+  if (role === "WAITER") return "Service"
+  if (role === "MANAGER") return "Management"
+  if (role === "ADMIN") return "Management"
+  return "Service"
+}
+
+function roleToDisplay(role: string): string {
+  if (role === "CHEF") return "Chef"
+  if (role === "WAITER") return "Waiter"
+  if (role === "MANAGER") return "Manager"
+  if (role === "ADMIN") return "Admin"
+  return role
+}
+
+function formatDate(dateStr: string): string {
+  const d = new Date(dateStr)
+  if (isNaN(d.getTime())) return dateStr
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+}
+
 export const toEmployee = (dto: EmployeeDto): Employee => ({
   id: dto.id,
-  name: dto.name,
-  email: dto.email,
-  phone: dto.phone,
-  role: dto.role,
-  department: dto.department,
-  hireDate: dto.hireDate,
-  salary: dto.salary,
-  status: dto.status as Employee['status'],
-  avatar: dto.avatar,
+  name: `${dto.firstName} ${dto.lastName}`,
+  email: dto.email ?? "",
+  phone: String(dto.phone),
+  role: roleToDisplay(dto.role),
+  department: roleToDepartment(dto.role),
+  hireDate: formatDate(dto.createdAt),
+  salary: 0,
+  status: dto.isActive ? "active" : "inactive",
+  avatar: null,
   performance: {
-    rating: dto.performance_rating,
-    avgServiceTime: dto.performance_avg_service_time,
-    customerScore: dto.performance_customer_score,
-    attendance: dto.performance_attendance,
+    rating: 0,
+    avgServiceTime: "--",
+    customerScore: 0,
+    attendance: 0,
   },
 });
 
