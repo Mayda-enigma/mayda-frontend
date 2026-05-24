@@ -12,6 +12,11 @@ export const STATIC_AR_MODELS: (StaticArModel & { aliases?: string[] })[] = [
     src: '/AR/Bourak Fixed 2.glb',
     alt: 'Bourek',
   },
+  {
+    dishName: 'Thé à la Menthe',
+    src: '/AR/Tememon Tea Cup.glb',
+    alt: 'Thé à la Menthe',
+  },
 ]
 
 const normalizeDishName = (name: string) =>
