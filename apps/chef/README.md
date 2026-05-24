@@ -34,15 +34,17 @@ The Chef Application provides an intuitive interface for kitchen staff to:
 
 ## 🛠 Tech Stack
 
-- **Framework**: Next.js 14.2.16 with App Router
+- **Framework**: Next.js 16.2.6 with App Router (Turbopack)
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS with custom components
-- **UI Components**: Radix UI primitives
+- **Styling**: Tailwind CSS v4 with design tokens
+- **Font**: Outfit (primary) + Source Code Pro (mono)
+- **UI Components**: shadcn/ui (Radix primitives) with daisy-depth shadows
+- **Theme**: MongoDB Compass dark palette (default dark mode)
 - **Icons**: Lucide React
-- **State Management**: React Context API
+- **State Management**: TanStack Query + React Context API
 - **Voice Control**: Web Speech API integration
 - **Internationalization**: Custom i18n implementation
-- **Package Manager**: pnpm
+- **Package Manager**: npm
 
 ## 📋 Prerequisites
 

@@ -9,17 +9,17 @@ Strategic and brand context for `@mayda/admin`. Required by the `impeccable` ski
 
 ## Product
 
-**Mayda Admin** is the operator console for a multi-restaurant smart platform. One workspace, many partner restaurants. The admin oversees revenue, channels, peak hours, infrastructure health, anomaly signals, and per-tenant settings.
+**Mayda Chef** is the kitchen dashboard for a multi-restaurant smart platform. Kitchen staff use it to manage incoming orders, track preparation status, monitor stock levels, and coordinate with voice commands during busy service periods.
 
-It is **not** a marketing surface. It is the cockpit a single operator (or a small team) uses every day to run the business.
+It is **not** a management console. It is the hands-on tool kitchen staff use on tablets and wall-mounted displays during real-time food preparation.
 
 ## Users
 
 | Persona | Context | What they need |
 |---|---|---|
-| **Platform operator** | Sits at a desk, ~8h/day, often dual-monitor. Watches anomalies, approves restaurants, audits revenue. | Information density, glanceable status, fast keyboard navigation, no surprise modals. |
-| **Finance / ops manager** | Drops in once a day, scans dashboard, exports the weekly rollup. | High-contrast charts, accessible data tables, exportable summaries. |
-| **On-call engineer** | Reacts to anomaly alerts on phone or laptop at unpredictable hours. | Mobile-readable empty states, dark-mode legibility, non-noisy notifications. |
+| **Head Chef** | Runs the kitchen pass, oversees all orders, coordinates team. Uses tablet at the pass. | At-a-glance order status, priority indicators, voice commands for hands-free updates. |
+| **Line Cook** | Prepares specific dishes, updates individual order progress. Glances at wall display. | Clear dish details, timing information, simple status transitions (Start→Ready). |
+| **Kitchen Porter** | Monitors stock levels, reorders ingredients. Checks between services. | Low-stock alerts, inventory counts, expiry tracking. |
 
 Single locale today: French (Algerian Dinar `DZD`). Multi-locale later, but copy lives in French + English where shown.
 
@@ -45,18 +45,17 @@ These are the patterns / aesthetics this product **rejects**:
 
 ## Strategic principles
 
-1. **Operator > visitor.** Optimize for the third visit, not the first impression. Density is OK. Animation is restrained.
-2. **One panel surface.** The floating white card holds every page. There is no second visual layer competing with it.
-3. **Status before metrics.** Empty states matter as much as filled ones. The dashboard renders meaningfully on day zero (Bento empty-state pattern).
-4. **Dark mode is the daily mode.** MongoDB Compass palette is the default theme because operators leave the app open. Light mode exists for accessibility, not as the canonical look.
-5. **Token-only colors.** Every color reads from a CSS variable. No hex in components. New token? Add to `globals.css` first, document in `DESIGN.md`, then use.
-6. **Skills-driven.** This codebase loads `impeccable`, `frontend-design`, `ui-ux-pro-max`, `vercel-react-best-practices`, `web-design-guidelines`, and `code-polish` by default (`.opencode/agents/mayda.json`). Their rules override generic agent defaults.
+1. **Speed > decoration.** Kitchen staff need instant recognition. Cards show status at a glance. Animation is minimal.
+2. **Hands-free when possible.** Voice commands are first-class, not a gimmick. Every status transition works via voice.
+3. **Dark mode is the daily mode.** Kitchens are often dimly lit. The Compass dark palette reduces eye strain on wall-mounted displays.
+4. **Token-only colors.** Every color reads from a CSS variable. No hex in components.
+5. **Glanceable status.** Order priority, time elapsed, and preparation status must be readable from across the kitchen.
 
 ## Out of scope
 
-- Marketing site, blog, changelog, pricing page. Not built here.
-- End-customer (diner) facing surfaces. Different app, different repo.
-- Multi-language UI strings beyond French/English at the moment.
+- Admin/management features. Those live in `@mayda/admin`.
+- End-customer (diner) facing surfaces. Those live in `@mayda/web-client`.
+- Multi-language UI strings beyond the supported set (en/es/fr/de/it).
 
 ## Reference
 

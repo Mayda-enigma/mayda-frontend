@@ -32,7 +32,7 @@ export function PrepTimeChart({ range }: PrepTimeChartProps) {
   return (
     <Card className="bg-card border-border">
       <CardHeader className="p-4 sm:p-6">
-        <CardTitle className="text-orange-500 text-base sm:text-lg">{t.kitchenEfficiency}</CardTitle>
+        <CardTitle className="text-primary text-base sm:text-lg">{t.kitchenEfficiency}</CardTitle>
         <CardDescription className="text-xs sm:text-sm">Average preparation time vs order volume</CardDescription>
       </CardHeader>
       <CardContent className="p-4 sm:p-6 pt-0">
