@@ -104,7 +104,7 @@ export function Sidebar({ navigation, className, onNavigate }: SidebarProps) {
       <header className="flex h-9 items-center justify-between gap-2 px-2">
         <div className="flex items-center gap-2 rounded-md">
           <Image
-            src="/LogoManager.svg"
+            src="/LogoAdmin.svg"
             alt=""
             width={120}
             height={32}

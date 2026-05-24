@@ -42,10 +42,10 @@ export function BurgerMenu({ currentPage }: BurgerMenuProps) {
           <div className="flex items-center justify-between h-24 px-4 border-b">
             <div className="flex items-center gap-2">
               <Image
-                src="/LogoOnSite.svg"
-                alt="Bella Vista Logo"
-                width={200}
-                height={200}
+                src="/LogoAdmin.svg"
+                alt="Mayda"
+                width={48}
+                height={16}
               />
             </div>
           </div>
