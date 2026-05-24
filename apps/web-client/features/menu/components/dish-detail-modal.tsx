@@ -6,8 +6,9 @@ import { Button } from '@/shared/ui/button';
 import { Card, CardContent } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
 import { Textarea } from '@/shared/ui/textarea';
+import { ModelViewer, getStaticArModelForDish } from '@/features/ar';
 import { useCart } from '@/features/cart';
-import { X, Plus, Minus, Heart, Leaf, Wheat, AlertTriangle } from 'lucide-react';
+import { X, Plus, Minus, Heart, Leaf, Wheat, AlertTriangle, ScanLine } from 'lucide-react';
 import type { MenuItem } from '../types';
 
 interface DishDetailModalProps {
@@ -27,8 +28,11 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
   const { dispatch } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [specialInstructions, setSpecialInstructions] = useState('');
+  const [isArOpen, setIsArOpen] = useState(false);
 
   if (!isOpen || !dish) return null;
+
+  const arModel = getStaticArModelForDish(dish);
 
   const addToCart = () => {
     dispatch({
@@ -46,11 +50,17 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
     onClose();
     setQuantity(1);
     setSpecialInstructions('');
+    setIsArOpen(false);
+  };
+
+  const closeModal = () => {
+    setIsArOpen(false);
+    onClose();
   };
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/50 z-50 animate-in fade-in-0 duration-300" aria-label="Close" onClick={onClose} />
+      <div className="fixed inset-0 bg-black/50 z-50 animate-in fade-in-0 duration-300" onClick={closeModal} />
 
       <div className="fixed inset-4 md:inset-8 lg:inset-16 bg-background rounded-xl z-50 overflow-hidden flex flex-col max-w-2xl mx-auto animate-in zoom-in-95 slide-in-from-bottom-4 duration-300">
         <div className="flex-1 overflow-y-auto">
@@ -66,13 +76,20 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
               variant="ghost"
               size="sm"
               className="absolute top-4 right-4 bg-white/90 hover:bg-white text-black hover:scale-110 transition-all duration-200 hover:shadow-lg"
-              aria-label="Close" onClick={onClose}
+        
+              onClick={closeModal}
             >
               <X className="w-5 h-5" />
             </Button>
 
             {dish.popular && (
               <Badge className="absolute top-4 left-4 bg-primary text-primary-foreground animate-bounce">Popular</Badge>
+            )}
+
+            {arModel && (
+              <Badge className="absolute top-14 left-4 bg-background/90 text-foreground shadow-sm">
+                AR disponible
+              </Badge>
             )}
 
             <div className="absolute bottom-4 right-4 flex gap-2">
@@ -117,6 +134,30 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
                   {diet.replace('-', ' ')}
                 </Badge>
               ))}
+            </div>
+
+            <div className="mb-4 animate-in slide-in-from-bottom-4 duration-500 delay-150">
+              {arModel ? (
+                <div className="rounded-xl border border-border bg-card p-4">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <h3 className="font-semibold">Visualisez ce plat sur votre table</h3>
+                      <p className="text-sm text-muted-foreground">Disponible pour ce plat.</p>
+                    </div>
+                    <Button
+                      className="restaurant-gradient text-white hover:opacity-90"
+                      onClick={() => setIsArOpen(true)}
+                    >
+                      <ScanLine className="w-4 h-4" />
+                      Voir en AR
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <Badge variant="outline" className="text-muted-foreground">
+                  AR bientôt disponible
+                </Badge>
+              )}
             </div>
 
             <Card className="mb-4 hover:shadow-md transition-shadow duration-200 animate-in slide-in-from-bottom-4 duration-500 delay-200">
@@ -193,6 +234,34 @@ export function DishDetailModal({ dish, isOpen, onClose }: DishDetailModalProps)
           </Button>
         </div>
       </div>
+
+      {arModel && isArOpen && (
+        <>
+          <div
+            className="fixed inset-0 bg-black/60 z-[60] animate-in fade-in-0 duration-300"
+            onClick={() => setIsArOpen(false)}
+          />
+          <div className="fixed inset-4 z-[70] mx-auto flex max-w-3xl flex-col overflow-hidden rounded-xl bg-background shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-4 duration-300 md:inset-8">
+            <div className="flex items-center justify-between border-b border-border p-4">
+              <div>
+                <h2 className="text-lg font-bold">{dish.name}</h2>
+                <p className="text-sm text-muted-foreground">Visualisez ce plat sur votre table</p>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="p-2"
+                onClick={() => setIsArOpen(false)}
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4">
+              <ModelViewer src={arModel.src} alt={arModel.alt} />
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 }

@@ -1,0 +1,46 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Web Client: Dev",
+      "type": "shell",
+      "command": "cd apps/web-client && npm run dev",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Web Client: Build",
+      "type": "shell",
+      "command": "cd apps/web-client && npm run build",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Web Client: Lint",
+      "type": "shell",
+      "command": "cd apps/web-client && npm run lint",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Web Client: Typecheck",
+      "type": "shell",
+      "command": "cd apps/web-client && npx tsc --noEmit",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    }
+  ]
+}
