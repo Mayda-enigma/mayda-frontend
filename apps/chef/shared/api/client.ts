@@ -12,12 +12,12 @@ export class ApiError extends Error {
   }
 }
 
-function clearAuth() {
+export function clearAuth() {
   localStorage.removeItem('mayda_token');
   document.cookie = 'mayda_token=; path=/; max-age=0; SameSite=Lax';
 }
 
-function redirectToLogin() {
+export function redirectToLogin() {
   if (typeof window !== 'undefined') {
     window.location.href = '/login';
   }
