@@ -20,13 +20,13 @@ export function BottomNavigation() {
     {
       href: "/orders",
       icon: Clock,
-      label: "Orders",
+      label: "Commandes",
       active: pathname === "/orders",
     },
     {
       href: "/cart",
       icon: ShoppingBag,
-      label: "Cart",
+      label: "Panier",
       active: pathname === "/cart",
       badge: state.items.length > 0 ? state.items.length : undefined,
     },

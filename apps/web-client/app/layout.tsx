@@ -22,8 +22,8 @@ const sourceCodePro = Source_Code_Pro({
 })
 
 export const metadata: Metadata = {
-  title: "Mayda - Premium Digital Dining",
-  description: "Premium onsite digital restaurant experience with QR ordering",
+  title: "Mayda - Restaurant Digital",
+  description: "Expérience de restauration numérique haut de gamme avec commande par QR",
 }
 
 export default function RootLayout({
@@ -32,11 +32,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="fr" suppressHydrationWarning>
       <body className={`font-sans ${outfit.variable} ${sourceCodePro.variable} antialiased`}>
         <QueryProvider>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange={false}>
-          <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+          <Suspense fallback={<div>Chargement...</div>}>{children}</Suspense>
           <CartSidebar />
           <BottomNavigation />
           <Analytics />

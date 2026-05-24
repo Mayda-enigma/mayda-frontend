@@ -35,8 +35,8 @@ export function NotificationSystem({ onFeedbackRequest }: NotificationSystemProp
       {
         id: "notif-1",
         type: "order_update",
-        title: "Order Ready!",
-        message: "Your Grilled Mediterranean Sea Bass is ready to be served",
+        title: "Commande prête !",
+        message: "Votre bar méditerranéen grillé est prêt",
         timestamp: new Date(Date.now() - 2 * 60 * 1000),
         read: false,
         priority: "high",
@@ -44,11 +44,11 @@ export function NotificationSystem({ onFeedbackRequest }: NotificationSystemProp
       {
         id: "notif-2",
         type: "discount",
-        title: "Special Offer",
-        message: "20% off desserts when you order a main course today!",
+        title: "Offre spéciale",
+        message: "20% de réduction sur les desserts avec un plat aujourd'hui !",
         timestamp: new Date(Date.now() - 15 * 60 * 1000),
         read: false,
-        actionLabel: "View Desserts",
+        actionLabel: "Voir desserts",
         actionCallback: () => {
           // Navigate to desserts category
           window.location.href = "/menu?category=desserts"
@@ -58,11 +58,11 @@ export function NotificationSystem({ onFeedbackRequest }: NotificationSystemProp
       {
         id: "notif-3",
         type: "feedback_request",
-        title: "How was your meal?",
-        message: "We'd love to hear about your experience with Order #ORD-002",
+        title: "Comment était votre repas ?",
+        message: "Donnez-nous votre avis sur la commande #ORD-002",
         timestamp: new Date(Date.now() - 30 * 60 * 1000),
         read: false,
-        actionLabel: "Leave Review",
+        actionLabel: "Laisser un avis",
         actionCallback: () => onFeedbackRequest?.("ORD-002"),
         priority: "low",
       },
@@ -76,8 +76,8 @@ export function NotificationSystem({ onFeedbackRequest }: NotificationSystemProp
         {
           id: `notif-${Date.now()}`,
           type: "order_update" as const,
-          title: "Chef Update",
-          message: "Your order is being prepared with extra care",
+          title: "Info du chef",
+          message: "Votre commande est préparée avec soin",
           timestamp: new Date(),
           read: false,
           priority: "medium" as const,
@@ -85,8 +85,8 @@ export function NotificationSystem({ onFeedbackRequest }: NotificationSystemProp
         {
           id: `notif-${Date.now()}`,
           type: "general" as const,
-          title: "Table Service",
-          message: "Your server will be with you shortly",
+          title: "Service à table",
+          message: "Votre serveur sera bientôt là",
           timestamp: new Date(),
           read: false,
           priority: "low" as const,
@@ -178,14 +178,14 @@ export function NotificationSystem({ onFeedbackRequest }: NotificationSystemProp
                 <h3 className="font-semibold text-sm sm:text-base">Notifications</h3>
                 {unreadCount > 0 && (
                   <Badge variant="secondary" className="text-xs">
-                    {unreadCount} new
+                    {unreadCount} nouveau
                   </Badge>
                 )}
               </div>
               <div className="flex items-center gap-1">
                 {unreadCount > 0 && (
                   <Button variant="ghost" size="sm" className="text-xs h-auto p-1" onClick={markAllAsRead}>
-                    Mark all read
+                    Tout marquer lu
                   </Button>
                 )}
                 <Button variant="ghost" size="sm" className="p-1" onClick={() => setIsOpen(false)}>
@@ -199,7 +199,7 @@ export function NotificationSystem({ onFeedbackRequest }: NotificationSystemProp
               {notifications.length === 0 ? (
                 <div className="p-6 text-center sm:p-8">
                   <Bell className="w-6 h-6 text-muted-foreground mx-auto mb-2 sm:w-8 sm:h-8" />
-                  <p className="text-muted-foreground text-xs sm:text-sm">No notifications</p>
+                  <p className="text-muted-foreground text-xs sm:text-sm">Aucune notification</p>
                 </div>
               ) : (
                 <div className="divide-y divide-border">

@@ -13,21 +13,21 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 
 const dietaryOptions = [
-  { id: "vegetarian", name: "Vegetarian", icon: Leaf, color: "text-green-600" },
-  { id: "vegan", name: "Vegan", icon: Heart, color: "text-green-600" },
-  { id: "gluten-free", name: "Gluten Free", icon: Wheat, color: "text-amber-600" },
+  { id: "vegetarian", name: "Végétarien", icon: Leaf, color: "text-green-600" },
+  { id: "vegan", name: "Végétalien", icon: Heart, color: "text-green-600" },
+  { id: "gluten-free", name: "Sans gluten", icon: Wheat, color: "text-amber-600" },
   { id: "halal", name: "Halal", icon: Heart, color: "text-blue-600" },
-  { id: "dairy-free", name: "Dairy Free", icon: Heart, color: "text-purple-600" },
-  { id: "nut-free", name: "Nut Free", icon: Heart, color: "text-orange-600" },
+  { id: "dairy-free", name: "Sans lactose", icon: Heart, color: "text-purple-600" },
+  { id: "nut-free", name: "Sans noix", icon: Heart, color: "text-orange-600" },
 ]
 
-const cuisineTypes = ["Mediterranean", "Italian", "Moroccan", "French", "Asian", "American", "Healthy", "Comfort Food"]
+const cuisineTypes = ["Méditerranéenne", "Italienne", "Marocaine", "Française", "Asiatique", "Américaine", "Saine", "Cuisine réconfortante"]
 
 const spiceLevels: { id: SpiceLevel; name: string; color: string }[] = [
-  { id: "mild", name: "Mild", color: "bg-green-100 text-green-800" },
-  { id: "medium", name: "Medium", color: "bg-yellow-100 text-yellow-800" },
-  { id: "hot", name: "Hot", color: "bg-orange-100 text-orange-800" },
-  { id: "very-hot", name: "Very Hot", color: "bg-red-100 text-red-800" },
+  { id: "mild", name: "Douce", color: "bg-green-100 text-green-800" },
+  { id: "medium", name: "Moyenne", color: "bg-yellow-100 text-yellow-800" },
+  { id: "hot", name: "Épicée", color: "bg-orange-100 text-orange-800" },
+  { id: "very-hot", name: "Très épicée", color: "bg-red-100 text-red-800" },
 ]
 
 export default function FiltersPage() {
@@ -65,9 +65,9 @@ export default function FiltersPage() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-lg sm:text-xl font-bold">Filters</h1>
+              <h1 className="text-lg sm:text-xl font-bold">Filtres</h1>
               <p className="text-xs sm:text-sm text-muted-foreground">
-                {count > 0 ? `${count} active filters` : "No filters applied"}
+                {count > 0 ? `${count} filtres actifs` : "Aucun filtre"}
               </p>
             </div>
           </div>
@@ -76,7 +76,7 @@ export default function FiltersPage() {
               <ThemeToggle />
             </div>
             <Button variant="ghost" onClick={clearAll} className="text-xs sm:text-sm px-2 sm:px-3">
-              Clear All
+              Tout effacer
             </Button>
           </div>
         </div>
@@ -88,19 +88,19 @@ export default function FiltersPage() {
           <CardHeader className="pb-3 sm:pb-4">
             <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
               <Star className="w-4 h-4 sm:w-5 sm:h-5" />
-              Sort By
+              Trier par
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {(
                 [
-                  { id: "recommended", name: "Recommended" },
-                  { id: "price-low", name: "Price: Low to High" },
-                  { id: "price-high", name: "Price: High to Low" },
-                  { id: "popular", name: "Most Popular" },
-                  { id: "prep-time", name: "Prep Time" },
-                  { id: "rating", name: "Highest Rated" },
+                  { id: "recommended", name: "Recommandé" },
+                  { id: "price-low", name: "Prix : croissant" },
+                  { id: "price-high", name: "Prix : décroissant" },
+                  { id: "popular", name: "Plus populaires" },
+                  { id: "prep-time", name: "Temps de prép." },
+                  { id: "rating", name: "Mieux notés" },
                 ] as const
               ).map((option) => (
                 <Button
@@ -122,15 +122,15 @@ export default function FiltersPage() {
           <CardHeader className="pb-3 sm:pb-4">
             <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
               <DollarSign className="w-4 h-4 sm:w-5 sm:h-5" />
-              Price Range
+              Fourchette de prix
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3 sm:space-y-4">
               <Slider value={priceRange} onValueChange={(v) => setPriceRange(v as [number, number])} max={50} min={0} step={1} className="w-full" />
               <div className="flex justify-between text-xs sm:text-sm text-muted-foreground">
-                <span>${priceRange[0]}</span>
-                <span>${priceRange[1]}+</span>
+                <span>{priceRange[0]} DZD</span>
+                <span>{priceRange[1]}+ DZD</span>
               </div>
             </div>
           </CardContent>
@@ -141,7 +141,7 @@ export default function FiltersPage() {
           <CardHeader className="pb-3 sm:pb-4">
             <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
               <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
-              Preparation Time
+              Temps de préparation
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -158,7 +158,7 @@ export default function FiltersPage() {
         {/* Dietary Preferences */}
         <Card>
           <CardHeader className="pb-3 sm:pb-4">
-            <CardTitle className="text-sm sm:text-base">Dietary Preferences</CardTitle>
+            <CardTitle className="text-sm sm:text-base">Préférences alimentaires</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -185,7 +185,7 @@ export default function FiltersPage() {
         {/* Cuisine Types */}
         <Card>
           <CardHeader className="pb-3 sm:pb-4">
-            <CardTitle className="text-sm sm:text-base">Cuisine Type</CardTitle>
+            <CardTitle className="text-sm sm:text-base">Type de cuisine</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-1 sm:gap-2">
@@ -208,7 +208,7 @@ export default function FiltersPage() {
         {/* Spice Level */}
         <Card>
           <CardHeader className="pb-3 sm:pb-4">
-            <CardTitle className="text-sm sm:text-base">Spice Level</CardTitle>
+            <CardTitle className="text-sm sm:text-base">Niveau d'épices</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-2">
@@ -230,7 +230,7 @@ export default function FiltersPage() {
         {/* Popular Items Toggle */}
         <Card>
           <CardHeader className="pb-3 sm:pb-4">
-            <CardTitle className="text-sm sm:text-base">Additional Options</CardTitle>
+            <CardTitle className="text-sm sm:text-base">Options supplémentaires</CardTitle>
           </CardHeader>
           <CardContent>
             <Button
@@ -239,7 +239,7 @@ export default function FiltersPage() {
               className={`w-full text-xs sm:text-sm ${popularOnly ? "bg-primary text-primary-foreground" : ""}`}
             >
               <Star className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
-              Show Popular Items Only
+              Afficher uniquement les populaires
             </Button>
           </CardContent>
         </Card>
@@ -250,7 +250,7 @@ export default function FiltersPage() {
             onClick={() => router.push("/menu")}
             className="w-full h-12 sm:h-14 text-sm sm:text-base md:text-lg bg-primary text-primary-foreground"
           >
-            Apply Filters {count > 0 && `(${count})`}
+            Appliquer {count > 0 && `(${count})`}
           </Button>
         </div>
       </div>

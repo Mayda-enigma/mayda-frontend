@@ -64,8 +64,8 @@ export function RecommendationList({ cartItemIds, onAddToCart }: RecommendationL
             <Sparkles className="w-4 h-4 text-white" />
           </div>
           <div>
-            <h3 className="font-semibold text-primary">AI Recommendations</h3>
-            <p className="text-sm text-muted-foreground">Based on your current order</p>
+            <h3 className="font-semibold text-primary">Recommandations IA</h3>
+            <p className="text-sm text-muted-foreground">Basées sur votre commande</p>
           </div>
         </div>
 
@@ -81,14 +81,14 @@ export function RecommendationList({ cartItemIds, onAddToCart }: RecommendationL
                 <h4 className="font-medium text-sm leading-tight">{item.name}</h4>
                 <p className="text-xs text-muted-foreground line-clamp-1">{item.reason}</p>
                 <div className="flex items-center justify-between mt-1">
-                  <span className="text-sm font-semibold text-primary">${item.price}</span>
+                  <span className="text-sm font-semibold text-primary">DZD{item.price}</span>
                   <Button
                     size="sm"
                     className="h-7 px-2 text-xs bg-primary text-primary-foreground hover:opacity-90"
                     onClick={() => onAddToCart(item)}
                   >
                     <Plus className="w-3 h-3 mr-1" />
-                    Add
+                    Ajouter
                   </Button>
                 </div>
               </div>
@@ -99,7 +99,7 @@ export function RecommendationList({ cartItemIds, onAddToCart }: RecommendationL
         <div className="mt-3 p-2 bg-amber-50 dark:bg-amber-950/30 rounded-md border border-amber-200 dark:border-amber-800">
           <p className="text-xs text-amber-800 dark:text-amber-200 text-center">
             <Sparkles className="w-3 h-3 inline mr-1" />
-            AI-powered recommendation based on your current order
+            Recommandation IA basée sur votre commande
           </p>
         </div>
       </CardContent>

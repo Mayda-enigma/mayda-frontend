@@ -54,10 +54,10 @@ export function CartSidebar() {
           if (error instanceof ApiError && error.status === 422) {
             const detail = error.body && typeof error.body === 'object' && 'detail' in error.body
               ? (error.body as { detail: string }).detail
-              : 'Please check your order and try again.'
+              : 'Veuillez vérifier votre commande et réessayer.'
             setCheckoutError(detail)
           } else {
-            setCheckoutError('Something went wrong. Please try again.')
+            setCheckoutError('Une erreur est survenue. Veuillez réessayer.')
           }
         },
       },
@@ -77,7 +77,7 @@ export function CartSidebar() {
         <div className="flex items-center justify-between p-4 border-b border-border animate-in slide-in-from-top-4 duration-500">
           <div className="flex items-center gap-2">
             <ShoppingBag className="w-5 h-5 text-primary" />
-            <h2 className="text-lg font-semibold">Your Order</h2>
+            <h2 className="text-lg font-semibold">Votre commande</h2>
             <Badge variant="secondary" className="animate-pulse">
               {state.items.length}
             </Badge>
@@ -97,8 +97,8 @@ export function CartSidebar() {
           {state.items.length === 0 ? (
             <div className="text-center py-12 animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
               <ShoppingBag className="w-12 h-12 text-muted-foreground mx-auto mb-4 animate-bounce" />
-              <p className="text-muted-foreground">Your cart is empty</p>
-              <p className="text-sm text-muted-foreground">Add some delicious dishes!</p>
+              <p className="text-muted-foreground">Votre panier est vide</p>
+              <p className="text-sm text-muted-foreground">Ajoutez de délicieux plats !</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -120,7 +120,7 @@ export function CartSidebar() {
                           {item.name}
                         </h3>
                         <p className="text-primary font-semibold hover:scale-105 transition-transform duration-200 inline-block">
-                          ${item.price.toFixed(2)}
+                          {item.price.toFixed(2)} DZD
                         </p>
 
                         <div className="flex items-center justify-between mt-2">
@@ -172,16 +172,16 @@ export function CartSidebar() {
             {/* Order Summary */}
             <div className="space-y-2">
               <div className="flex justify-between text-sm hover:scale-105 transition-transform duration-200">
-                <span>Subtotal</span>
-                <span>${state.total.toFixed(2)}</span>
+                <span>Sous-total</span>
+                <span>{state.total.toFixed(2)} DZD</span>
               </div>
               <div className="flex justify-between text-sm hover:scale-105 transition-transform duration-200">
-                <span>Service Fee</span>
-                <span>${(state.total * 0.1).toFixed(2)}</span>
+                <span>Frais de service</span>
+                <span>{(state.total * 0.1).toFixed(2)} DZD</span>
               </div>
               <div className="flex justify-between font-semibold text-lg border-t border-border pt-2 hover:scale-105 transition-transform duration-200">
                 <span>Total</span>
-                <span className="text-primary">${(state.total * 1.1).toFixed(2)}</span>
+                <span className="text-primary">{(state.total * 1.1).toFixed(2)} DZD</span>
               </div>
             </div>
 
@@ -202,10 +202,10 @@ export function CartSidebar() {
                 <CreditCard className="w-4 h-4 mr-2" />
                 {createOrder.isPending ? (
                   <>
-                    <span className="animate-pulse">Processing...</span>
+                    <span className="animate-pulse">Traitement...</span>
                   </>
                 ) : (
-                  "Place Order"
+                  "Passer commande"
                 )}
               </Button>
               <Link href="/menu">
@@ -214,13 +214,13 @@ export function CartSidebar() {
                   className="w-full bg-transparent hover:scale-105 transition-all duration-200 hover:shadow-md"
                   size="lg"
                 >
-                  Continue Shopping
+                  Continuer
                 </Button>
               </Link>
             </div>
 
             <p className="text-xs text-muted-foreground text-center animate-pulse">
-              Table {tableId} • Estimated time: 25-30 minutes
+              Table {tableId} • Temps estimé : 25-30 min
             </p>
           </div>
         )}
