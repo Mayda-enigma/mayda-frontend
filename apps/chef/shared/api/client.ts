@@ -29,7 +29,6 @@ export async function apiClient<T>(
 ): Promise<T> {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    'ngrok-skip-browser-warning': 'true',
   };
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('mayda_token') : null;
