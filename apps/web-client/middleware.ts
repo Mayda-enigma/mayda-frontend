@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const publicPaths = ['/login'];
+const publicPaths = ['/login', '/signup'];
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const token = request.cookies.get('mayda_token')?.value;
   const { pathname } = request.nextUrl;
 
