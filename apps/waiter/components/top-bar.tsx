@@ -7,20 +7,13 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { useTheme } from "next-themes"
 import { Globe, Moon, Sun, Sparkles } from "lucide-react"
 import { NotificationSystem, type Notification } from "@/components/notification-system"
-import { useLanguage } from "@/components/language-provider"
 
-const languages = [
- { code: "en" as const, name: "English", flag: "🇺🇸" },
- { code: "fr" as const, name: "Français", flag: "🇫🇷" },
- { code: "ar" as const, name: "العربية", flag: "🇸🇦" },
-]
+
+
 
 export function TopBar() {
  const { theme, setTheme } = useTheme()
- const { language, setLanguage, t } = useLanguage()
- const [notifications, setNotifications] = useState<Notification[]>([])
-
- const currentLang = languages.find((lang) => lang.code === language) || languages[0]
+  const [notifications, setNotifications] = useState<Notification[]>([])
 
  const handleNotificationUpdate = (updatedNotifications: Notification[]) => {
  setNotifications(updatedNotifications)
@@ -32,7 +25,7 @@ export function TopBar() {
  <div className="flex items-center gap-1.5">
  <Image
  src="/LogoWaiter.svg"
- alt="WaiterApp Logo"
+ alt="Logo Waiter"
  width={200}
  height={200}
  style={{ filter: 'drop-shadow(2px 2px 4px rgba(255, 255, 255, 0.8))' }}
@@ -43,27 +36,7 @@ export function TopBar() {
  {/* Notifications */}
  <NotificationSystem onNotificationUpdate={handleNotificationUpdate} />
 
- {/* Language Switcher */}
- <DropdownMenu>
- <DropdownMenuTrigger asChild>
- <Button variant="ghost" size="sm" className="gap-1 h-7 px-1.5 sm:h-8 sm:px-2">
- <Globe className="h-3 w-3" />
- <span className="text-xs">{currentLang.flag}</span>
- </Button>
- </DropdownMenuTrigger>
- <DropdownMenuContent align="end" className="animate-fade-in">
- {languages.map((lang) => (
- <DropdownMenuItem
- key={lang.code}
- onClick={() => setLanguage(lang.code)}
- className="gap-2 text-xs py-1.5"
- >
- <span>{lang.flag}</span>
- <span>{lang.name}</span>
- </DropdownMenuItem>
- ))}
- </DropdownMenuContent>
- </DropdownMenu>
+
 
  <Button
  variant="ghost"
@@ -73,7 +46,7 @@ export function TopBar() {
  >
  <Sun className="h-3 w-3 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
  <Moon className="absolute h-3 w-3 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
- <span className="sr-only">Toggle theme</span>
+ <span className="sr-only">Changer le thème</span>
  </Button>
  </div>
  </div>

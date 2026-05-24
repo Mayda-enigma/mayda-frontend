@@ -8,11 +8,10 @@ import { AlertTriangle, CheckCircle, Camera, CameraOff, Loader2 } from "lucide-r
 import { cn } from "@/shared/utils"
 import { tableService } from "@/features/tables"
 import { useCheckinTable } from "@/features/tables/api/mutations"
-import { useLanguage } from "@/components/language-provider"
+
 import { useRouter } from "next/navigation"
 
 export function QRScanner() {
-  const { t } = useLanguage()
   const router = useRouter()
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
@@ -34,7 +33,7 @@ export function QRScanner() {
       setCameraActive(true)
       setScanResult(null)
     } catch {
-      setScanResult({ success: false, message: "Camera access denied or not available" })
+      setScanResult({ success: false, message: "Accès caméra refusé ou non disponible" })
     }
   }, [])
 
@@ -59,10 +58,10 @@ export function QRScanner() {
     try {
       const table = await tableService.qrLookup(code)
       await checkinTable.mutateAsync(table.id)
-      setScanResult({ success: true, message: `Checked in at ${table.number}` })
+      setScanResult({ success: true, message: `Enregistré à la table ${table.number}` })
       setTimeout(() => router.push(`/table/${table.id}`), 1500)
     } catch (err: any) {
-      const msg = err?.body?.detail || err?.message || "Failed to process QR code"
+      const msg = err?.body?.detail || err?.message || "Échec du traitement du QR code"
       setScanResult({ success: false, message: msg })
     } finally {
       setIsProcessing(false)
@@ -80,7 +79,7 @@ export function QRScanner() {
     <div className="min-h-screen bg-background p-4 space-y-6">
       <Card className="max-w-md mx-auto">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-center">Scan Table QR</CardTitle>
+          <CardTitle className="text-lg font-semibold text-center">Scanner QR table</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="relative aspect-square bg-muted rounded-lg overflow-hidden flex items-center justify-center">
@@ -95,7 +94,7 @@ export function QRScanner() {
             ) : (
               <div className="text-center text-muted-foreground">
                 <Camera className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                <p className="text-sm">Camera is off</p>
+                <p className="text-sm">Caméra éteinte</p>
               </div>
             )}
           </div>
@@ -104,12 +103,12 @@ export function QRScanner() {
             {cameraActive ? (
               <Button onClick={stopCamera} variant="outline" className="flex-1 bg-transparent h-12">
                 <CameraOff className="h-5 w-5 mr-2" />
-                {t("stopCamera") || "Stop Camera"}
+                Arrêter caméra
               </Button>
             ) : (
               <Button onClick={startCamera} className="flex-1 hover:-dark text-white h-12">
                 <Camera className="h-5 w-5 mr-2" />
-                {t("startCamera") || "Start Camera"}
+                Démarrer caméra
               </Button>
             )}
           </div>
@@ -119,12 +118,12 @@ export function QRScanner() {
       <Card className="max-w-md mx-auto">
         <CardHeader>
           <CardTitle className="text-base font-semibold text-center">
-            {t("enterTableCode") || "Enter Table Code"}
+            Entrer le code table
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <Input
-            placeholder="e.g. MaydaDowntown-T01"
+            placeholder="ex: MaydaDowntown-T01"
             value={manualCode}
             onChange={(e) => setManualCode(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleManualSubmit()}
@@ -136,7 +135,7 @@ export function QRScanner() {
             className="w-full hover:-dark text-white h-11"
           >
             {isProcessing ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-            {t("checkIn") || "Check In"}
+            Enregistrer
           </Button>
         </CardContent>
       </Card>

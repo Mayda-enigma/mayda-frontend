@@ -98,10 +98,10 @@ export function NotificationSystem({ onNotificationUpdate }: NotificationSystemP
     const date = new Date(dateStr)
     const diffMs = now.getTime() - date.getTime()
     const diffMins = Math.floor(diffMs / 60000)
-    if (diffMins < 1) return "Just now"
-    if (diffMins < 60) return `${diffMins}m ago`
+    if (diffMins < 1) return "À l'instant"
+    if (diffMins < 60) return `${diffMins}m`
     const diffHours = Math.floor(diffMins / 60)
-    return `${diffHours}h ${diffMins % 60}m ago`
+    return `${diffHours}h ${diffMins % 60}m`
   }
 
   return (
@@ -136,7 +136,7 @@ export function NotificationSystem({ onNotificationUpdate }: NotificationSystemP
               <div>
                 <h3 className="text-xs sm:text-sm font-semibold">Notifications</h3>
                 <p className="text-xs text-muted-foreground">
-                  {unacknowledgedCount} unread {urgentCount > 0 && `• ${urgentCount} urgent`}
+                  {unacknowledgedCount} non lues {urgentCount > 0 && ` • ${urgentCount} urgent`}
                 </p>
               </div>
               <div className="flex items-center gap-1">
@@ -147,7 +147,7 @@ export function NotificationSystem({ onNotificationUpdate }: NotificationSystemP
                     onClick={acknowledgeAll}
                     className="text-xs h-6 px-2 bg-transparent"
                   >
-                    Mark All Read
+                    Tout marquer lu
                   </Button>
                 )}
                 <Button size="sm" variant="ghost" onClick={() => setIsVisible(false)} className="h-6 w-6 p-0">
@@ -160,7 +160,7 @@ export function NotificationSystem({ onNotificationUpdate }: NotificationSystemP
               {notifications.length === 0 ? (
                 <div className="p-4 text-center text-muted-foreground">
                   <Bell className="h-6 w-6 mx-auto mb-2 opacity-50" />
-                  <p className="text-xs">No notifications</p>
+                  <p className="text-xs">Aucune notification</p>
                 </div>
               ) : (
                 <div className="p-1.5 sm:p-2 space-y-1.5">
@@ -201,7 +201,7 @@ export function NotificationSystem({ onNotificationUpdate }: NotificationSystemP
                                       onClick={() => acknowledgeNotification(notification.id)}
                                       className="h-5 px-1.5 text-xs"
                                     >
-                                      Read
+                                      Lu
                                     </Button>
                                   )}
                                   <Button

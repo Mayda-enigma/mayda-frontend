@@ -46,30 +46,30 @@ export function OrdersManagement() {
     const date = new Date(dateStr)
     const diffMs = now.getTime() - date.getTime()
     const diffMins = Math.floor(diffMs / 60000)
-    if (diffMins < 1) return "Just now"
-    if (diffMins < 60) return `${diffMins}m ago`
+    if (diffMins < 1) return "À l'instant"
+    if (diffMins < 60) return `${diffMins}m`
     const diffHours = Math.floor(diffMins / 60)
-    return `${diffHours}h ${diffMins % 60}m ago`
+    return `${diffHours}h ${diffMins % 60}m`
   }
 
   const statusConfig: Record<string, { label: string; color: string; icon: typeof Clock }> = {
-    PENDING: { label: "Pending", color: "bg-primary/10 text-primary/80", icon: Clock },
-    CONFIRMED: { label: "Confirmed", color: "bg-blue-100 text-blue-800", icon: ChefHat },
-    PREPARING: { label: "Preparing", color: "bg-blue-100 text-blue-800", icon: ChefHat },
-    READY: { label: "Ready", color: "bg-green-100 text-green-800", icon: CheckCircle },
-    COMPLETED: { label: "Served", color: "bg-gray-100 text-gray-800", icon: CheckCircle },
-    CANCELLED: { label: "Cancelled", color: "bg-red-100 text-red-800", icon: AlertTriangle },
+    PENDING: { label: "En attente", color: "bg-primary/10 text-primary/80", icon: Clock },
+    CONFIRMED: { label: "Confirmée", color: "bg-blue-100 text-blue-800", icon: ChefHat },
+    PREPARING: { label: "En préparation", color: "bg-blue-100 text-blue-800", icon: ChefHat },
+    READY: { label: "Prête", color: "bg-green-100 text-green-800", icon: CheckCircle },
+    COMPLETED: { label: "Servie", color: "bg-gray-100 text-gray-800", icon: CheckCircle },
+    CANCELLED: { label: "Annulée", color: "bg-red-100 text-red-800", icon: AlertTriangle },
   }
 
   const getStatusActions = (order: { id: number; status: string }) => {
     switch (order.status) {
       case "PENDING":
       case "CONFIRMED":
-        return [{ label: "Start Preparing", status: "PREPARING", variant: "default" as const }]
+        return [{ label: "Commencer préparation", status: "PREPARING", variant: "default" as const }]
       case "PREPARING":
-        return [{ label: "Mark Ready", status: "READY", variant: "default" as const }]
+        return [{ label: "Marquer prêt", status: "READY", variant: "default" as const }]
       case "READY":
-        return [{ label: "Mark Served", status: "COMPLETED", variant: "default" as const }]
+        return [{ label: "Marquer servi", status: "COMPLETED", variant: "default" as const }]
       default:
         return []
     }
@@ -99,44 +99,44 @@ export function OrdersManagement() {
     <div className="p-2 sm:p-3 space-y-3 sm:space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg sm:text-xl font-semibold text-foreground">Orders</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-foreground">Commandes</h2>
           <p className="text-sm text-muted-foreground">
-            {readyCount} ready • {preparingCount} preparing
+            {readyCount} prêtes • {preparingCount} en préparation
           </p>
         </div>
         <Dialog open={isAddOrderOpen} onOpenChange={setIsAddOrderOpen}>
           <DialogTrigger asChild>
             <Button size="sm" className="hover:-dark text-white h-9 px-3 text-sm">
               <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1.5" />
-              Add Order
+              Ajouter commande
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-md">
             <DialogHeader>
-              <DialogTitle className="text-lg font-semibold">Add Manual Order</DialogTitle>
+              <DialogTitle className="text-lg font-semibold">Ajouter commande manuelle</DialogTitle>
             </DialogHeader>
             <div className="space-y-3">
               <div>
-                <label className="text-sm font-medium">Table Number</label>
+                <label className="text-sm font-medium">Numéro de table</label>
                 <Input placeholder="T01" className="text-sm h-9" />
               </div>
               <div>
-                <label className="text-sm font-medium">Customer Name (Optional)</label>
-                <Input placeholder="John Doe" className="text-sm h-9" />
+                <label className="text-sm font-medium">Nom client (optionnel)</label>
+                <Input placeholder="Jean Dupont" className="text-sm h-9" />
               </div>
               <div>
-                <label className="text-sm font-medium">Order Items</label>
-                <Textarea placeholder="List items here..." className="text-sm min-h-20" />
+                <label className="text-sm font-medium">Articles</label>
+                <Textarea placeholder="Listez les articles..." className="text-sm min-h-20" />
               </div>
               <div className="flex gap-2">
                 <Button variant="outline" onClick={() => setIsAddOrderOpen(false)} className="flex-1 text-sm h-9">
-                  Cancel
+                  Annuler
                 </Button>
                 <Button
                   onClick={() => setIsAddOrderOpen(false)}
                   className="flex-1 hover:-dark text-white text-sm h-9"
                 >
-                  Add Order
+                  Ajouter commande
                 </Button>
               </div>
             </div>
@@ -148,7 +148,7 @@ export function OrdersManagement() {
         <div className="relative flex-1">
           <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
           <Input
-            placeholder="Search orders or items..."
+            placeholder="Rechercher commandes ou articles..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-8 text-sm h-9"
@@ -159,12 +159,12 @@ export function OrdersManagement() {
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm" className="gap-1.5 bg-transparent text-sm h-9 px-3">
               <Filter className="h-3 w-3 sm:h-4 sm:w-4" />
-              {filterStatus === "all" ? "All Orders" : statusConfig[filterStatus]?.label || filterStatus}
+              {filterStatus === "all" ? "Toutes les commandes" : statusConfig[filterStatus]?.label || filterStatus}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="text-sm">
             <DropdownMenuItem onClick={() => setFilterStatus("all")} className="text-sm py-2">
-              All Orders
+              Toutes les commandes
             </DropdownMenuItem>
             {Object.entries(statusConfig).map(([status, config]) => (
               <DropdownMenuItem
@@ -185,7 +185,7 @@ export function OrdersManagement() {
           <Card>
             <CardContent className="p-6 text-center">
               <ChefHat className="h-8 w-8 mx-auto mb-3 opacity-50" />
-              <p className="text-sm text-muted-foreground">No orders found</p>
+              <p className="text-sm text-muted-foreground">Aucune commande trouvée</p>
             </CardContent>
           </Card>
         ) : (
@@ -219,7 +219,7 @@ export function OrdersManagement() {
                   </div>
                   <p className="text-sm text-muted-foreground flex items-center gap-1.5">
                     <Users className="h-3 w-3" />
-                    {order.type || "DINE_IN"}
+                    {order.type || "SUR PLACE"}
                   </p>
                 </CardHeader>
 
@@ -230,7 +230,7 @@ export function OrdersManagement() {
                         <div className="flex items-center gap-1.5">
                           <span>{item.quantity}x {item.dishName}</span>
                         </div>
-                        <span className="font-medium">${(item.totalPrice || 0).toFixed(2)}</span>
+                        <span className="font-medium">{(item.totalPrice || 0).toFixed(2)} DZD</span>
                       </div>
                     ))}
                   </div>
@@ -242,7 +242,7 @@ export function OrdersManagement() {
                         {formatTime(order.orderTime)}
                       </span>
                     </div>
-                    <span className="font-bold text-foreground">${(order.totalAmount || 0).toFixed(2)}</span>
+                    <span className="font-bold text-foreground">{(order.totalAmount || 0).toFixed(2)} DZD</span>
                   </div>
 
                   {actions.length > 0 && (
