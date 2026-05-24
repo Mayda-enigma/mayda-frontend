@@ -62,7 +62,7 @@ There is no dedicated automated test script in `package.json` at this time.
 - Croissant shows `AR disponible` and a `Voir en AR` action when that dish is present in API data.
 - Unsupported dishes show `AR bientôt disponible` and do not open the AR viewer.
 - Clicking `Voir en AR` opens the model-viewer modal without crashing the app.
-- Current expected limitation: GLB files are not present in `public/models/demo/`, so the viewer may show a missing model or a 404 in DevTools.
+- GLB files are present on the `test` branch under `public/models/demo/`.
 - When model files are later added, place them at:
   - `apps/web-client/public/models/demo/burger_merged.glb`
   - `apps/web-client/public/models/demo/croissant.glb`
@@ -113,12 +113,86 @@ Use a tunnel only if same-network access is not available.
 
 ## Known Limitations
 
-- `burger_merged.glb` and `croissant.glb` are not present unless they are added later.
+- The `test` branch includes `burger_merged.glb` and `croissant.glb` for AR testing.
 - iOS Quick Look needs real USDZ files later.
 - AR mapping is local/static and currently name-based for the demo dishes.
 - The backend does not manage AR model URLs yet.
 - No dedicated automated test suite exists in `package.json`.
 - Menu, recommendations, checkout, and orders depend on backend API availability through `NEXT_PUBLIC_API_URL`.
+
+## Testing Web AR on Android
+
+### Prerequisites
+
+- Android phone with **Chrome** installed
+- **Google ARCore / Google Play Services for AR** installed and updated (Settings → Google → ARCore)
+- Computer and phone on the same network (or use ngrok)
+- `public/models/demo/burger_merged.glb` and `public/models/demo/croissant.glb` exist
+
+### Steps
+
+1. **Start the dev server**:
+   ```bash
+   cd apps/web-client
+   npm run dev
+   ```
+
+2. **Expose with HTTPS using ngrok** (AR requires HTTPS on mobile):
+   ```bash
+   ngrok http 3000
+   ```
+   Copy the HTTPS URL (e.g. `https://abc123.ngrok.io`).
+
+3. **Open on Android Chrome**:
+   ```
+   https://<ngrok-url>/menu
+   ```
+
+4. **Find a demo dish**:
+   - "Gourmet Burger" (category: mains)
+   - "Croissant" (category: starters)
+   - Both show an "AR disponible" badge on the card.
+
+5. **Open the dish detail** → tap **Voir en AR**.
+
+6. **In the AR viewer**:
+   - The 3D model loads inside `<model-viewer>`.
+   - The **visualiseur intégré** (native AR button inside the model-viewer shadow DOM) is available and visible.
+   - A custom button **"Voir sur ma table"** is also shown below the 3D viewer. Tap it to programmatically launch AR.
+   - If AR launches, the phone camera opens and the model is placed on the table surface.
+
+### If the camera does not open
+
+Use the **🔧 Diagnostic AR (dev)** panel inside the AR modal (development mode only). It shows:
+
+| Check | What to look for |
+|---|---|
+| Model path | Verify `/models/demo/burger_merged.glb` is correct |
+| Protocol | Must be `https:` — HTTP/local IP may not launch AR camera |
+| Mobile | Must be `true` — AR requires a mobile device |
+| Android | Must be `true` — ARCore only on Android |
+| Lib loaded | Must be `true` — model-viewer library registered |
+
+**Direct GLB URL test**: Open this URL in Android Chrome:
+```
+https://<ngrok-url>/models/demo/burger_merged.glb
+https://<ngrok-url>/models/demo/croissant.glb
+```
+If the GLB downloads, the file is served correctly. If 404, the file is missing or the path is wrong.
+
+### Common issues
+
+| Issue | Cause | Fix |
+|---|---|---|
+| "AR non disponible" error | Browser does not support WebXR / Scene Viewer | Use Android Chrome, update ARCore |
+| Camera does not open on HTTP | HTTPS required for WebXR AR | Use ngrok or deploy to HTTPS |
+| Camera does not open on local network IP | Browsers block AR on non-HTTPS | Use ngrok |
+| "Échec lancement AR" | `activateAR()` threw | Check Chrome and ARCore version |
+| model-viewer shows blank | GLB path wrong or file missing | Check dev diagnostics panel |
+
+### iOS limitation
+
+iOS Quick Look requires **USDZ** files. No USDZ is configured yet. On iOS, the model renders in 3D but AR will not launch. iOS support requires adding `.usdz` model files later.
 
 ## Troubleshooting
 
