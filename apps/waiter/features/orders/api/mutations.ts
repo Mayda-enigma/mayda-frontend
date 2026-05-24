@@ -12,10 +12,21 @@ export const useMarkDelivered = () => {
   });
 };
 
+export const useUpdateOrderStatus = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, status }: { id: number; status: string }) =>
+      orderService.updateStatus(id, status),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: orderKeys.all });
+    },
+  });
+};
+
 export const useCreateOrder = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (payload: { tableId: number; items: { name: string; quantity: number; price: number }[] }) =>
+    mutationFn: (payload: { restaurantId: number; tableId: number; items: { dishId: number; quantity: number }[] }) =>
       orderService.create(payload),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: orderKeys.all });

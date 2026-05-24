@@ -1,4 +1,4 @@
-export { useTables } from './api/queries';
-export { useUpdateTableStatus, useCheckinTable } from './api/mutations';
-export { mockTables } from './__fixtures__/tables-mock';
-export type { Table, TableStatus } from './types';
+export { useTables, useTableCurrentOrders } from './api/queries';
+export { tableService } from './api/services';
+export { toTable } from './api/mappers';
+export type { Table, TableDto, TableStatus, CurrentSession } from './types';
