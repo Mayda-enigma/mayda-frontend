@@ -59,7 +59,7 @@ export function HourlyHeatmap({ range }: { range: RangePreset }) {
                 borderRadius: "8px",
               }}
               formatter={(value, name) => {
-                if (name === "Revenue ($)") {
+                if (name === "Revenue (DZD)") {
                   return [`$${value}`, name]
                 }
                 return [value, name]
@@ -73,7 +73,7 @@ export function HourlyHeatmap({ range }: { range: RangePreset }) {
               dataKey="revenue"
               stroke="#FF6B35"
               strokeWidth={3}
-              name="Revenue ($)"
+              name="Revenue (DZD)"
               dot={{ fill: "#FF6B35", strokeWidth: 2, r: 4 }}
             />
           </BarChart>
