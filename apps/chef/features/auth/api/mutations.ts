@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { authKeys } from './queryKeys';
 import { authService } from './services';
 import { toLoginPayloadDto } from './mappers';
-import type { LoginInput, RegisterInput, RegisterPayloadDto, StaffLoginInput, OtpVerificationInput } from '../types';
+import type { LoginInput, RegisterInput, RegisterPayloadDto } from '../types';
 
 function setTokenCookie(token: string) {
   document.cookie = `mayda_token=${token}; path=/; max-age=604800; SameSite=Lax`;
@@ -17,25 +17,6 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: (input: LoginInput) =>
       authService.login(toLoginPayloadDto(input)),
-    onSuccess: (data) => {
-      localStorage.setItem('mayda_token', data.access_token);
-      setTokenCookie(data.access_token);
-      qc.invalidateQueries({ queryKey: authKeys.currentUser() });
-    },
-  });
-};
-
-export const useStaffLogin = () =>
-  useMutation({
-    mutationFn: (input: StaffLoginInput) =>
-      authService.staffLogin({ phone: input.phone, password: input.password }),
-  });
-
-export const useVerifyOtp = () => {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: (input: OtpVerificationInput) =>
-      authService.verifyOtp({ tempToken: input.tempToken, otpCode: input.otpCode }),
     onSuccess: (data) => {
       localStorage.setItem('mayda_token', data.access_token);
       setTokenCookie(data.access_token);
