@@ -11,7 +11,9 @@ export const voiceService = {
       typeof window !== 'undefined'
         ? localStorage.getItem('mayda_token')
         : null
-    const headers: Record<string, string> = {}
+    const headers: Record<string, string> = {
+      'ngrok-skip-browser-warning': 'true',
+    }
     if (token) {
       headers['Authorization'] = `Bearer ${token}`
     }
