@@ -4,89 +4,137 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Updated to restaurant theme with amber-to-red gradient palette - unified styling */
-  --background: oklch(0.98 0.01 85); /* Chef's light beige background */
-  --foreground: oklch(0.3 0 0); /* Dark gray for text - from manager */
-  --card: oklch(0.98 0.02 85); /* Light beige for cards - from manager */
-  --card-foreground: oklch(0.3 0 0);
-  --popover: oklch(0.98 0.01 85);
-  --popover-foreground: oklch(0.3 0 0);
-  --primary: oklch(0.65 0.15 45); /* Amber primary - from manager */
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.7 0.18 35); /* Orange accent - from manager */
-  --secondary-foreground: oklch(1 0 0);
-  --muted: oklch(0.96 0.01 85); /* Very light beige - from manager */
-  --muted-foreground: oklch(0.5 0 0);
-  --accent: oklch(0.72 0.2 25); /* Red-orange accent - from manager */
-  --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.55 0.25 15); /* Red for alerts - from manager */
-  --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.9 0.01 85);
-  --input: oklch(0.98 0.02 85);
-  --ring: oklch(0.65 0.15 45);
-  /* Updated chart colors to match food theme - from manager */
-  --chart-1: oklch(0.75 0.2 45); /* Golden yellow */
-  --chart-2: oklch(0.7 0.18 35); /* Orange */
-  --chart-3: oklch(0.65 0.2 25); /* Red-orange */
-  --chart-4: oklch(0.6 0.22 15); /* Red */
-  --chart-5: oklch(0.55 0.15 120); /* Fresh green */
-  --radius: 0.75rem; /* Larger radius for modern look - from manager */
-  --sidebar: oklch(0.98 0.02 85);
-  --sidebar-foreground: oklch(0.3 0 0);
-  --sidebar-primary: oklch(0.65 0.15 45);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.96 0.01 85);
-  --sidebar-accent-foreground: oklch(0.3 0 0);
-  --sidebar-border: oklch(0.9 0.01 85);
-  --sidebar-ring: oklch(0.65 0.15 45);
+  --font-sans: var(--font-outfit);
+  --font-mono: var(--font-source-code-pro);
 
-  /* Added custom restaurant-specific color variables */
-  --restaurant-gradient: oklch(0.7 0.18 35); /* Unified orange color from manager */
-  --restaurant-green: oklch(0.55 0.15 120); /* Fresh green for healthy indicators */
-  --restaurant-gold: oklch(0.75 0.2 45); /* Unified gold for highlights */
+  --background: oklch(97.5% 0.003 160);
+  --foreground: oklch(15% 0.025 250);
+  --card: oklch(100% 0 0);
+  --card-foreground: oklch(15% 0.025 250);
+  --popover: oklch(100% 0 0);
+  --popover-foreground: oklch(15% 0.025 250);
+
+  --primary: oklch(82% 0.24 150);
+  --primary-foreground: oklch(15% 0.025 250);
+  --primary-deep: oklch(64% 0.22 150);
+  --primary-pressed: oklch(55% 0.20 150);
+
+  --secondary: oklch(98.5% 0.003 160);
+  --secondary-foreground: oklch(15% 0.025 250);
+  --muted: oklch(97% 0.004 160);
+  --muted-foreground: oklch(48% 0.02 260);
+  --accent: oklch(98.5% 0.003 160);
+  --accent-foreground: oklch(20% 0.02 260);
+
+  --destructive: oklch(58% 0.22 22);
+  --destructive-foreground: oklch(100% 0 0);
+  --success: oklch(63% 0.16 145);
+  --warning: oklch(80% 0.18 80);
+  --attention: oklch(76% 0.18 75);
+
+  --border: oklch(91% 0.005 220);
+  --input: oklch(81% 0.01 230);
+  --ring: oklch(47% 0.13 165);
+
+  --chart-1: oklch(82% 0.24 150);
+  --chart-2: oklch(63% 0.16 145);
+  --chart-3: oklch(76% 0.18 75);
+  --chart-4: oklch(50% 0.28 290);
+  --chart-5: oklch(65% 0.24 45);
+
+  --sidebar: oklch(98.5% 0.003 160);
+  --sidebar-foreground: oklch(15% 0.025 250);
+  --sidebar-primary: oklch(82% 0.24 150);
+  --sidebar-primary-foreground: oklch(15% 0.025 250);
+  --sidebar-accent: oklch(97% 0.004 160);
+  --sidebar-accent-foreground: oklch(20% 0.02 260);
+  --sidebar-border: oklch(91% 0.005 220);
+  --sidebar-ring: oklch(47% 0.13 165);
+
+  --brand-green: oklch(82% 0.24 150);
+  --brand-green-dark: oklch(47% 0.13 165);
+  --brand-green-mid: oklch(62% 0.18 155);
+  --brand-green-soft: oklch(92% 0.07 155);
+  --brand-teal-deep: oklch(15% 0.025 250);
+  --brand-teal: oklch(27% 0.04 235);
+  --brand-teal-mid: oklch(47% 0.13 165);
+  --accent-purple: oklch(50% 0.28 290);
+  --accent-orange: oklch(65% 0.24 45);
+  --accent-pink: oklch(62% 0.30 345);
+  --accent-blue: oklch(40% 0.18 270);
+  --surface-feature: oklch(96.5% 0.04 150);
+  --hairline-strong: oklch(81% 0.01 230);
+
+  --syntax-key: #2563eb;
+  --syntax-string: #047857;
+  --syntax-number: #c2410c;
+  --syntax-punctuation: #475569;
+
+  --radius: 0.625rem;
+
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 }
-
 
 .dark {
-  /* Updated dark theme to maintain restaurant aesthetic - unified with manager */
-  --background: oklch(0.15 0 0);
-  --foreground: oklch(0.95 0 0);
-  --card: oklch(0.18 0.01 45);
-  --card-foreground: oklch(0.95 0 0);
-  --popover: oklch(0.15 0 0);
-  --popover-foreground: oklch(0.95 0 0);
-  --primary: oklch(0.75 0.2 45);
-  --primary-foreground: oklch(0.15 0 0);
-  --secondary: oklch(0.25 0.02 45);
-  --secondary-foreground: oklch(0.95 0 0);
-  --muted: oklch(0.25 0.01 45);
-  --muted-foreground: oklch(0.7 0 0);
-  --accent: oklch(0.25 0.02 45);
-  --accent-foreground: oklch(0.95 0 0);
-  --destructive: oklch(0.5 0.2 15);
-  --destructive-foreground: oklch(0.95 0 0);
-  --border: oklch(0.25 0.01 45);
-  --input: oklch(0.25 0.01 45);
-  --ring: oklch(0.75 0.2 45);
-  --chart-1: oklch(0.8 0.25 45);
-  --chart-2: oklch(0.75 0.22 35);
-  --chart-3: oklch(0.7 0.25 25);
-  --chart-4: oklch(0.65 0.27 15);
-  --chart-5: oklch(0.6 0.2 120);
-  --sidebar: oklch(0.18 0.01 45);
-  --sidebar-foreground: oklch(0.95 0 0);
-  --sidebar-primary: oklch(0.8 0.25 45);
-  --sidebar-primary-foreground: oklch(0.15 0 0);
-  --sidebar-accent: oklch(0.25 0.02 45);
-  --sidebar-accent-foreground: oklch(0.95 0 0);
-  --sidebar-border: oklch(0.25 0.01 45);
-  --sidebar-ring: oklch(0.75 0.2 45);
+  --background: #0e1f26;
+  --foreground: #ffffff;
+  --card: #0e1f26;
+  --card-foreground: #ffffff;
+  --popover: #112329;
+  --popover-foreground: #ffffff;
+
+  --primary: #00ed64;
+  --primary-foreground: #001e2b;
+  --primary-deep: #00684a;
+  --primary-pressed: #008c34;
+
+  --secondary: #1a2d34;
+  --secondary-foreground: #ffffff;
+  --muted: #1a2d34;
+  --muted-foreground: #b8c2c4;
+  --accent: #1a2d34;
+  --accent-foreground: #ffffff;
+
+  --destructive: #db3030;
+  --destructive-foreground: #ffffff;
+  --success: #15b273;
+  --warning: #e27a3f;
+  --attention: #e27a3f;
+
+  --border: #1c353c;
+  --input: #1a2d34;
+  --ring: #00ed64;
+
+  --sidebar: #112329;
+  --sidebar-foreground: #b8c2c4;
+  --sidebar-primary: #00ed64;
+  --sidebar-primary-foreground: #001e2b;
+  --sidebar-accent: #1a2d34;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #1c353c;
+  --sidebar-ring: #00ed64;
+
+  --brand-green: #00ed64;
+  --brand-green-dark: #00684a;
+  --brand-green-mid: #008c34;
+  --brand-teal-deep: #0e1f26;
+  --brand-teal: #112329;
+  --brand-teal-mid: #1a2d34;
+  --hairline-strong: #1c353c;
+
+  --syntax-key: #4fb4d7;
+  --syntax-string: #15b273;
+  --syntax-number: #e27a3f;
+  --syntax-punctuation: #b8c2c4;
 }
 
-/* Updated font configuration for restaurant app - unified with manager */
 @theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-outfit);
+  --font-mono: var(--font-source-code-pro);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -95,6 +143,8 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-deep: var(--primary-deep);
+  --color-primary-pressed: var(--primary-pressed);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -103,6 +153,9 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-attention: var(--attention);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -111,10 +164,12 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --radius-xs: calc(var(--radius) - 6px);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --radius-xxl: calc(var(--radius) + 8px);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -123,29 +178,116 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-brand-green: var(--brand-green);
+  --color-brand-green-dark: var(--brand-green-dark);
+  --color-brand-green-mid: var(--brand-green-mid);
+  --color-brand-green-soft: var(--brand-green-soft);
+  --color-brand-teal-deep: var(--brand-teal-deep);
+  --color-brand-teal: var(--brand-teal);
+  --color-brand-teal-mid: var(--brand-teal-mid);
+  --color-accent-purple: var(--accent-purple);
+  --color-accent-orange: var(--accent-orange);
+  --color-accent-pink: var(--accent-pink);
+  --color-accent-blue: var(--accent-blue);
+  --color-surface-feature: var(--surface-feature);
+  --color-hairline-strong: var(--hairline-strong);
+  --color-syntax-key: var(--syntax-key);
+  --color-syntax-string: var(--syntax-string);
+  --color-syntax-number: var(--syntax-number);
+  --color-syntax-punctuation: var(--syntax-punctuation);
+}
 
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+@utility shadow-depth-btn {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.18),
+    0 1px 2px rgb(0 0 0 / 0.06),
+    0 0.5px 0 rgb(0 0 0 / 0.04);
+  @variant dark {
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.04),
+      0 1px 2px rgb(0 0 0 / 0.12),
+      0 0.5px 0 rgb(0 0 0 / 0.10);
+  }
+}
+
+@utility shadow-depth-btn-active {
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.10);
+  @variant dark {
+    box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.20);
+  }
+}
+
+@utility shadow-depth-card {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.6),
+    0 0 0 1px rgb(0 0 0 / 0.03),
+    0 1px 2px -1px rgb(0 0 0 / 0.05),
+    0 4px 12px -4px rgb(0 0 0 / 0.08);
+  @variant dark {
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.04),
+      0 0 0 1px rgb(0 0 0 / 0.15),
+      0 1px 2px -1px rgb(0 0 0 / 0.15),
+      0 4px 16px -4px rgb(0 0 0 / 0.25);
+  }
+}
+
+@utility shadow-depth-card-lg {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.6),
+    0 0 0 1px rgb(0 0 0 / 0.04),
+    0 4px 8px -2px rgb(0 0 0 / 0.06),
+    0 12px 32px -8px rgb(0 0 0 / 0.10),
+    0 24px 64px -16px rgb(0 0 0 / 0.08);
+  @variant dark {
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.04),
+      0 0 0 1px rgb(0 0 0 / 0.15),
+      0 4px 8px -2px rgb(0 0 0 / 0.20),
+      0 12px 40px -8px rgb(0 0 0 / 0.30),
+      0 24px 72px -16px rgb(0 0 0 / 0.25);
+  }
+}
+
+@utility shadow-depth-card-lg-hover {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.6),
+    0 0 0 1px rgb(0 0 0 / 0.04),
+    0 6px 12px -2px rgb(0 0 0 / 0.08),
+    0 16px 40px -8px rgb(0 0 0 / 0.12),
+    0 32px 80px -16px rgb(0 0 0 / 0.10);
+  @variant dark {
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.04),
+      0 0 0 1px rgb(0 0 0 / 0.15),
+      0 6px 12px -2px rgb(0 0 0 / 0.25),
+      0 16px 48px -8px rgb(0 0 0 / 0.35),
+      0 32px 88px -16px rgb(0 0 0 / 0.30);
+  }
+}
+
+@utility shadow-depth-input {
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.04);
+  @variant dark {
+    box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.16);
+  }
+}
+
+@utility shadow-depth-overlay {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.5),
+    0 0 0 1px rgb(0 0 0 / 0.04),
+    0 4px 8px -2px rgb(0 0 0 / 0.08),
+    0 12px 24px -8px rgb(0 0 0 / 0.10),
+    0 24px 48px -16px rgb(0 0 0 / 0.10);
+  @variant dark {
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.04),
+      0 0 0 1px rgb(0 0 0 / 0.15),
+      0 4px 8px -2px rgb(0 0 0 / 0.20),
+      0 12px 24px -8px rgb(0 0 0 / 0.30),
+      0 24px 48px -16px rgb(0 0 0 / 0.30);
+  }
 }
 
 @layer base {
@@ -155,41 +297,38 @@
   body {
     @apply bg-background text-foreground font-sans;
   }
-
-  /* Added smooth scroll behavior */
   html {
     scroll-behavior: smooth;
   }
+  [data-slot="card"]:hover {
+    transform: translateY(-1px);
+  }
+  button:active {
+    transform: translateY(0.5px);
+  }
 }
 
-/* Added custom restaurant app styles */
 @layer utilities {
-  .restaurant-gradient {
-    background: var(--restaurant-gradient);
-  }
-
-  .text-restaurant-green {
-    color: var(--restaurant-green);
-  }
-
-  .text-restaurant-gold {
-    color: var(--restaurant-gold);
-  }
-
-  .bg-restaurant-green {
-    background-color: var(--restaurant-green);
-  }
-
-  .bg-restaurant-gold {
-    background-color: var(--restaurant-gold);
-  }
-
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-slot="card"]:hover {
+    transform: none;
+  }
+  button:active {
+    transform: none;
   }
 }

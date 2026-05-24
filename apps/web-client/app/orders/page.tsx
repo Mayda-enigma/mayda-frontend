@@ -43,8 +43,8 @@ const orderStatusConfig: Record<string, {
   COMPLETED: {
     label: "Completed",
     icon: Utensils,
-    color: "text-restaurant-green",
-    bgColor: "bg-restaurant-green/10",
+    color: "text-success",
+    bgColor: "bg-success/10",
   },
   CANCELLED: {
     label: "Cancelled",
@@ -95,7 +95,7 @@ function OrderCard({ order }: { order: Order }) {
             <span className="font-semibold text-sm sm:text-base">${order.total.toFixed(2)}</span>
             <Badge
               variant="outline"
-              className={`ml-2 text-xs ${order.paymentStatus === "PAID" ? "text-restaurant-green border-restaurant-green" : "text-amber-600 border-amber-600"}`}
+              className={`ml-2 text-xs ${order.paymentStatus === "PAID" ? "text-success border-success" : "text-amber-600 border-amber-600"}`}
             >
               {order.paymentStatus}
             </Badge>
@@ -119,12 +119,12 @@ export default function OrdersPage() {
   const { data: orders, isLoading, isError } = useMyOrders()
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
         <div className="flex items-center justify-between p-2 sm:p-3 md:p-4">
           <div className="flex items-center gap-2 sm:gap-3">
             <BurgerMenu currentPage="orders" />
-            <Link href="/menu" className="hidden md:block">
+            <Link href="/menu" className="hidden md:block" aria-label="Back to menu">
               <Button variant="ghost" size="sm" className="p-2">
                 <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
@@ -142,8 +142,8 @@ export default function OrdersPage() {
             </div>
             <div className="text-right">
               <div className="flex items-center gap-1">
-                <div className="w-2 h-2 bg-restaurant-green rounded-full animate-pulse" />
-                <span className="text-xs text-restaurant-green">Live</span>
+                <div className="w-2 h-2 bg-success rounded-full animate-pulse" />
+                <span className="text-xs text-success">Live</span>
               </div>
             </div>
           </div>
@@ -168,7 +168,7 @@ export default function OrdersPage() {
             <p className="text-muted-foreground text-base sm:text-lg">No orders yet</p>
             <p className="text-xs sm:text-sm text-muted-foreground mb-4">Start by adding some dishes to your cart</p>
             <Link href="/menu">
-              <Button className="restaurant-gradient text-white">Browse Menu</Button>
+              <Button className="bg-primary text-primary-foreground">Browse Menu</Button>
             </Link>
           </div>
         ) : (

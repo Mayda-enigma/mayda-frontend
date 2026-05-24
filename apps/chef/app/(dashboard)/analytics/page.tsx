@@ -28,7 +28,7 @@ export default function AnalyticsPage() {
       <div className="p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6">
         {/* Header */}
         <div className="space-y-3 sm:space-y-4">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-500 leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary leading-tight">
             {t.kitchenAnalytics}
           </h1>
           <p className="text-muted-foreground text-sm sm:text-base">{t.performanceInsights}</p>
@@ -43,7 +43,7 @@ export default function AnalyticsPage() {
               onClick={() => setTimeRange(range.key)}
               className={
                 timeRange === range.key
-                  ? "bg-orange-500 hover:bg-orange-600 transition-all duration-200 transform hover:scale-105 min-h-[44px]"
+                  ? "bg-primary hover:bg-primary/90 transition-all duration-200 min-h-[44px]"
                   : "border-border text-muted-foreground hover:text-foreground hover:bg-accent transition-all duration-200 min-h-[44px]"
               }
             >

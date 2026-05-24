@@ -33,7 +33,8 @@ export function BurgerMenu({ currentPage }: BurgerMenuProps) {
           size="sm"
           className="md:hidden p-1.5 h-8 hover:scale-110 transition-transform duration-200"
         >
-          <Menu className="w-4 h-4" />
+          <Menu className="w-4 h-4" aria-hidden />
+          <span className="sr-only">Open menu</span>
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="w-64 p-0">
@@ -61,7 +62,7 @@ export function BurgerMenu({ currentPage }: BurgerMenuProps) {
                     <Button
                       variant={isActive ? "default" : "ghost"}
                       className={`w-full justify-start gap-3 h-12 text-base hover:scale-105 transition-all duration-200 ${
-                        isActive ? "restaurant-gradient text-white" : "hover:bg-accent"
+                        isActive ? "bg-primary text-primary-foreground" : "hover:bg-accent"
                       }`}
                     >
                       <Icon className="w-5 h-5" />

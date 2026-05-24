@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@/shared/ui/button"
+import Image from "next/image"
 import { Card, CardContent } from "@/shared/ui/card"
 import { Badge } from "@/shared/ui/badge"
 import { useCart } from "@/features/cart"
@@ -64,7 +65,7 @@ export function CartSidebar() {
     <>
       <div
         className="fixed inset-0 bg-black/50 z-40 md:hidden animate-in fade-in-0 duration-300"
-        onClick={() => dispatch({ type: "CLOSE_CART" })}
+        aria-label="Close cart" onClick={() => dispatch({ type: "CLOSE_CART" })}
       />
 
       <div className="fixed right-0 top-0 h-full w-full md:w-96 bg-background border-l border-border z-50 flex flex-col shadow-xl animate-in slide-in-from-right-full duration-300">
@@ -80,7 +81,7 @@ export function CartSidebar() {
             variant="ghost"
             size="sm"
             className="hover:scale-110 transition-transform duration-200"
-            onClick={() => dispatch({ type: "CLOSE_CART" })}
+            aria-label="Close cart" onClick={() => dispatch({ type: "CLOSE_CART" })}
           >
             <X className="w-5 h-5" />
           </Button>
@@ -104,10 +105,10 @@ export function CartSidebar() {
                 >
                   <CardContent className="p-3">
                     <div className="flex gap-3">
-                      <img
+                      <Image
                         src={item.image || "/placeholder.svg"}
                         alt={item.name}
-                        className="w-16 h-16 object-cover rounded-md hover:scale-105 transition-transform duration-200"
+                        width={80} height={80} className="w-16 h-16 object-cover rounded-md hover:scale-105 transition-transform duration-200"
                       />
                       <div className="flex-1 min-w-0">
                         <h3 className="font-medium text-sm leading-tight mb-1 hover:text-primary transition-colors duration-200">
@@ -123,7 +124,7 @@ export function CartSidebar() {
                               variant="outline"
                               size="sm"
                               className="w-8 h-8 p-0 bg-transparent hover:scale-110 hover:bg-primary hover:text-white transition-all duration-200"
-                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                              aria-label="Decrease quantity" onClick={() => updateQuantity(item.id, item.quantity - 1)}
                             >
                               <Minus className="w-3 h-3" />
                             </Button>
@@ -132,7 +133,7 @@ export function CartSidebar() {
                               variant="outline"
                               size="sm"
                               className="w-8 h-8 p-0 bg-transparent hover:scale-110 hover:bg-primary hover:text-white transition-all duration-200"
-                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                              aria-label="Increase quantity" onClick={() => updateQuantity(item.id, item.quantity + 1)}
                             >
                               <Plus className="w-3 h-3" />
                             </Button>
@@ -141,7 +142,7 @@ export function CartSidebar() {
                             variant="ghost"
                             size="sm"
                             className="text-destructive hover:text-destructive hover:scale-110 transition-all duration-200"
-                            onClick={() => removeItem(item.id)}
+                            aria-label="Remove item" onClick={() => removeItem(item.id)}
                           >
                             <X className="w-4 h-4" />
                           </Button>
@@ -188,7 +189,7 @@ export function CartSidebar() {
 
             <div className="space-y-2">
               <Button
-                className="w-full restaurant-gradient text-white hover:opacity-90 hover:scale-105 transition-all duration-200 hover:shadow-lg"
+                className="w-full bg-primary text-primary-foreground hover:opacity-90 hover:scale-105 transition-all duration-200 hover:shadow-lg"
                 size="lg"
                 onClick={handleCheckout}
                 disabled={createOrder.isPending}

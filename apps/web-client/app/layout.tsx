@@ -1,7 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Poppins } from "next/font/google"
-import { GeistMono } from "geist/font/mono"
+import { Outfit, Source_Code_Pro } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import { QueryProvider } from "@/shared/lib/query-provider"
@@ -10,16 +9,21 @@ import { BottomNavigation } from "@/components/bottom-navigation"
 import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
 
-const poppins = Poppins({
+const outfit = Outfit({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-poppins",
+  variable: "--font-outfit",
+})
+
+const sourceCodePro = Source_Code_Pro({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-source-code-pro",
 })
 
 export const metadata: Metadata = {
-  title: "Restaurant Experience - Premium Digital Dining",
+  title: "Mayda - Premium Digital Dining",
   description: "Premium onsite digital restaurant experience with QR ordering",
-  generator: "v0.app",
 }
 
 export default function RootLayout({
@@ -29,9 +33,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`font-sans ${poppins.variable} ${GeistMono.variable} antialiased`}>
+      <body className={`font-sans ${outfit.variable} ${sourceCodePro.variable} antialiased`}>
         <QueryProvider>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange={false}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange={false}>
           <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
           <CartSidebar />
           <BottomNavigation />

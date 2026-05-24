@@ -37,30 +37,30 @@ export function StockManagement() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "critical":
-        return "text-red-400 bg-red-900/30"
+        return "text-destructive bg-destructive/10"
       case "low":
-        return "text-yellow-400 bg-yellow-900/30"
+        return "text-warning bg-warning/10"
       case "medium":
-        return "text-orange-400 bg-orange-900/30"
+        return "text-primary bg-primary/10"
       default:
-        return "text-green-400 bg-green-900/30"
+        return "text-success bg-success/10"
     }
   }
 
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "protein":
-        return "bg-red-500"
+        return "bg-destructive"
       case "vegetable":
-        return "bg-green-500"
+        return "bg-success"
       case "dairy":
-        return "bg-blue-500"
+        return "bg-accent-blue"
       case "grain":
-        return "bg-yellow-500"
+        return "bg-warning"
       case "spice":
         return "bg-purple-500"
       default:
-        return "bg-gray-500"
+        return "bg-muted"
     }
   }
 
@@ -77,7 +77,7 @@ export function StockManagement() {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="text-center">
-          <Loader2 className="w-12 h-12 mx-auto text-orange-500 mb-4 animate-spin" />
+          <Loader2 className="w-12 h-12 mx-auto text-primary mb-4 animate-spin" />
           <p className="text-muted-foreground">Loading inventory...</p>
         </div>
       </div>
@@ -88,8 +88,8 @@ export function StockManagement() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-orange-500">Stock Management</h2>
-        <Button className="bg-orange-500 hover:bg-orange-600">
+        <h2 className="text-2xl font-bold text-primary">Stock Management</h2>
+        <Button className="bg-primary hover:bg-primary/90">
           <ShoppingCart className="w-4 h-4 mr-2" />
           Bulk Reorder
         </Button>
@@ -99,7 +99,7 @@ export function StockManagement() {
       {alerts.length > 0 && (
         <div className="space-y-3">
           <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5 text-orange-500" />
+            <AlertTriangle className="w-5 h-5 text-primary" />
             Low Stock Alerts ({alerts.length})
           </h3>
           <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
@@ -160,9 +160,9 @@ export function StockManagement() {
             <Card className="bg-card border-border">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 rounded-full bg-green-900/30" />
+                  <div className="w-3 h-3 rounded-full bg-success/30" />
                   <div>
-                    <div className="text-2xl font-bold text-foreground">{stats.totalItems}</div>
+                    <div className="text-2xl font-bold tabular-nums text-foreground">{stats.totalItems}</div>
                     <div className="text-sm text-muted-foreground">Total Items</div>
                   </div>
                 </div>
@@ -171,9 +171,9 @@ export function StockManagement() {
             <Card className="bg-card border-border">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 rounded-full bg-blue-900/30" />
+                  <div className="w-3 h-3 rounded-full bg-accent-blue/30" />
                   <div>
-                    <div className="text-2xl font-bold text-foreground">{stats.activeItems}</div>
+                    <div className="text-2xl font-bold tabular-nums text-foreground">{stats.activeItems}</div>
                     <div className="text-sm text-muted-foreground">Active Items</div>
                   </div>
                 </div>
@@ -182,9 +182,9 @@ export function StockManagement() {
             <Card className="bg-card border-border">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 rounded-full bg-red-900/30" />
+                  <div className="w-3 h-3 rounded-full bg-destructive/30" />
                   <div>
-                    <div className="text-2xl font-bold text-foreground">{stats.lowStockItems}</div>
+                    <div className="text-2xl font-bold tabular-nums text-foreground">{stats.lowStockItems}</div>
                     <div className="text-sm text-muted-foreground">Low Stock</div>
                   </div>
                 </div>
@@ -193,9 +193,9 @@ export function StockManagement() {
             <Card className="bg-card border-border">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 rounded-full bg-yellow-900/30" />
+                  <div className="w-3 h-3 rounded-full bg-warning/30" />
                   <div>
-                    <div className="text-2xl font-bold text-foreground">{stats.expiringSoonItems}</div>
+                    <div className="text-2xl font-bold tabular-nums text-foreground">{stats.expiringSoonItems}</div>
                     <div className="text-sm text-muted-foreground">Expiring Soon</div>
                   </div>
                 </div>
@@ -236,7 +236,7 @@ export function StockManagement() {
           return (
             <Card
               key={item.id}
-              className={`bg-card border-border ${status === "critical" ? "ring-2 ring-red-500 animate-pulse" : ""}`}
+              className={`bg-card border-border ${status === "critical" ? "ring-2 ring-destructive" : ""}`}
             >
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
@@ -276,7 +276,7 @@ export function StockManagement() {
                 <div>
                   <div className="flex justify-between text-sm mb-2">
                     <span className="text-muted-foreground">Stock Level</span>
-                    <span className="text-foreground">
+                    <span className="tabular-nums text-foreground">
                       {item.currentStock} / {item.minimumStock} {item.unit}
                     </span>
                   </div>
@@ -287,11 +287,11 @@ export function StockManagement() {
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <div className="text-muted-foreground">Unit Price</div>
-                    <div className="text-foreground font-medium">${item.unitPrice.toFixed(2)}</div>
+                    <div className="tabular-nums text-foreground font-medium">${item.unitPrice.toFixed(2)}</div>
                   </div>
                   <div>
                     <div className="text-muted-foreground">Total Value</div>
-                    <div className="text-foreground font-medium">${item.totalValue.toFixed(2)}</div>
+                    <div className="tabular-nums text-foreground font-medium">${item.totalValue.toFixed(2)}</div>
                   </div>
                   {item.location && (
                     <div>
@@ -309,7 +309,7 @@ export function StockManagement() {
 
                 {/* Expiry */}
                 {item.expiryDate && (
-                  <div className={`text-xs ${expiringSoon ? "text-red-400" : "text-muted-foreground"}`}>
+                  <div className={`text-xs tabular-nums ${expiringSoon ? "text-destructive" : "text-muted-foreground"}`}>
                     Expires: {item.expiryDate.toLocaleDateString()}
                   </div>
                 )}
@@ -318,7 +318,7 @@ export function StockManagement() {
                 <div className="flex gap-2">
                   <Button
                     size="sm"
-                    className="flex-1 bg-orange-500 hover:bg-orange-600"
+                    className="flex-1 bg-primary hover:bg-primary/90"
                   >
                     <ShoppingCart className="w-4 h-4 mr-2" />
                     Reorder
@@ -339,9 +339,9 @@ export function StockManagement() {
       {/* Empty State */}
       {filteredItems.length === 0 && !isLoading && (
         <div className="text-center py-12">
-          <Package className="w-16 h-16 mx-auto text-gray-600 mb-4" />
-          <h3 className="text-xl font-semibold text-gray-400 mb-2">No Items Found</h3>
-          <p className="text-gray-500">Try adjusting your search or filters</p>
+          <Package className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+          <h3 className="text-xl font-semibold text-muted-foreground mb-2">No Items Found</h3>
+          <p className="text-muted-foreground">Try adjusting your search or filters</p>
         </div>
       )}
     </div>

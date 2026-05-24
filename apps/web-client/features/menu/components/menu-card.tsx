@@ -1,6 +1,7 @@
 'use client';
 
 import { Card, CardContent } from '@/shared/ui/card';
+import Image from "next/image"
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { hasStaticArModelForDish } from '@/features/ar';
@@ -8,8 +9,8 @@ import { Leaf, Wheat, Heart, Plus } from 'lucide-react';
 import type { MenuItem } from '../types';
 
 const dietaryIcons: Record<string, { icon: React.ElementType; color: string }> = {
-  vegetarian: { icon: Leaf, color: 'text-restaurant-green' },
-  vegan: { icon: Heart, color: 'text-restaurant-green' },
+  vegetarian: { icon: Leaf, color: 'text-success' },
+  vegan: { icon: Heart, color: 'text-success' },
   'gluten-free': { icon: Wheat, color: 'text-amber-600' },
   halal: { icon: Heart, color: 'text-blue-600' },
 };
@@ -33,14 +34,14 @@ export function MenuCard({ item, index = 0, onViewDetails, onAddToCart }: MenuCa
       }}
     >
       <div className="relative overflow-hidden" onClick={onViewDetails}>
-        <img
+        <Image
           src={item.image || '/placeholder.svg'}
           alt={item.name}
-          className="w-full h-32 sm:h-40 md:h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+          width={400} height={200} className="w-full h-32 sm:h-40 md:h-48 object-cover transition-transform duration-500 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         {item.popular && (
-          <Badge className="absolute top-2 left-2 restaurant-gradient text-white animate-bounce">Popular</Badge>
+          <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground animate-bounce">Popular</Badge>
         )}
         {hasArModel && (
           <Badge className="absolute bottom-2 left-2 bg-background/90 text-foreground shadow-sm">
@@ -91,7 +92,7 @@ export function MenuCard({ item, index = 0, onViewDetails, onAddToCart }: MenuCa
 
         <div className="flex gap-1 sm:gap-2">
           <Button
-            className="flex-1 restaurant-gradient text-white hover:opacity-90 hover:scale-105 transition-all duration-200 hover:shadow-lg text-xs sm:text-sm py-1 sm:py-2"
+            className="flex-1 bg-primary text-primary-foreground hover:opacity-90 hover:scale-105 transition-all duration-200 hover:shadow-lg text-xs sm:text-sm py-1 sm:py-2"
             size="sm"
             onClick={onViewDetails}
           >

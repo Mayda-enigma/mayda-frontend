@@ -4,7 +4,7 @@ Project-level instructions for AI coding agents working in this repo.
 
 ## Project
 
-`@mayda/admin`: Next.js 16 (App Router) admin dashboard. React 19, TypeScript, Tailwind CSS v4, shadcn/ui themed against Meta's design system, `next-themes` for dark/light, lucide-react for icons.
+`@mayda/chef`: Next.js 16 (App Router) kitchen dashboard. React 19, TypeScript, Tailwind CSS v4, shadcn/ui with daisy-depth shadows, MongoDB Compass dark palette, Outfit font, `next-themes` for dark/light (dark default), lucide-react for icons.
 
 ## Required reading
 
@@ -43,14 +43,19 @@ npx skills remove <name>        # uninstall
 
 ## Routes
 
-- `/`: admin shell (`app/page.tsx`) with sidebar + topbar + 5 stub sections (`dashboard`, `restaurants`, `analytics`, `anomalies`, `settings`).
-- `/design-preview`: dev-only token + primitives gallery. Remove or gate before production.
+- `/`: kitchen dashboard (`app/(dashboard)/page.tsx`) with order grid, stats row, sort controls, voice panel.
+- `/stock`: stock management with search, alerts, inventory grid.
+- `/analytics`: kitchen analytics with KPI cards, charts.
+- `/order/[id]`: individual order detail with timeline.
+- `/login`: auth page with login form.
 
 ## Conventions
 
-- Section state is managed in `app/page.tsx` via `activeSection` + `handleSectionChange` (a `useTransition` wrapper). New sections add an entry to `sectionTitles`, a switch arm in `renderContent`, and a sidebar `menuItems` entry in `components/layout/sidebar.tsx`.
-- Theme toggle uses `next-themes` via the wrapper at `components/theme-provider.tsx`. Use `useTheme()` from there, not directly from `next-themes`, so the wrapper stays the integration seam.
-- Mobile nav: a `Sheet`-based drawer in `app/page.tsx`. New nav items only need to be added to `menuItems`: both desktop and mobile share the same `Sidebar` component.
+- Layout uses a simplified top-bar (`shared/ui/layout/chef-topbar.tsx`) wrapped in a floating-card panel via `app/(dashboard)/layout.tsx`. Mobile: top-bar stays, panel goes edge-to-edge.
+- Theme toggle uses `next-themes` via the wrapper at `components/theme-provider.tsx`. Use `useTheme()` from there, not directly from `next-themes`.
+- Feature code follows the feature-based structure: API hooks in `features/<domain>/api/queries.ts`, types in `features/<domain>/types.ts`, components in `features/<domain>/components/`.
+- TanStack Query via `shared/lib/query-provider.tsx` and `shared/lib/query-client.ts`. Use `useQuery`/`useMutation` from `@tanstack/react-query`, not raw fetch.
+- API client at `shared/api/client.ts` handles auth tokens and error normalization.
 
 ## Out of scope (do not regress)
 
