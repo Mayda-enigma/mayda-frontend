@@ -17,20 +17,12 @@ export interface Notification {
   createdAt: string
 }
 
-interface NotificationSystemProps {
-  onNotificationUpdate?: (notifications: Notification[]) => void
-}
-
-export function NotificationSystem({ onNotificationUpdate }: NotificationSystemProps) {
+export function NotificationSystem() {
   const { data: notifications = [] } = useNotifications()
   const markRead = useMarkNotificationRead()
   const markAllRead = useMarkAllNotificationsRead()
   const [isVisible, setIsVisible] = useState(false)
   const [floatingNotifications, setFloatingNotifications] = useState<Notification[]>([])
-
-  useEffect(() => {
-    onNotificationUpdate?.(notifications)
-  }, [notifications, onNotificationUpdate])
 
   useEffect(() => {
     const unread = notifications.filter((n) => !n.isRead && n.type === "urgent")
