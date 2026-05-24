@@ -4,7 +4,7 @@ import { useState } from "react"
 import Image from "next/image"
 import { Button } from "@/shared/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/shared/ui/sheet"
-import { Menu, Home, UtensilsCrossed, ShoppingBag, Clock, X } from "lucide-react"
+import { Menu, UtensilsCrossed, ShoppingBag, Clock, X } from "lucide-react"
 import Link from "next/link"
 import { useCart } from "@/features/cart"
 import { Badge } from "@/shared/ui/badge"
@@ -19,7 +19,6 @@ export function BurgerMenu({ currentPage }: BurgerMenuProps) {
   const { state } = useCart()
 
   const menuItems = [
-    { href: "/", icon: Home, label: "Home", id: "home" },
     { href: "/menu", icon: UtensilsCrossed, label: "Menu", id: "menu" },
     { href: "/orders", icon: Clock, label: "Orders", id: "orders" },
     { href: "/cart", icon: ShoppingBag, label: "Cart", id: "cart" },

@@ -1,7 +1,7 @@
 "use client"
 
 import { useCart } from "@/features/cart"
-import { Home, UtensilsCrossed, Clock, ShoppingBag } from "lucide-react"
+import { UtensilsCrossed, Clock, ShoppingBag } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/shared/utils"
@@ -11,12 +11,6 @@ export function BottomNavigation() {
   const pathname = usePathname()
 
   const navItems = [
-    {
-      href: "/",
-      icon: Home,
-      label: "Home",
-      active: pathname === "/",
-    },
     {
       href: "/menu",
       icon: UtensilsCrossed,
