@@ -72,7 +72,7 @@ export function NotificationSystem({ onFeedbackRequest }: NotificationSystemProp
 
     // Simulate real-time notifications
     const interval = setInterval(() => {
-      const randomNotifications = [
+      const randomNotifications: Notification[] = [
         {
           id: `notif-${Date.now()}`,
           type: "order_update" as const,

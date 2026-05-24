@@ -3,6 +3,7 @@
 import { Card, CardContent } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
+import { hasStaticArModelForDish } from '@/features/ar';
 import { Leaf, Wheat, Heart, Plus } from 'lucide-react';
 import type { MenuItem } from '../types';
 
@@ -21,6 +22,8 @@ interface MenuCardProps {
 }
 
 export function MenuCard({ item, index = 0, onViewDetails, onAddToCart }: MenuCardProps) {
+  const hasArModel = hasStaticArModelForDish(item);
+
   return (
     <Card
       className="overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group hover:-translate-y-1 hover:scale-[1.02]"
@@ -38,6 +41,11 @@ export function MenuCard({ item, index = 0, onViewDetails, onAddToCart }: MenuCa
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         {item.popular && (
           <Badge className="absolute top-2 left-2 restaurant-gradient text-white animate-bounce">Popular</Badge>
+        )}
+        {hasArModel && (
+          <Badge className="absolute bottom-2 left-2 bg-background/90 text-foreground shadow-sm">
+            AR disponible
+          </Badge>
         )}
         <div className="absolute top-2 right-2 flex gap-1">
           {item.dietary.map((diet) => {

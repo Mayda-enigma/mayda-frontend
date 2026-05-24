@@ -186,7 +186,7 @@ export function FeedbackModal({ isOpen, onClose, orderId }: FeedbackModalProps) 
                   <span className="font-medium">Thank you for the great feedback!</span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-1">
-                  We're thrilled you enjoyed your experience. Your review helps us maintain our high standards.
+                  We&apos;re thrilled you enjoyed your experience. Your review helps us maintain our high standards.
                 </p>
               </CardContent>
             </Card>

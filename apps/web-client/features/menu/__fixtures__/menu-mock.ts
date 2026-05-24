@@ -2,7 +2,19 @@
  * @file Test-only fixture. Do not import from production code.
  * Used by unit/integration tests.
  */
-import type { MenuItemDto } from '../types';
+
+interface MenuItemDto {
+  id: string;
+  name: string;
+  description: string;
+  price_cents: number;
+  category: string;
+  image_url: string;
+  dietary_tags: string[];
+  ingredients: string[];
+  allergens: string[];
+  is_popular?: boolean;
+}
 
 export const menuMock: MenuItemDto[] = [
   {

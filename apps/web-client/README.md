@@ -17,6 +17,7 @@ The Onsite Client Application enables restaurant customers to:
 ### Digital Menu Experience
 - **Interactive Menu**: Browse categories with beautiful food imagery
 - **Dish Details**: Detailed descriptions, ingredients, allergen information
+- **Web AR Preview**: View supported dishes in AR from the dish detail screen
 - **Smart Search**: Find dishes quickly with intelligent search
 - **Filtering**: Filter by dietary preferences, price range, categories
 - **Recommendations**: AI-powered dish suggestions based on preferences
@@ -157,6 +158,23 @@ NEXT_PUBLIC_TABLE_NUMBER=1
 NEXT_PUBLIC_RESTAURANT_ID=your_restaurant_id
 NEXT_PUBLIC_QR_CODE_ENABLED=true
 ```
+
+## Web AR Experience
+
+The customer-facing AR flow is web-first: a customer scans the table QR code, opens the web menu, chooses a dish, and taps **Voir en AR** from the dish detail screen when that dish is supported.
+
+The web client uses `<model-viewer>` through `@google/model-viewer` because it runs directly in the browser and fits the QR-to-web menu flow. Viro remains native-only and belongs in the React Native app, not this Next.js client.
+
+Backend menu data remains unchanged. Dishes still come from `GET /menus/restaurant/{restaurantId}` and do not include AR model URLs. For now, supported AR dishes are resolved through a local static registry in `features/ar/constants/staticArModels.ts`.
+
+Supported demo dishes:
+- Gourmet Burger
+- Croissant
+
+Limitations:
+- The backend does not manage AR model URLs yet.
+- iOS Quick Look requires real USDZ files later.
+- The current AR registry is local/static for the demo, with temporary name-based matching when stable dish IDs are not available.
 
 ## 📱 Usage Guide
 

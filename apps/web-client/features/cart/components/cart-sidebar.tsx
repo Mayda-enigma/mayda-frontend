@@ -9,7 +9,7 @@ import { X, Plus, Minus, ShoppingBag, CreditCard, AlertCircle } from "lucide-rea
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import type { ApiError } from "@/shared/api/client"
+import { ApiError } from "@/shared/api/client"
 
 export function CartSidebar() {
   const { state, dispatch } = useCart()
@@ -28,14 +28,24 @@ export function CartSidebar() {
   const handleCheckout = () => {
     setCheckoutError(null)
     createOrder.mutate(
-      { items: state.items.map((item) => ({ menuItemId: item.id, quantity: item.quantity })) },
+      {
+        restaurantId: Number(process.env.NEXT_PUBLIC_RESTAURANT_ID ?? 1),
+        tableId: Number(process.env.NEXT_PUBLIC_TABLE_ID ?? 12),
+        type: "DINE_IN",
+        items: state.items.map((item) => ({
+          dishId: Number(item.id),
+          quantity: item.quantity,
+          unitPrice: item.price,
+          totalPrice: item.price * item.quantity,
+        })),
+      },
       {
         onSuccess: () => {
           dispatch({ type: "CLOSE_CART" })
           router.push("/orders")
         },
-        onError: (error: ApiError) => {
-          if (error.status === 422) {
+        onError: (error) => {
+          if (error instanceof ApiError && error.status === 422) {
             const detail = error.body && typeof error.body === 'object' && 'detail' in error.body
               ? (error.body as { detail: string }).detail
               : 'Please check your order and try again.'
