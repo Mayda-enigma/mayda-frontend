@@ -61,12 +61,12 @@ export function KpiCards({ range }: KpiCardsProps) {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       {metrics.map((m) => {
         const TrendIcon = m.trendUp ? TrendingUp : TrendingDown
-        const trendColor = m.trendUp ? "text-green-400" : "text-red-400"
+        const trendColor = m.trendUp ? "text-success" : "text-destructive"
 
         return (
           <Card
             key={m.title}
-            className="bg-card border-border hover:bg-accent/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
+            className="bg-card border-border hover:bg-accent/50 transition-all duration-300 hover:shadow-lg"
           >
             <CardContent className="p-4 sm:p-6">
               {isLoading ? (
@@ -85,7 +85,7 @@ export function KpiCards({ range }: KpiCardsProps) {
                       {m.change}
                     </div>
                   </div>
-                  <m.Icon className="w-6 h-6 sm:w-8 sm:h-8 text-amber-400" />
+                  <m.Icon className="w-6 h-6 sm:w-8 sm:h-8 text-warning" />
                 </div>
               )}
             </CardContent>

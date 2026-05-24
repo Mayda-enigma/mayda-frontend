@@ -1,25 +1,28 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Poppins } from "next/font/google"
+import { Outfit, Source_Code_Pro } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
-import { Suspense } from "react"
 import { NotificationProvider } from "@/components/notification-system"
 import { I18nProvider } from "@/components/i18n-provider"
-import { Navigation } from "@/components/navigation"
 import { QueryProvider } from "@/shared/lib/query-provider"
 import "./globals.css"
 
-const poppins = Poppins({
+const outfit = Outfit({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-poppins",
+  variable: "--font-outfit",
+})
+
+const sourceCodePro = Source_Code_Pro({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-source-code",
 })
 
 export const metadata: Metadata = {
-  title: "Chef Dashboard - Smart Restaurant",
-  description: "Efficient kitchen management system for smart restaurants",
-  generator: "v0.app",
+  title: "Mayda Chef - Kitchen Dashboard",
+  description: "Real-time order and stock management for kitchen staff",
 }
 
 export default function RootLayout({
@@ -29,20 +32,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`font-sans ${poppins.variable} antialiased`}>
+      <body className={`font-sans ${outfit.variable} ${sourceCodePro.variable} antialiased`}>
         <QueryProvider>
-        <Suspense fallback={null}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange={false}>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange={false}>
             <I18nProvider>
               <NotificationProvider>
-                <Navigation />
-                <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+                {children}
               </NotificationProvider>
             </I18nProvider>
           </ThemeProvider>
-        </Suspense>
-        <Analytics />
         </QueryProvider>
+        <Analytics />
       </body>
     </html>
   )

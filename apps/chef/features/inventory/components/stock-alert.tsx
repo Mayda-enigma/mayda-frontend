@@ -21,22 +21,22 @@ export function StockAlertCard({ alert }: StockAlertCardProps) {
   const getUrgencyStyles = (level: string) => {
     switch (level) {
       case "critical":
-        return "bg-red-500/30 dark:bg-red-900/30 border-red-500 animate-pulse"
+        return "bg-destructive/10 border-destructive animate-pulse"
       case "warning":
-        return "bg-yellow-500/30 dark:bg-yellow-900/30 border-yellow-500"
+        return "bg-warning/10 border-warning"
       default:
-        return "bg-orange-500/30 dark:bg-orange-900/30 border-orange-500"
+        return "bg-primary/10 border-primary"
     }
   }
 
   const getUrgencyColor = (level: string) => {
     switch (level) {
       case "critical":
-        return "text-red-400"
+        return "text-destructive"
       case "warning":
-        return "text-yellow-400"
+        return "text-warning"
       default:
-        return "text-orange-400"
+        return "text-primary"
     }
   }
 
@@ -61,7 +61,7 @@ export function StockAlertCard({ alert }: StockAlertCardProps) {
           </div>
           <div className="flex items-center gap-2">
             <AlertTriangle className={`w-5 h-5 ${getUrgencyColor(urgencyLevel)}`} />
-            <Button size="sm" className="bg-orange-500 hover:bg-orange-600">
+            <Button size="sm" className="bg-primary hover:bg-primary/90">
               <ShoppingCart className="w-4 h-4 mr-2" />
               Reorder
             </Button>

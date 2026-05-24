@@ -26,7 +26,7 @@ export function RevenueTrendChart({ range }: RevenueTrendChartProps) {
   return (
     <Card className="bg-card border-border">
       <CardHeader className="p-4 sm:p-6">
-        <CardTitle className="text-orange-500 text-base sm:text-lg">{t.revenueTrend}</CardTitle>
+        <CardTitle className="text-primary text-base sm:text-lg">{t.revenueTrend}</CardTitle>
         <CardDescription className="text-xs sm:text-sm">
           Monthly revenue and order volume comparison
         </CardDescription>

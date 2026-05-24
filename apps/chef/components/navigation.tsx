@@ -41,7 +41,7 @@ export function Navigation() {
                   size="sm"
                   className={
                     isActive
-                      ? "bg-orange-500 hover:bg-orange-600"
+                      ? "bg-primary hover:bg-primary/90"
                       : "text-muted-foreground hover:text-foreground hover:bg-accent"
                   }
                 >
