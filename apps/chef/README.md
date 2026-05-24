@@ -86,8 +86,12 @@ mayda-chef/
 │   ├── stock-alert.tsx  # Stock monitoring component
 │   ├── voice-control.tsx # Voice command interface
 │   └── navigation.tsx   # App navigation
+├── features/             # Feature modules
+│   └── voice/           # Voice control feature
+│       ├── api/         # Transcribe API + TanStack hooks
+│       ├── hooks/       # useVoiceCommands, useVoiceRecording
+│       └── types.ts     # Transcript DTO + domain types
 ├── hooks/               # Custom React hooks
-│   ├── use-voice-commands.ts # Voice control logic
 │   └── use-mobile.ts    # Mobile detection
 ├── lib/                 # Utility libraries
 │   ├── i18n.ts         # Internationalization

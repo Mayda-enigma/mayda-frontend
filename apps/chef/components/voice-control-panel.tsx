@@ -5,7 +5,7 @@ import { Button } from "@/shared/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card"
 import { Badge } from "@/shared/ui/badge"
 import { Mic, MicOff, Volume2, HelpCircle } from "lucide-react"
-import { useVoiceCommands } from "@/hooks/use-voice-commands"
+import { useVoiceCommands } from "@/features/voice"
 import { useI18n } from "./i18n-provider"
 
 interface VoiceControlPanelProps {
